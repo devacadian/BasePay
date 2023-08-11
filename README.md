@@ -5,7 +5,8 @@
 ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
 ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
 
-## About
+## Go cashless, Go Decentralized!
+Whether you're organizing a vacation or sharing lunch expenses, BasePay streamlines payments for all social situations, ensuring they're more convenient than before.
 
 ## Features
 

@@ -20,7 +20,7 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            By{' '}
+            {' '}
             <ConnectButton
               className="dark:invert"
               width={100}

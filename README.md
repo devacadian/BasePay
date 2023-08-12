@@ -15,6 +15,7 @@ Whether you're organizing a vacation or sharing lunch expenses, BasePay streamli
 🔹 User will be able to initiate payment requests  
 🔹 User will be able to initiate payment requests to multiple Contacts (Split bill)  
 🔹 User will be able to leave a message for each transaction request (ie. A very expensive Lunch - 100 ETH)  
+🔹 User will be able to review transaction history  
 🔹 The application will accept the native token of Base (Ether) as the payment method  
 
 

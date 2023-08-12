@@ -1,7 +1,5 @@
-import '../styles/globals.css';
+import '@/styles/globals.css'
 import '@rainbow-me/rainbowkit/styles.css';
-import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import type { AppProps } from 'next/app';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import {
   arbitrum,
@@ -12,6 +10,7 @@ import {
   zora,
 } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
+import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
@@ -38,7 +37,7 @@ const wagmiConfig = createConfig({
   webSocketPublicClient,
 });
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }) {
   return (
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains}>

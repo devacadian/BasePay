@@ -1,4 +1,4 @@
-[![](https://github.com/devacadian/BasePay/blob/main/public/assets/Basepay_Black%20BG_Full%20Logo-01.png)](basepay.app)
+[![](https://github.com/devacadian/BasePay/blob/main/public/assets/Basepay_Black%20BG_Full%20Logo-01.png)](https://basepay.app)
 
 ![Ethereum Badge](https://img.shields.io/badge/Ethereum-3C3C3D?logo=ethereum&logoColor=fff&style=for-the-badge)
 ![Solidity Badge](https://img.shields.io/badge/Solidity-e6e6e6?style=for-the-badge&logo=solidity&logoColor=black)

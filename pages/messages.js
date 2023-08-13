@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Head from 'next/head';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faMessages, faDollarSign, faBell, faUser, faMagnifyingGlass, faBarcodeRead } from '@fortawesome/pro-solid-svg-icons';
 import { ConnectButton } from '@rainbow-me/rainbowkit';

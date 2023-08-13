@@ -11,6 +11,7 @@ import {
 } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import Head from 'next/head';
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
@@ -38,12 +39,24 @@ const wagmiConfig = createConfig({
 });
 
 function MyApp({ Component, pageProps }) {
+  const isLocal = process.env.NEXT_PUBLIC_ENVIRONMENT === 'local'; 
+
   return (
+    <>
+      <Head>
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href={isLocal ? '/favicon-local.png' : '/favicon.png'} // Change favicon based on the environment
+        />
+      </Head>
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains}>
         <Component {...pageProps} />
       </RainbowKitProvider>
     </WagmiConfig>
+    </>
   );
 }
 

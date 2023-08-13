@@ -11,7 +11,6 @@ export default function Messages() {
   return (
     <main className="flex flex-col min-h-screen p-0 bg-white">
           <Head>
-        <link rel="icon" href="/favicon.png" />
         <link rel="canonical" href="https://www.basepay.app" />
         <title>BasePay.app - Go cashless, Go Decentralized!</title>
         <meta name="description" content="BasePay streamlines payments for all social situations, ensuring they're more convenient than before. Go cashless, Go Decentralized with BasePay.app."/>

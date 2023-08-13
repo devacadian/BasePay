@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faMessages, faDollarSign, faBell, faUser, faMagnifyingGlass, faBarcodeRead } from '@fortawesome/pro-solid-svg-icons';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
@@ -38,22 +39,30 @@ export default function Messages() {
         <div className="absolute top-[-30px] left-1/2 transform -translate-x-1/2 w-[60px] h-[60px] rounded-full bg-blue-500 border-b-2 border-blue-500 flex items-center justify-center">
           <FontAwesomeIcon icon={faDollarSign} className="w-8 h-8 text-white" />
         </div>
-        <a href="/" className="flex flex-col items-center font-semibold" onClick={() => setActiveTab('home')}>
-          <FontAwesomeIcon icon={faHouse} className={activeTab === 'home' ? 'text-blue-500 w-8 h-8' : 'w-6 h-6'} />
-          <span className={`pt-1 pb-1 ${activeTab === 'home' ? 'text-blue-500' : ''}`}>Home</span>
-        </a>
-        <a href="/messages" className="flex flex-col items-center font-semibold" onClick={() => setActiveTab('messages')}>
-          <FontAwesomeIcon icon={faMessages} className={activeTab === 'messages' ? 'text-blue-500 w-8 h-8' : 'w-6 h-6'} />
-          <span className={`pt-0 pb-2 ${activeTab === 'messages' ? 'text-blue-500' : ''}`}>Messages</span>
-        </a>
-        <a href="/notifications" className="flex flex-col items-center font-semibold" onClick={() => setActiveTab('notifications')}>
-          <FontAwesomeIcon icon={faBell} className={activeTab === 'notifications' ? 'text-blue-500 w-8 h-8' : 'w-6 h-6'} />
-          <span className={`pt-1 ${activeTab === 'notifications' ? 'text-blue-500' : ''}`}>Notifications</span>
-        </a>
-        <a href="/profile" className="flex flex-col items-center font-semibold" onClick={() => setActiveTab('profile')}>
-          <FontAwesomeIcon icon={faUser} className={activeTab === 'profile' ? 'text-blue-500 w-8 h-8' : 'w-6 h-6'} />
-          <span className={`pt-1 ${activeTab === 'profile' ? 'text-blue-500' : ''}`}>Profile</span>
-        </a>
+        <Link href="/">
+          <div className="flex flex-col items-center font-semibold" onClick={() => setActiveTab('home')}>
+            <FontAwesomeIcon icon={faHouse} className={`pt-1 ${activeTab === 'home' ? 'text-blue-500 w-8 h-8' : 'w-6 h-6'}`} />
+            <span className={`pt-1 pb-1 ${activeTab === 'home' ? 'text-blue-500' : ''}`}>Home</span>
+          </div>
+        </Link>
+        <Link href="/messages">
+          <div className="flex flex-col items-center font-semibold" onClick={() => setActiveTab('messages')}>
+            <FontAwesomeIcon icon={faMessages} className={`pt-1 ${activeTab === 'messages' ? 'text-blue-500 w-8 h-8' : 'w-6 h-6'}`} />
+            <span className={`pb-2 ${activeTab === 'messages' ? 'text-blue-500' : ''}`}>Messages</span>
+          </div>
+        </Link>
+        <Link href="/notifications">
+          <div className="flex flex-col items-center font-semibold" onClick={() => setActiveTab('notifications')}>
+            <FontAwesomeIcon icon={faBell} className={`pt-1 ${activeTab === 'notifications' ? 'text-blue-500 w-8 h-8' : 'w-6 h-6'}`} />
+            <span className={`pt-1 ${activeTab === 'notifications' ? 'text-blue-500' : ''}`}>Notifications</span>
+          </div>
+        </Link>
+        <Link href="/profile">
+          <div className="flex flex-col items-center font-semibold" onClick={() => setActiveTab('profile')}>
+            <FontAwesomeIcon icon={faUser} className={`pt-1 ${activeTab === 'profile' ? 'text-blue-500 w-8 h-8' : 'w-6 h-6'}`} />
+            <span className={`pt-1 ${activeTab === 'profile' ? 'text-blue-500' : ''}`}>Profile</span>
+          </div>
+        </Link>
       </footer>
     </main>
   );

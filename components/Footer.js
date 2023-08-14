@@ -16,7 +16,9 @@ const Footer = () => {
   return (
     <footer className="fixed bottom-0 left-0 right-0 flex w-full h-24 bg-white text-black items-center justify-around border-t-2 border-base-blue z-10">
       <div className="absolute top-[-30px] left-1/2 transform -translate-x-1/2 w-[60px] h-[60px] rounded-full bg-base-blue border-b-2 border-base-blue flex items-center justify-center">
+      <Link href="/pay">
         <FontAwesomeIcon icon={faDollarSign} className="w-8 h-8 text-white" />
+           </Link>
       </div>
       <Link href="/">
           <div className="flex flex-col items-center font-semibold pt-1">

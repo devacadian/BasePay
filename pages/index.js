@@ -1,12 +1,19 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
+import { useRouter } from 'next/router'; // Import useRouter
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faMessages, faDollarSign, faBell, faUser, faMagnifyingGlass, faBarcodeRead } from '@fortawesome/pro-solid-svg-icons';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 
-export default function Messages() {
-  const [activeTab, setActiveTab] = useState('messages');
+export default function Home() {
+  const router = useRouter(); // Use router
+
+  // Determine active tab based on current route
+  const activeTab = router.pathname === '/' ? 'home' :
+                    router.pathname === '/messages' ? 'messages' :
+                    router.pathname === '/notifications' ? 'notifications' :
+                    router.pathname === '/profile' ? 'profile' : '';
 
   return (
       <main className="flex flex-col min-h-screen p-0 bg-white">
@@ -53,25 +60,25 @@ export default function Messages() {
           <FontAwesomeIcon icon={faDollarSign} className="w-8 h-8 text-white" />
         </div>
         <Link href="/">
-          <div className="flex flex-col items-center font-semibold" onClick={() => setActiveTab('home')}>
+          <div className="flex flex-col items-center font-semibold">
             <FontAwesomeIcon icon={faHouse} className={`pt-1 ${activeTab === 'home' ? 'text-blue-500 w-8 h-8' : 'w-6 h-6'}`} />
             <span className={`pt-1 pb-1 ${activeTab === 'home' ? 'text-blue-500' : ''}`}>Home</span>
           </div>
         </Link>
         <Link href="/messages">
-          <div className="flex flex-col items-center font-semibold" onClick={() => setActiveTab('messages')}>
+          <div className="flex flex-col items-center font-semibold">
             <FontAwesomeIcon icon={faMessages} className={`pt-1 ${activeTab === 'messages' ? 'text-blue-500 w-8 h-8' : 'w-6 h-6'}`} />
             <span className={`pb-2 ${activeTab === 'messages' ? 'text-blue-500' : ''}`}>Messages</span>
           </div>
         </Link>
         <Link href="/notifications">
-          <div className="flex flex-col items-center font-semibold" onClick={() => setActiveTab('notifications')}>
+          <div className="flex flex-col items-center font-semibold">
             <FontAwesomeIcon icon={faBell} className={`pt-1 ${activeTab === 'notifications' ? 'text-blue-500 w-8 h-8' : 'w-6 h-6'}`} />
             <span className={`pt-1 ${activeTab === 'notifications' ? 'text-blue-500' : ''}`}>Notifications</span>
           </div>
         </Link>
         <Link href="/profile">
-          <div className="flex flex-col items-center font-semibold" onClick={() => setActiveTab('profile')}>
+          <div className="flex flex-col items-center font-semibold">
             <FontAwesomeIcon icon={faUser} className={`pt-1 ${activeTab === 'profile' ? 'text-blue-500 w-8 h-8' : 'w-6 h-6'}`} />
             <span className={`pt-1 ${activeTab === 'profile' ? 'text-blue-500' : ''}`}>Profile</span>
           </div>

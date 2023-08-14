@@ -34,8 +34,8 @@ const Pay = () => {
       </div>
       <div className="flex-grow flex flex-col items-center justify-center pb-24">
         <main className="text-center mt-0">
-        <div className="text-6xl font-semibold mb-8 text-black flex justify-center items-baseline -ml-8">
-            <FontAwesomeIcon icon={faEthereum} className="mr-1 text-black h-10 w-10" /> {/* Ethereum icon */}
+        <div className="text-6xl font-semibold mb-8 text-black flex justify-center items-baseline -ml-10">
+            <FontAwesomeIcon icon={faEthereum} className="mr-0 text-black h-10 w-10" /> {/* Ethereum icon */}
             <span className="text-center">{counter || '0'}</span>
           </div>
           <div className="grid grid-cols-3 gap-x-20 gap-y-8 mb-8 mt-10">

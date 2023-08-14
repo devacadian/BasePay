@@ -16,9 +16,11 @@ const Footer = () => {
 
   return (
     <footer className="fixed bottom-0 left-0 right-0 flex w-full h-24 bg-white text-black items-center justify-around border-t-2 border-base-blue z-10">
-  <div className={`absolute top-[-30px] left-1/2 transform -translate-x-1/2 w-[60px] h-[60px] rounded-full bg-base-blue border-b-2 ${activeTab === 'pay' ? 'border-blue-300 shadow-3xl drop-shadow-xl' : 'border-base-blue'} flex items-center justify-center`}>
+  <div className="absolute top-[-0px] left-1/2 transform -translate-x-1/2 w-[74px] h-[37px] rounded-b-full bg-base-blue shadow-3xl drop-shadow-xl box-shadow: 0 0 0 2px blue-800"></div> 
+  <div className="absolute top-[-35px] left-1/2 transform -translate-x-1/2 w-[70px] h-[70px] rounded-full bg-white" ></div>
+  <div className={`absolute left-1/2 transform -translate-x-1/2 rounded-full bg-base-blue ${activeTab === 'pay' ? 'border-blue-300 w-[73px] h-[73px] top-[-35px]' : 'border-base-blue w-[60px] h-[60px] top-[-30px]'} flex items-center justify-center`}>
       <Link href="/pay">
-        <FontAwesomeIcon icon={faDollarSign} className="w-8 h-8 text-white" />
+      <FontAwesomeIcon icon={faDollarSign} className={`${activeTab === 'pay' ? 'w-10 h-10' : 'w-8 h-8'} text-white`} />
            </Link>
       </div>
       <Link href="/">

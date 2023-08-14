@@ -14,7 +14,7 @@ const Footer = () => {
                     router.pathname === '/profile' ? 'profile' : '';
 
   return (
-    <footer className="relative flex w-full h-24 bg-white text-black items-center justify-around border-t-2 border-blue-500">
+    <footer className="fixed bottom-0 left-0 right-0 flex w-full h-24 bg-white text-black items-center justify-around border-t-2 border-blue-500 z-10">
       <div className="absolute top-[-30px] left-1/2 transform -translate-x-1/2 w-[60px] h-[60px] rounded-full bg-blue-500 border-b-2 border-blue-500 flex items-center justify-center">
         <FontAwesomeIcon icon={faDollarSign} className="w-8 h-8 text-white" />
       </div>

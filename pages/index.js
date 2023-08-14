@@ -5,7 +5,6 @@ import { useRouter } from 'next/router'; // Import useRouter
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faBarcodeRead } from '@fortawesome/pro-solid-svg-icons';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import Footer from '../components/Footer';
 
 export default function Home() {
 
@@ -49,7 +48,6 @@ export default function Home() {
           />
         </a>
       </div>
-      <Footer/>
     </main>
   );
 }

@@ -1,27 +1,16 @@
 import '@/styles/globals.css'
 import '@rainbow-me/rainbowkit/styles.css';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
-import {
-  arbitrum,
-  goerli,
-  mainnet,
-  optimism,
-  polygon,
-  zora,
-} from 'wagmi/chains';
+import { arbitrum, goerli, mainnet, optimism,polygon, zora } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import Head from 'next/head';
+import Footer from '../components/Footer';
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
-    mainnet,
-    polygon,
-    optimism,
-    arbitrum,
-    zora,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [goerli] : []),
-  ],
+    mainnet, polygon, optimism,arbitrum,zora, ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [goerli] : []),
+],
   [publicProvider()]
 );
 
@@ -57,6 +46,7 @@ function MyApp({ Component, pageProps }) {
         <Component {...pageProps} />
       </RainbowKitProvider>
     </WagmiConfig>
+    <Footer />
     </>
   );
 }

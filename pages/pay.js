@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // Import Font
 import { faBarcodeRead, faPaperPlane, faFileInvoice } from '@fortawesome/pro-solid-svg-icons'; // Import icons
 import { faClockNine } from '@fortawesome/pro-regular-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
+import { initiatePayment } from "../controller/contract-control"
 
 const Pay = () => {
   const [counter, setCounter] = useState('');
@@ -16,6 +17,12 @@ const Pay = () => {
   const handleBackspace = () => {
     setCounter(counter.slice(0, -1));
   };
+
+  // @dev Allen's testing function. Feel free to amend during integration
+  const handlePayClick = () => { 
+    console.log(window.ethereum)
+    initiatePayment(window.ethereum, "0xAB60DdFE027D9D86C836e8e5f9133578E102F720", "0.001"  )
+  }
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -51,7 +58,7 @@ const Pay = () => {
           </div>
         </main>
         <div className="w-full flex justify-center space-x-3 px-4">
-        <button className="w-1/2 bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 rounded-3xl focus:outline-none">
+        <button onClick={handlePayClick} className="w-1/2 bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 rounded-3xl focus:outline-none">
           <FontAwesomeIcon icon={faPaperPlane} className="mr-2 h-4 w-4 text-white" />
           Pay
         </button>

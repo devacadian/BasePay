@@ -38,8 +38,9 @@ const wagmiConfig = createConfig({
   webSocketPublicClient,
 });
 
+const isLocal = process.env.NEXT_PUBLIC_ENVIRONMENT === 'local'; 
+
 function MyApp({ Component, pageProps }) {
-  const isLocal = process.env.NEXT_PUBLIC_ENVIRONMENT === 'local'; 
 
   return (
     <>

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // Import FontAwesomeIcon
-import { faBarcodeRead } from '@fortawesome/pro-solid-svg-icons'; // Import icon
+import { faBarcodeRead, faPaperPlane, faFileInvoice } from '@fortawesome/pro-solid-svg-icons'; // Import icons
+import { faClockNine } from '@fortawesome/pro-regular-svg-icons';
 
 const Pay = () => {
   const [counter, setCounter] = useState('');
@@ -21,7 +22,11 @@ const Pay = () => {
         <title>Payment Page</title>
         <meta name="description" content="Handle payments here" />
       </Head>
-      <div className="px-4 pb-0 pt-8 flex items-center w-full justify-end">
+      <div className="px-4 pb-0 pt-8 flex items-center w-full justify-between">
+        <div className="flex items-center">
+          <FontAwesomeIcon icon={faClockNine} className="mr-4 h-7 w-7 text-gray-600" /> {/* New clock icon */}
+          <div className="w-20 h-8 border rounded-4xl border-2.5 border-gray-600 flex items-center justify-center text-xs text-black font-semibold">{"$0.0000"}</div>
+        </div>
         <FontAwesomeIcon icon={faBarcodeRead} className="ml-4 mr-0 h-7 w-7 text-gray-600" />
       </div>
       <div className="flex-grow flex flex-col items-center justify-center pb-24">
@@ -43,9 +48,15 @@ const Pay = () => {
           </div>
         </main>
         <div className="w-full flex justify-center space-x-3 px-4">
-          <button className="w-1/2 bg-base-blue text-black text-lg font-medium flex items-center justify-center h-12 rounded-3xl focus:outline-none">Pay</button>
-          <button className="w-1/2 bg-base-blue text-black text-lg font-medium flex items-center justify-center h-12 rounded-3xl focus:outline-none">Request</button>
-        </div>
+        <button className="w-1/2 bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 rounded-3xl focus:outline-none">
+          <FontAwesomeIcon icon={faPaperPlane} className="mr-2 h-4 w-4 text-white" />
+          Pay
+        </button>
+        <button className="w-1/2 bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 rounded-3xl focus:outline-none">
+          <FontAwesomeIcon icon={faFileInvoice} className="mr-2 h-4 w-4 text-white" /> 
+          Request
+        </button>
+      </div>
       </div>
     </div>
   );

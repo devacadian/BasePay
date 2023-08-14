@@ -12,7 +12,7 @@ const Footer = () => {
                     router.pathname === '/messages' ? 'messages' :
                     router.pathname === '/notifications' ? 'notifications' :
                     router.pathname === '/profile' ? 'profile' :
-                    router.pathname === '/pay' ? 'pay' : '';
+                    router.pathname === '/pay' ? 'pay' : 'home';
 
   return (
     <footer className={`fixed bottom-0 left-0 right-0 flex w-full ${activeTab === 'pay' ? 'h-20' : 'h-24'} bg-white text-black items-center justify-around border-t-2 border-base-blue`}>

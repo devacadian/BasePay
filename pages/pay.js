@@ -19,9 +19,12 @@ const Pay = () => {
   };
 
   // @dev Allen's testing function. Feel free to amend during integration
-  const handlePayClick = () => { 
+  // @dev initiatePayment return true if txn successful false if otherwise
+  // @dev can build front-end pop-up messages based on the returned bool
+  const handlePayClick = async () => { 
     console.log(window.ethereum)
-    initiatePayment(window.ethereum, "0xAB60DdFE027D9D86C836e8e5f9133578E102F720", "0.001"  )
+    const status = await initiatePayment(window.ethereum, "0xAB60DdFE027D9D86C836e8e5f9133578E102F720", "0.001"  )
+    console.log(status)
   }
 
   return (

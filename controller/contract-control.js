@@ -24,8 +24,19 @@ async function initiatePayment(eth, _paymentRecipient, _etherValue) {
         const basePayContractInstance = await connectNode(eth)
         const txResponse = await basePayContractInstance.initiatePayment(_paymentRecipient, {value: ethers.utils.parseEther(_etherValue)})
         console.log("Transaction Hash: ",txResponse.hash)
+        // Wait for the transaction to be mined
+        const receipt = await txResponse.wait();
+
+        if (receipt.status === 1) {
+            console.log("Transaction successful!");
+            return true
+        } else {
+            console.log("Transaction failed or reverted.");
+            return false
+        }
     } catch(error) {
         console.log(error.message)
+        return false
     }
 }
 

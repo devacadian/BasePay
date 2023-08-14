@@ -1,7 +1,7 @@
 import '@/styles/globals.css'
 import '@rainbow-me/rainbowkit/styles.css';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
-import { arbitrum, goerli, mainnet, optimism,polygon, zora } from 'wagmi/chains';
+import { arbitrum, goerli, mainnet, optimism, polygon, zora } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import Head from 'next/head';
@@ -42,7 +42,7 @@ function MyApp({ Component, pageProps }) {
         />
       </Head>
     <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider coolMode chains={chains}>
+      <RainbowKitProvider coolMode chains={chains} >
         <Component {...pageProps} />
       </RainbowKitProvider>
     </WagmiConfig>

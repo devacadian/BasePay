@@ -5,9 +5,21 @@ import { faBarcodeRead, faPaperPlane, faFileInvoice } from '@fortawesome/pro-sol
 import { faClockNine } from '@fortawesome/pro-regular-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import { initiatePayment } from "../controller/contract-control"
+import { useAccount } from "wagmi";
+import { useBalance } from 'wagmi';
 
 const Pay = () => {
   const [counter, setCounter] = useState('');
+
+  
+  const { address } = useAccount();
+  const { data, isLoading } = useBalance({ address });
+
+  if (isLoading) return <div>Loading...</div>;
+
+  const balanceValue = parseFloat(data?.formatted || '0.0000');
+  const formattedBalance = balanceValue.toFixed(4);
+
 
   const handleNumberClick = (number) => {
     if (number === '.' && counter.includes('.')) return; // Prevent more than one decimal point
@@ -37,7 +49,7 @@ const Pay = () => {
         <div className="flex items-center">
           <FontAwesomeIcon icon={faClockNine} className="mr-4 h-7 w-7 text-gray-600" /> {/* New clock icon */}
           <div className="w-20 h-8 border rounded-4xl border-2.5 border-gray-600 flex items-center justify-center text-xs text-black font-semibold">
-            <FontAwesomeIcon icon={faEthereum} className="mr-1 text-black h-3 w-3" />{"0.0000"} 
+            <FontAwesomeIcon icon={faEthereum} className="mr-1 text-black h-3 w-3" />  {formattedBalance}
           </div>
         </div>
         <FontAwesomeIcon icon={faBarcodeRead} className="ml-4 mr-0 h-7 w-7 text-gray-600" />

@@ -56,7 +56,7 @@ const Pay = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-white pb-20">
-      <div style={{ background: 'linear-gradient(to bottom, #007BFF, #ffffff)' }} className="flex-grow flex flex-col">
+      <div style={{ background: 'linear-gradient(to bottom, #0e76fd, #ffffff)' }} className="flex-grow flex flex-col">
         <Head>
           <title>Payment Page</title>
           <meta name="description" content="Handle payments here" />
@@ -88,6 +88,7 @@ const Pay = () => {
             <FontAwesomeIcon icon={faEthereum} className="mr-0 text-black h-10 w-10" /> {/* Ethereum icon */}
             <span className="text-center">{counter || '0'}</span>
           </div>
+          </div>
           <div className="grid grid-cols-3 gap-x-0 gap-y-8 mb-8 mt-0">
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, '.', 0, '<'].map((number, index) => (
               <button
@@ -98,7 +99,7 @@ const Pay = () => {
                 {number}
               </button>
             ))}
-          </div>
+          
       </div>
       <div className="w-full flex justify-center space-x-3 px-4 mb-20">
         <button onClick={handlePayClick} className="w-1/2 bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 rounded-3xl focus:outline-none">

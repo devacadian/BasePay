@@ -8,6 +8,8 @@ import { initiatePayment } from "../controller/contract-control"
 import { useAccount } from "wagmi";
 import { useBalance } from 'wagmi';
 import { useNetwork } from 'wagmi';
+import { useChainModal } from '@rainbow-me/rainbowkit'; 
+
 
 const Pay = () => {
   const [counter, setCounter] = useState('');
@@ -16,17 +18,18 @@ const Pay = () => {
   const { address } = useAccount();
   const { data, isLoading } = useBalance({ address });
 
-
+  const defaultNetworkName = 'Ethereum';
+  const chainName = chain?.name || defaultNetworkName;
   const isBaseGoerli = chain?.name === 'Base Goerli';
   const containerWidth = isBaseGoerli ? 'w-24' : 'w-20';
+
+  const { openChainModal } = useChainModal();
 
 
   useEffect(() => {
     const balanceValue = parseFloat(data?.formatted || '0.0000');
     setFormattedBalance(balanceValue.toFixed(4));
 }, [data]);
-
-  const NetworkIcon = chain?.name === 'Ethereum' ? faEthereum : '/assets/Base_Network_Logo.svg';
 
   const handleNumberClick = (number) => {
     if (number === '.' && counter.includes('.')) return; // Prevent more than one decimal point
@@ -56,12 +59,19 @@ const Pay = () => {
       <div className="px-4 pb-0 pt-8 flex items-center w-full justify-between">
         <div className="flex items-center">
         <FontAwesomeIcon icon={faClockNine} className="mr-4 h-7 w-7 text-gray-600" />
-          <div className={`${containerWidth} h-8 border rounded-4xl border-2.5 border-gray-600 flex items-center justify-center text-xs text-black font-semibold`}>
-            {isBaseGoerli && <img src="/assets/Base_Network_Logo.svg" alt="Network Logo" className="mr-1 h-3 w-3" />} {/* Base Network icon */}
-            {isBaseGoerli && <FontAwesomeIcon icon={faEthereum} className="mr-1 text-black h-3 w-3" />} {/* Ethereum icon */}
-            {chain?.name === 'Ethereum' && <FontAwesomeIcon icon={faEthereum} className="mr-1 text-black h-3 w-3" />} {/* Ethereum icon only */}
-            {formattedBalance}
-          </div>
+        <div className={`${containerWidth} h-8 border rounded-4xl border-2.5 border-gray-600 flex items-center justify-center text-xs text-black font-semibold`}
+     onClick={openChainModal} // Attach the openChainModal function to onClick
+>
+  {isBaseGoerli ? (
+    <>
+      <img src="/assets/Base_Network_Logo.svg" alt="Network Logo" className="mr-1 h-3 w-3" />
+      <FontAwesomeIcon icon={faEthereum} className="mr-1 text-black h-3 w-3" />
+    </>
+  ) : (
+    chain?.name === 'Ethereum' && <FontAwesomeIcon icon={faEthereum} className="mr-1 text-black h-3 w-3" />
+  )}
+  {formattedBalance}
+</div>
         </div>
         <FontAwesomeIcon icon={faBarcodeRead} className="ml-4 mr-0 h-7 w-7 text-gray-600" />
       </div>

@@ -21,12 +21,13 @@ router.get("/", (req,res) => {
 // returns back the newly created document id 
 router.post('/create-payment-request', async (req,res) => {
     try {
-        const {payment_requester, request_recipient, ether_amount} = req.body
+        const {payment_requester, request_recipient, ether_amount, transaction_message} = req.body
 
         const data = {
             payment_requester : payment_requester,
             request_recipient : request_recipient,
             ether_amount : ether_amount,
+            transaction_message : transaction_message,
             transaction_state : "Pending"
         }
         
@@ -62,6 +63,39 @@ router.get('/get-payment-request/:requestRecipient', async (req,res) => {
         res.status(500).send(error.message)
     }
 })
+
+//PATCH Request: Update payment request's transaction state
+// Returns back the entire updated document
+// decision = true if user accepts request
+// decision = false if user rejects request
+// @dev get back to this function how how to verify update result
+router.patch('/update-transaction-state/:paymentRequestId', async (req,res) => {
+    try {
+        const payment_request_id = req.params.paymentRequestId
+        const { decision } = req.body
+
+        const targetDocument = PaymentRequestRef.doc(payment_request_id)
+
+        if (decision) {
+            await targetDocument.update({transaction_state:"Processed"}) // returning void
+            const updatedTargetDocument = await PaymentRequestRef.doc(payment_request_id).get()
+            const updatedTargetDocumentData = await updatedTargetDocument.data()
+            console.log(`Here is the updated document: `,updatedTargetDocumentData)
+            res.status(200).json(updatedTargetDocumentData)
+        } else {
+            await targetDocument.update({transaction_state:"Rejected"}) // returning void
+            const updatedTargetDocument = await PaymentRequestRef.doc(payment_request_id).get()
+            const updatedTargetDocumentData = await updatedTargetDocument.data()
+            console.log(`Here is the updated document: `,updatedTargetDocumentData)
+            res.status(200).json(updatedTargetDocumentData)
+        }
+        
+    } 
+    catch(error) {
+        res.status(500).send(error.message)
+    }
+})
+
 
 /* ----- Start Server ----- */
 app.use('/', router)

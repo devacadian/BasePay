@@ -21,12 +21,12 @@ const Pay = () => {
   const defaultNetworkName = 'Ethereum';
   const chainName = chain?.name || defaultNetworkName;
   const isBaseGoerli = chain?.name === 'Base Goerli';
-  const containerWidth = isBaseGoerli ? 'w-24' : 'w-20';
+  const [containerWidth, setContainerWidth] = useState('w-20');
   const { openChainModal } = useChainModal();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-
+    setContainerWidth(chain?.name === 'Base Goerli' ? 'w-24' : 'w-20');
     setIsClient(true);
   }, []);
 
@@ -55,7 +55,7 @@ const Pay = () => {
 
 
   return (
-    <div className="min-h-screen flex flex-col bg-white pb-20">
+<main className="min-h-screen flex flex-col bg-white pb-20">
       <div style={{ background: 'linear-gradient(to bottom, #0e76fd, #ffffff)' }} className="flex-grow flex flex-col">
         <Head>
           <title>Payment Page</title>
@@ -111,7 +111,7 @@ const Pay = () => {
           Request
         </button>
       </div>
-    </div>
+      </main>
   );
 };
 

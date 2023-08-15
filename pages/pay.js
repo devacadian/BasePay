@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import Head from 'next/head';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // Import FontAwesomeIcon
 import { faBarcodeRead, faPaperPlane, faFileInvoice } from '@fortawesome/pro-solid-svg-icons'; // Import icons
@@ -7,19 +7,26 @@ import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import { initiatePayment } from "../controller/contract-control"
 import { useAccount } from "wagmi";
 import { useBalance } from 'wagmi';
+import { useNetwork } from 'wagmi';
 
 const Pay = () => {
   const [counter, setCounter] = useState('');
-
-  
+  const [formattedBalance, setFormattedBalance] = useState('0.0000'); // State for formatted balance
+  const { chain } = useNetwork();
   const { address } = useAccount();
   const { data, isLoading } = useBalance({ address });
 
-  if (isLoading) return <div>Loading...</div>;
 
-  const balanceValue = parseFloat(data?.formatted || '0.0000');
-  const formattedBalance = balanceValue.toFixed(4);
+  const isBaseGoerli = chain?.name === 'Base Goerli';
+  const containerWidth = isBaseGoerli ? 'w-24' : 'w-20';
 
+
+  useEffect(() => {
+    const balanceValue = parseFloat(data?.formatted || '0.0000');
+    setFormattedBalance(balanceValue.toFixed(4));
+}, [data]);
+
+  const NetworkIcon = chain?.name === 'Ethereum' ? faEthereum : '/assets/Base_Network_Logo.svg';
 
   const handleNumberClick = (number) => {
     if (number === '.' && counter.includes('.')) return; // Prevent more than one decimal point
@@ -39,6 +46,7 @@ const Pay = () => {
     console.log(status)
   }
 
+
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <Head>
@@ -47,9 +55,12 @@ const Pay = () => {
       </Head>
       <div className="px-4 pb-0 pt-8 flex items-center w-full justify-between">
         <div className="flex items-center">
-          <FontAwesomeIcon icon={faClockNine} className="mr-4 h-7 w-7 text-gray-600" /> {/* New clock icon */}
-          <div className="w-20 h-8 border rounded-4xl border-2.5 border-gray-600 flex items-center justify-center text-xs text-black font-semibold">
-            <FontAwesomeIcon icon={faEthereum} className="mr-1 text-black h-3 w-3" />  {formattedBalance}
+        <FontAwesomeIcon icon={faClockNine} className="mr-4 h-7 w-7 text-gray-600" />
+          <div className={`${containerWidth} h-8 border rounded-4xl border-2.5 border-gray-600 flex items-center justify-center text-xs text-black font-semibold`}>
+            {isBaseGoerli && <img src="/assets/Base_Network_Logo.svg" alt="Network Logo" className="mr-1 h-3 w-3" />} {/* Base Network icon */}
+            {isBaseGoerli && <FontAwesomeIcon icon={faEthereum} className="mr-1 text-black h-3 w-3" />} {/* Ethereum icon */}
+            {chain?.name === 'Ethereum' && <FontAwesomeIcon icon={faEthereum} className="mr-1 text-black h-3 w-3" />} {/* Ethereum icon only */}
+            {formattedBalance}
           </div>
         </div>
         <FontAwesomeIcon icon={faBarcodeRead} className="ml-4 mr-0 h-7 w-7 text-gray-600" />

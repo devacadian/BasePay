@@ -63,10 +63,10 @@ const Pay = () => {
         </Head>
         <div className="px-4 pb-0 pt-8 flex items-center w-full justify-between">
         <div className="flex items-center">
-  <div className="bg-blue-100 rounded-full h-7 w-7 flex items-center justify-center"> 
+  <div className="bg-gray-100 rounded-full h-7 w-7 flex items-center justify-center"> 
     <FontAwesomeIcon icon={faClockNine} className="h-7 w-7 text-base-blue" />
   </div>
-  <div className={`${containerWidth} h-8 rounded-4xl bg-blue-100 border-base-blue border-2 flex items-center justify-center text-xs text-black font-semibold ml-4`}
+  <div className={`${containerWidth} h-8 rounded-4xl bg-gray-100 border-base-blue border-2 flex items-center justify-center text-xs text-black font-semibold ml-4`}
        onClick={openChainModal}>
     {isClient && isBaseGoerli ? (
       <>
@@ -80,14 +80,14 @@ const Pay = () => {
   </div>
 </div>
 <div className="flex items-center relative">
-          <div className=" bg-blue-100 absolute h-6 w-7 rounded-md"  />
+          <div className=" bg-gray-100 absolute h-6 w-7 rounded-md"  />
           <FontAwesomeIcon icon={faBarcodeRead} className="h-7 w-7 text-base-blue z-10" />
         </div>
       </div>
-      <div className="flex-grow flex flex-col items-center justify-center mt-10 mb-10 relative">
-  <span className="text-center text-5xl font-semibold text-black">{counter || '0'}</span>
-  <FontAwesomeIcon icon={faEthereum} className="text-black h-8 w-8 absolute left-1/2 -ml-13" />
-</div>
+      <div className="text-6xl font-semibold mb-10 text-black flex justify-center items-baseline -ml-10 mt-10">
+            <FontAwesomeIcon icon={faEthereum} className="mr-0 text-black h-10 w-10" /> {/* Ethereum icon */}
+            <span className="text-center">{counter || '0'}</span>
+          </div>
           <div className="grid grid-cols-3 gap-x-0 gap-y-8 mb-8 mt-0">
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, '.', 0, '<'].map((number, index) => (
               <button

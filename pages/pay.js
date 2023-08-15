@@ -84,9 +84,14 @@ const Pay = () => {
           <FontAwesomeIcon icon={faBarcodeRead} className="h-7 w-7 text-base-blue z-10" />
         </div>
       </div>
-      <div className="text-6xl font-semibold mb-10 text-black flex justify-center items-baseline -ml-10 mt-10">
+      <div className="text-6xl font-semibold mb-4 text-black flex justify-center items-baseline -ml-10 mt-10">
             <FontAwesomeIcon icon={faEthereum} className="mr-0 text-black h-10 w-10" /> {/* Ethereum icon */}
             <span className="text-center">{counter || '0'}</span>
+          </div>
+          <div className="flex justify-center mb-6"> 
+        <div className="bg-gray-100 rounded-4xl w-20 h-6 text-center"> 
+          <span className="text-gray-800 text-sm font-bold">ETH</span>
+          </div>
           </div>
           </div>
           <div className="grid grid-cols-3 gap-x-0 gap-y-8 mb-8 mt-0">

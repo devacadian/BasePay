@@ -17,10 +17,10 @@ const Notifications = () => {
           <FontAwesomeIcon icon={faListCheck} className="text-white h-4 w-4" />
         </div>
       </div>
-      <div className="bg-white w-full mb-0"></div>
+      <div className="bg-white w-full -mb-2"></div>
       <div className="px-4">
         {['5d ago', '12d ago'].map((time, index) => (
-          <div className="flex items-center h-25 rounded-4xl border-2 border-gray-100 w-full shadow-md mt-2">
+          <div className="flex items-center h-25 rounded-4xl border-2 border-gray-100 w-full shadow-md mt-4">
             <div className="relative h-12 w-12 border-2 border-gray-300 bg-blue-600 rounded-3xl ml-5">
               <div className="bg-green-400 h-2 w-2 rounded-full absolute bottom-0 right-0"></div>
             </div>

@@ -15,7 +15,8 @@ const Notifications = () => {
       </div>
       <div className="border-b-2 border-base-blue w-full mb-4"></div>
       <div className="px-4"> 
-        <div className="h-25 rounded-4xl border-2 border-gray-500 w-full shadow-xl"></div>
+        <div className="h-25 rounded-4xl border-2 border-gray-100 w-full shadow-md"></div>
+        <div className="h-25 rounded-4xl border-2 border-gray-100 w-full shadow-md mt-4"></div>
       </div>
     </main>
   );

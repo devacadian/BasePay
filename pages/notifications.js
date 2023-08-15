@@ -16,7 +16,7 @@ const Notifications = () => {
         <meta name="twitter:description" content="Get the latest notifications and updates related to your BasePay activities."/>
         <meta name="keywords" content="Crypto, Decentralized, Payments, Wallet, Metamask, BasePay.app, Notifications, Updates, Ether, Base"/>
       </Head>
-      {/* Content goes here */}
+
     </main>
   );
 };

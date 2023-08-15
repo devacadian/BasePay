@@ -22,9 +22,13 @@ const Pay = () => {
   const chainName = chain?.name || defaultNetworkName;
   const isBaseGoerli = chain?.name === 'Base Goerli';
   const containerWidth = isBaseGoerli ? 'w-24' : 'w-20';
-
   const { openChainModal } = useChainModal();
+  const [isClient, setIsClient] = useState(false);
 
+  useEffect(() => {
+
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     const balanceValue = parseFloat(data?.formatted || '0.0000');
@@ -60,17 +64,16 @@ const Pay = () => {
         <div className="flex items-center">
         <FontAwesomeIcon icon={faClockNine} className="mr-4 h-7 w-7 text-gray-600" />
         <div className={`${containerWidth} h-8 border rounded-4xl border-2.5 border-gray-600 flex items-center justify-center text-xs text-black font-semibold`}
-     onClick={openChainModal} // Attach the openChainModal function to onClick
->
-  {isBaseGoerli ? (
-    <>
-      <img src="/assets/Base_Network_Logo.svg" alt="Network Logo" className="mr-1 h-3 w-3" />
-      <FontAwesomeIcon icon={faEthereum} className="mr-1 text-black h-3 w-3" />
-    </>
-  ) : (
-    chain?.name === 'Ethereum' && <FontAwesomeIcon icon={faEthereum} className="mr-1 text-black h-3 w-3" />
-  )}
-  {formattedBalance}
+             onClick={openChainModal}>
+          {isClient && isBaseGoerli ? (
+            <>
+              <img src="/assets/Base_Network_Logo.svg" alt="Network Logo" className="mr-1 h-3 w-3" />
+              <FontAwesomeIcon icon={faEthereum} className="mr-1 text-black h-3 w-3" />
+            </>
+          ) : (
+            <FontAwesomeIcon icon={faEthereum} className="mr-1 text-black h-3 w-3" />
+          )}
+          {formattedBalance}
 </div>
         </div>
         <FontAwesomeIcon icon={faBarcodeRead} className="ml-4 mr-0 h-7 w-7 text-gray-600" />

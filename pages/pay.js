@@ -208,7 +208,7 @@ const Pay = () => {
         <input
       type="text"
       id="for"
-      className="rounded p-2 flex-grow text-black font-medium outline-none"
+      className="rounded p-2 flex-grow text-gray-600 font-medium outline-none"
       placeholder="Add a note"
       value={forValue}
       onChange={(e) => setForValue(e.target.value)} // Update the state with the entered value
@@ -232,8 +232,8 @@ const Pay = () => {
 {showPaymentModal && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 outside-click" onClick={handleOutsideClick}>
     <div className="bg-black opacity-50 w-full h-full outside-click"></div>
-    <div className={`bg-white w-full h-1/2 rounded-t-lg absolute ${animateModal ? 'top-full transition-all duration-300 ease-in-out' : 'top-1/2'}`}>
-      <div className="bg-gray-300 w-16 h-1 mx-auto mt-2 rounded-full cursor-pointer"
+    <div className={`bg-white w-full h-1/2 rounded-t-lg absolute mt-10 ${animateModal ? 'top-full transition-all duration-300 ease-in-out' : 'top-1/2'}`}>
+      <div className="bg-gray-300 w-18 h-1 mx-auto mt-4 rounded-full cursor-pointer"
            onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} // Adding touch handlers to the gray drag bar
            onClick={handleCloseAnimation}></div> {/* Clickable drag bar */}
       <div className="p-4">
@@ -241,9 +241,16 @@ const Pay = () => {
           <FontAwesomeIcon icon={faEthereum} className="mr-2 text-black h-5 w-5" /> {/* Ethereum icon */}
           {counter || '0'} {/* Display counter value */}
         </div>
-        <div className="mt-2 text-black font-medium text-lg text-left">payment to</div> {/* Display phrase */}
-        <div className="mt-2 text-black font-medium text-lg">{toAddress}</div> {/* Display address */}
-        <div className="mt-2 text-black font-medium text-lg">{forValue}</div> {/* Display "for" value */}
+        <div className="mt-4">
+          <div className="bg-gray-300 rounded-3xl w-24 h-12 flex items-center justify-center"> {/* Circle background */}
+            <span className="text-gray-600 font-medium text-lg">Pay To</span> {/* Display phrase */}
+          </div>
+        </div>
+        <div className="mt-4 ml-1 text-black font-medium text-2xl">{toAddress}</div> {/* Display address */}
+        <div className="mt-2 ml-1 text-gray-600 font-medium italic text-lg">{forValue}</div> {/* Display "for" value */}
+        <button className="bg-base-blue text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none mt-4">
+          Confirm
+        </button> {/* Confirm button */}
       </div>
       {/* Rest of the content for the new payment modal goes here */}
     </div>

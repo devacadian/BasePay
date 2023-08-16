@@ -128,7 +128,7 @@ const Pay = () => {
         </button>
         <div className="text-black text-2xl font-bold flex items-center justify-center"> {/* Centered text */}
           <FontAwesomeIcon icon={faEthereum} className="mr-0 text-black h-5 w-5" /> {/* Ethereum icon */}
-          0
+          {counter || '0'} {/* Display counter value */}
         </div>
         <div className="flex justify-end"> {/* Pay button container */}
           <button className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-10 w-24 rounded-3xl focus:outline-none">
@@ -140,13 +140,13 @@ const Pay = () => {
       <div className="border-t border-gray-300 mt-2"></div> {/* Thin gray border */}
       <div className="px-4 py-2 flex items-center">
         <label htmlFor="to" className="text-black text-lg font-bold mr-2">To:</label> {/* To: label */}
-        <input type="text" id="to" className="rounded p-2 flex-grow ml-1" placeholder="Enter ENS or Base address..." /> {/* Entry box */}
+        <input type="text" id="to" className="rounded p-2 flex-grow ml-1 text-black font-medium outline-none" placeholder="Enter ENS or Base address..." /> {/* Entry box */}
         <FontAwesomeIcon icon={faBarcodeRead} className="h-6 w-6 text-black ml-2" /> {/* Scan icon */}
       </div>
       <div className="border-t border-gray-300"></div> {/* Thin gray border */}
       <div className="px-4 py-2 flex items-center">
         <label htmlFor="for" className="text-black text-lg font-bold mr-2">For:</label> {/* For: label */}
-        <input type="text" id="for" className="rounded p-2 flex-grow" placeholder="Add a note" /> {/* Entry box */}
+        <input type="text" id="for" className="rounded p-2 flex-grow text-black font-medium outline-none" placeholder="Add a note" /> {/* Entry box */}
       </div>
       <div className="border-t border-gray-300"></div> {/* Thin gray border */}
       {/* Add your user selection content here */}

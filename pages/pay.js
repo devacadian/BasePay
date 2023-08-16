@@ -25,6 +25,7 @@ const Pay = () => {
   const { openChainModal } = useChainModal();
   const [isClient, setIsClient] = useState(false);
   const [showModal, setShowModal] = useState(false); // State to control the modal display
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   useEffect(() => {
     setContainerWidth(chain?.name === 'Base Goerli' ? 'w-24' : 'w-20');
@@ -53,6 +54,33 @@ const Pay = () => {
     setShowModal(false); // Hide the modal when the close button is clicked
   };
 
+  const handleDragStart = (e) => {
+    e.dataTransfer.setDragImage(new Image(), 0, 0);
+  };
+
+  const handleDragEnd = () => {
+    setShowPaymentModal(false); // Close the new payment modal when dragged down
+  };
+
+  const handleConfirmPaymentClick = () => {
+    setShowPaymentModal(true); // Show the new payment modal when Confirm Payment button is clicked
+  };
+
+  const handleOutsideClick = (e) => {
+    if (e.target.className.includes('outside-click')) {
+      setShowPaymentModal(false); // Close the new payment modal when clicked outside of it
+    }
+  };
+
+  const [animateModal, setAnimateModal] = useState(false);
+
+  const handleCloseAnimation = () => {
+    setAnimateModal(true); // Start the animation
+    setTimeout(() => {
+      setShowPaymentModal(false); // Close the modal after animation completes
+      setAnimateModal(false); // Reset the animation state
+    }, 300); // 300 milliseconds
+  };
 
   return (
 <main className="min-h-screen flex flex-col bg-white pb-20">
@@ -130,12 +158,12 @@ const Pay = () => {
           <FontAwesomeIcon icon={faEthereum} className="mr-0 text-black h-5 w-5" /> {/* Ethereum icon */}
           {counter || '0'} {/* Display counter value */}
         </div>
-        <div className="flex justify-end"> {/* Pay button container */}
-          <button className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-10 w-24 rounded-3xl focus:outline-none">
-            <FontAwesomeIcon icon={faPaperPlane} className="mr-2 h-4 w-4 text-white" /> {/* Icon */}
-            Pay
-          </button>
-        </div>
+        <div className="flex justify-end"> {/* Confirm Payment button container */}
+            <button onClick={handleConfirmPaymentClick} className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-10 w-24 rounded-3xl focus:outline-none">
+              <FontAwesomeIcon icon={faPaperPlane} className="mr-2 h-4 w-4 text-white" /> {/* Icon */}
+              Pay
+            </button>
+          </div>
       </div>
       <div className="border-t border-gray-300 mt-2"></div> {/* Thin gray border */}
       <div className="px-4 py-2 flex items-center">
@@ -161,8 +189,22 @@ const Pay = () => {
     </div>
   </div>
 )}
-      </main>
+
+      {/* New Payment Modal */}
+      {showPaymentModal && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 outside-click" onClick={handleOutsideClick}>
+          <div className="bg-black opacity-50 w-full h-full outside-click"></div>
+          <div
+            className={`bg-white w-full h-1/2 rounded-t-lg absolute ${animateModal ? 'top-full transition-all duration-300 ease-in-out' : 'top-1/2'}`}
+          >
+            <div className="bg-gray-300 w-16 h-1 mx-auto mt-2 rounded-full cursor-pointer" onClick={handleCloseAnimation}></div> {/* Clickable drag bar */}
+            {/* Content of the new payment modal goes here */}
+          </div>
+        </div>
+      )}
+    </main>
   );
 };
+
 
 export default Pay;

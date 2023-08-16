@@ -232,7 +232,7 @@ const Pay = () => {
 {showPaymentModal && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 outside-click" onClick={handleOutsideClick}>
     <div className="bg-black opacity-50 w-full h-full outside-click"></div>
-    <div className={`bg-white w-full h-1/2 rounded-t-lg absolute mt-10 ${animateModal ? 'top-full transition-all duration-300 ease-in-out' : 'top-1/2'}`}>
+    <div className={`bg-white w-full h-1/2 rounded-t-2xl absolute mt-10 ${animateModal ? 'top-full transition-all duration-300 ease-in-out' : 'top-1/2'}`}>
       <div className="bg-gray-300 w-18 h-1 mx-auto mt-4 rounded-full cursor-pointer"
            onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} // Adding touch handlers to the gray drag bar
            onClick={handleCloseAnimation}></div> {/* Clickable drag bar */}

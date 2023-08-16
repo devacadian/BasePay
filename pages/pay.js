@@ -1,7 +1,7 @@
 import React, { useState, useEffect  } from 'react';
 import Head from 'next/head';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // Import FontAwesomeIcon
-import { faBarcodeRead, faPaperPlane, faFileInvoice, faChevronLeft } from '@fortawesome/pro-solid-svg-icons'; // Import icons
+import { faBarcodeRead, faPaperPlane, faFileInvoice, faChevronLeft, faMagnifyingGlass } from '@fortawesome/pro-solid-svg-icons'; // Import icons
 import { faClockNine } from '@fortawesome/pro-regular-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import { initiatePayment } from "../controller/contract-control"
@@ -104,7 +104,6 @@ const Pay = () => {
                 {number}
               </button>
             ))}
-          
       </div>
       <div className="w-full flex justify-center space-x-3 px-4 mb-20">
         <button onClick={handlePayClick} className="w-1/2 bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 rounded-3xl focus:outline-none">
@@ -116,17 +115,35 @@ const Pay = () => {
           Request
         </button>
       </div>
+
+
+      
      {/* User Selection Modal */}
      {showModal && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-50">
-          <div className="bg-white w-full h-full relative">
-            <button onClick={handleCloseModal} className="absolute top-4 left-4 bg-gray-100 p-2 rounded-full focus:outline-none">
-              <FontAwesomeIcon icon={faChevronLeft} className="h-4 w-4 text-black" />
-            </button>
-            {/* Add your user selection content here */}
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-50">
+    <div className="bg-white w-full h-full relative">
+      <div className="px-4 pb-4 pt-6 flex items-center justify-between -ml-3">
+        <button onClick={handleCloseModal} className="p-2 rounded-full focus:outline-none">
+          <FontAwesomeIcon icon={faChevronLeft} className="h-6 w-8 text-black" />
+        </button>
+        <div className="flex items-center w-full">
+          <div className="flex items-center border-2 border-blue-500 rounded-3xl w-full p-2 ml-0">
+            <FontAwesomeIcon icon={faMagnifyingGlass} className="pl-2 mr-2 text-black w-6 h-6" />
+            <input
+              type="text"
+              placeholder="Search for an ENS or Base address..."
+              className="w-full bg-transparent outline-none text-black"
+            />
           </div>
+          <FontAwesomeIcon icon={faBarcodeRead} className="ml-4 mr-0 h-8 w-8 text-gray-600" />
         </div>
-      )}
+      </div>
+      {/* Add your user selection content here */}
+    </div>
+  </div>
+)}
+
+
 
       </main>
   );

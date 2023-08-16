@@ -148,12 +148,19 @@ const Pay = () => {
         <label htmlFor="for" className="text-black text-lg font-bold mr-2">For:</label> {/* For: label */}
         <input type="text" id="for" className="rounded p-2 flex-grow text-black font-medium outline-none" placeholder="Add a note" /> {/* Entry box */}
       </div>
-      <div className="border-t border-gray-300"></div> {/* Thin gray border */}
+
+
+      <div className="bg-gray-100 h-10 flex items-center">
+        <span className="text-gray-500 text-base font-bold ml-4">Suggested</span>
+      </div>
+
+      <div className="text-center text-black text-sm font-medium my-10">
+        Start using BasePay to find suggested contacts!
+      </div>
       {/* Add your user selection content here */}
     </div>
   </div>
 )}
-
       </main>
   );
 };

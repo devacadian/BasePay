@@ -26,6 +26,9 @@ const Pay = () => {
   const [isClient, setIsClient] = useState(false);
   const [showModal, setShowModal] = useState(false); // State to control the modal display
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [toAddress, setToAddress] = useState('');
+  const [forValue, setForValue] = useState('');
+
 
   useEffect(() => {
     setContainerWidth(chain?.name === 'Base Goerli' ? 'w-24' : 'w-20');
@@ -189,13 +192,27 @@ const Pay = () => {
       <div className="border-t border-gray-300 mt-2"></div> {/* Thin gray border */}
       <div className="px-4 py-2 flex items-center">
         <label htmlFor="to" className="text-black text-lg font-bold mr-2">To:</label> {/* To: label */}
-        <input type="text" id="to" className="rounded p-2 flex-grow ml-1 text-black font-medium outline-none" placeholder="Enter ENS or Base address..." /> {/* Entry box */}
+        <input
+  type="text"
+  id="to"
+  className="rounded p-2 flex-grow ml-1 text-black font-medium outline-none"
+  placeholder="Enter ENS or Base address..."
+  value={toAddress}
+  onChange={(e) => setToAddress(e.target.value)} // Update the state with the entered value
+/>
         <FontAwesomeIcon icon={faBarcodeRead} className="h-6 w-6 text-black ml-2" /> {/* Scan icon */}
       </div>
       <div className="border-t border-gray-300"></div> {/* Thin gray border */}
       <div className="px-4 py-2 flex items-center">
         <label htmlFor="for" className="text-black text-lg font-bold mr-2">For:</label> {/* For: label */}
-        <input type="text" id="for" className="rounded p-2 flex-grow text-black font-medium outline-none" placeholder="Add a note" /> {/* Entry box */}
+        <input
+      type="text"
+      id="for"
+      className="rounded p-2 flex-grow text-black font-medium outline-none"
+      placeholder="Add a note"
+      value={forValue}
+      onChange={(e) => setForValue(e.target.value)} // Update the state with the entered value
+    />
       </div>
 
 
@@ -213,16 +230,26 @@ const Pay = () => {
 
 {/* New Payment Modal */}
 {showPaymentModal && (
-    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 outside-click" onClick={handleOutsideClick}>
-      <div className="bg-black opacity-50 w-full h-full outside-click"></div>
-      <div className={`bg-white w-full h-1/2 rounded-t-lg absolute ${animateModal ? 'top-full transition-all duration-300 ease-in-out' : 'top-1/2'}`}>
-        <div className="bg-gray-300 w-16 h-1 mx-auto mt-2 rounded-full cursor-pointer"
-             onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} // Adding touch handlers to the gray drag bar
-             onClick={handleCloseAnimation}></div> {/* Clickable drag bar */}
-        {/* Content of the new payment modal goes here */}
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 outside-click" onClick={handleOutsideClick}>
+    <div className="bg-black opacity-50 w-full h-full outside-click"></div>
+    <div className={`bg-white w-full h-1/2 rounded-t-lg absolute ${animateModal ? 'top-full transition-all duration-300 ease-in-out' : 'top-1/2'}`}>
+      <div className="bg-gray-300 w-16 h-1 mx-auto mt-2 rounded-full cursor-pointer"
+           onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} // Adding touch handlers to the gray drag bar
+           onClick={handleCloseAnimation}></div> {/* Clickable drag bar */}
+      <div className="p-4">
+        <div className="flex items-center text-2xl text-black font-bold">
+          <FontAwesomeIcon icon={faEthereum} className="mr-2 text-black h-5 w-5" /> {/* Ethereum icon */}
+          {counter || '0'} {/* Display counter value */}
+        </div>
+        <div className="mt-2 text-black font-medium text-lg text-left">payment to</div> {/* Display phrase */}
+        <div className="mt-2 text-black font-medium text-lg">{toAddress}</div> {/* Display address */}
+        <div className="mt-2 text-black font-medium text-lg">{forValue}</div> {/* Display "for" value */}
       </div>
+      {/* Rest of the content for the new payment modal goes here */}
     </div>
+  </div>
 )}
+
     </main>
   );
 };

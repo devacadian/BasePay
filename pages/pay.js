@@ -62,10 +62,6 @@ const Pay = () => {
     setShowPaymentModal(false); // Close the new payment modal when dragged down
   };
 
-  const handleConfirmPaymentClick = () => {
-    setShowPaymentModal(true); // Show the new payment modal when Confirm Payment button is clicked
-  };
-
   const handleOutsideClick = (e) => {
     if (e.target.className.includes('outside-click')) {
       setShowPaymentModal(false); // Close the new payment modal when clicked outside of it
@@ -81,6 +77,23 @@ const Pay = () => {
       setAnimateModal(false); // Reset the animation state
     }, 300); // 300 milliseconds
   };
+
+
+  const handleOpenPaymentModal = () => {
+    document.body.style.overflowY = "hidden";
+    document.body.style.minHeight = "calc(100vh + 1px)";
+    window.scrollBy(0, 1);
+    setShowPaymentModal(true);
+  };
+
+  // Function to close the payment modal
+  const handleClosePaymentModal = () => {
+    document.body.style.overflowY = "scroll";
+    document.body.style.minHeight = "0px";
+    window.scrollBy(0, -1);
+    setShowPaymentModal(false);
+  };
+
 
   return (
 <main className="min-h-screen flex flex-col bg-white pb-20">
@@ -159,7 +172,7 @@ const Pay = () => {
           {counter || '0'} {/* Display counter value */}
         </div>
         <div className="flex justify-end"> {/* Confirm Payment button container */}
-            <button onClick={handleConfirmPaymentClick} className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-10 w-24 rounded-3xl focus:outline-none">
+        <button onClick={handleOpenPaymentModal} className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-10 w-24 rounded-3xl focus:outline-none">
               <FontAwesomeIcon icon={faPaperPlane} className="mr-2 h-4 w-4 text-white" /> {/* Icon */}
               Pay
             </button>
@@ -190,13 +203,11 @@ const Pay = () => {
   </div>
 )}
 
-      {/* New Payment Modal */}
-      {showPaymentModal && (
+    {/* New Payment Modal */}
+    {showPaymentModal && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 outside-click" onClick={handleOutsideClick}>
           <div className="bg-black opacity-50 w-full h-full outside-click"></div>
-          <div
-            className={`bg-white w-full h-1/2 rounded-t-lg absolute ${animateModal ? 'top-full transition-all duration-300 ease-in-out' : 'top-1/2'}`}
-          >
+          <div className={`bg-white w-full h-1/2 rounded-t-lg absolute ${animateModal ? 'top-full transition-all duration-300 ease-in-out' : 'top-1/2'}`}>
             <div className="bg-gray-300 w-16 h-1 mx-auto mt-2 rounded-full cursor-pointer" onClick={handleCloseAnimation}></div> {/* Clickable drag bar */}
             {/* Content of the new payment modal goes here */}
           </div>
@@ -205,6 +216,5 @@ const Pay = () => {
     </main>
   );
 };
-
 
 export default Pay;

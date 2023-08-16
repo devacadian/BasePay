@@ -60,6 +60,9 @@ const Pay = () => {
 
   const handleOutsideClick = (e) => {
     if (e.target.className.includes('outside-click')) {
+      document.body.style.overflowY = "scroll"; // Remove scroll lock
+      document.body.style.minHeight = "0px";
+      window.scrollBy(0, -1);
       setShowPaymentModal(false); // Close the new payment modal when clicked outside of it
     }
   };
@@ -68,12 +71,14 @@ const Pay = () => {
 
   const handleCloseAnimation = () => {
     setAnimateModal(true); // Start the animation
+    document.body.style.overflowY = "scroll"; // Remove scroll lock
+    document.body.style.minHeight = "0px";
+    window.scrollBy(0, -1);
     setTimeout(() => {
       setShowPaymentModal(false); // Close the modal after animation completes
       setAnimateModal(false); // Reset the animation state
     }, 300); // 300 milliseconds
   };
-
 
   const handleOpenPaymentModal = () => {
     document.body.style.overflowY = "hidden";

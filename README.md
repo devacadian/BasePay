@@ -1,9 +1,12 @@
 [![](https://github.com/devacadian/BasePay/blob/main/public/assets/Basepay_White%20BG_Full%20Logo-01.png)](https://basepay.app)
 
-![Ethereum Badge](https://img.shields.io/badge/Ethereum-3C3C3D?logo=ethereum&logoColor=fff&style=for-the-badge)
-![Solidity Badge](https://img.shields.io/badge/Solidity-e6e6e6?style=for-the-badge&logo=solidity&logoColor=black)
-![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
-![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
+<div style="display: flex; align-items: center;">
+    <img src="https://a11ybadges.com/badge?logo=coinbase" alt="Coinbase Badge" height="30">
+    <img src="https://img.shields.io/badge/Ethereum-3C3C3D?logo=ethereum&logoColor=fff&style=for-the-badge" alt="Ethereum Badge" height="30">
+    <img src="https://img.shields.io/badge/Solidity-e6e6e6?style=for-the-badge&logo=solidity&logoColor=black" alt="Solidity Badge" height="30">
+    <img src="https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white" alt="Next JS Badge" height="30">
+    <img src="https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB" alt="Express.js Badge" height="30">
+</div>
 
 ## Go cashless, Go Decentralized!
 Whether you're organizing a vacation or sharing lunch expenses, BasePay streamlines payments for all social situations, ensuring they're more convenient than before.

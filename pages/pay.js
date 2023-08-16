@@ -54,13 +54,6 @@ const Pay = () => {
     setShowModal(false); // Hide the modal when the close button is clicked
   };
 
-  const handleDragStart = (e) => {
-    e.dataTransfer.setDragImage(new Image(), 0, 0);
-  };
-
-  const handleDragEnd = () => {
-    setShowPaymentModal(false); // Close the new payment modal when dragged down
-  };
 
   const handleOutsideClick = (e) => {
     if (e.target.className.includes('outside-click')) {
@@ -92,6 +85,21 @@ const Pay = () => {
     document.body.style.minHeight = "0px";
     window.scrollBy(0, -1);
     setShowPaymentModal(false);
+  };
+
+
+  
+  const [touchStartY, setTouchStartY] = useState(0); // State to track the touch start position
+
+  const handleTouchStart = (e) => {
+    setTouchStartY(e.touches[0].clientY);
+  };
+
+  const handleTouchEnd = (e) => {
+    const touchEndY = e.changedTouches[0].clientY;
+    if (touchEndY > touchStartY + 50) { // 50px threshold for swipe-down
+      handleClosePaymentModal(); // or handleCloseModal() depending on the modal you want to close
+    }
   };
 
 
@@ -203,16 +211,18 @@ const Pay = () => {
   </div>
 )}
 
-    {/* New Payment Modal */}
-    {showPaymentModal && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 outside-click" onClick={handleOutsideClick}>
-          <div className="bg-black opacity-50 w-full h-full outside-click"></div>
-          <div className={`bg-white w-full h-1/2 rounded-t-lg absolute ${animateModal ? 'top-full transition-all duration-300 ease-in-out' : 'top-1/2'}`}>
-            <div className="bg-gray-300 w-16 h-1 mx-auto mt-2 rounded-full cursor-pointer" onClick={handleCloseAnimation}></div> {/* Clickable drag bar */}
-            {/* Content of the new payment modal goes here */}
-          </div>
-        </div>
-      )}
+{/* New Payment Modal */}
+{showPaymentModal && (
+    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 outside-click" onClick={handleOutsideClick}>
+      <div className="bg-black opacity-50 w-full h-full outside-click"></div>
+      <div className={`bg-white w-full h-1/2 rounded-t-lg absolute ${animateModal ? 'top-full transition-all duration-300 ease-in-out' : 'top-1/2'}`}>
+        <div className="bg-gray-300 w-16 h-1 mx-auto mt-2 rounded-full cursor-pointer"
+             onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} // Adding touch handlers to the gray drag bar
+             onClick={handleCloseAnimation}></div> {/* Clickable drag bar */}
+        {/* Content of the new payment modal goes here */}
+      </div>
+    </div>
+)}
     </main>
   );
 };

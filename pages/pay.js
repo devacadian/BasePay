@@ -1,7 +1,7 @@
 import React, { useState, useEffect  } from 'react';
 import Head from 'next/head';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // Import FontAwesomeIcon
-import { faBarcodeRead, faPaperPlane, faFileInvoice } from '@fortawesome/pro-solid-svg-icons'; // Import icons
+import { faBarcodeRead, faPaperPlane, faFileInvoice, faChevronLeft } from '@fortawesome/pro-solid-svg-icons'; // Import icons
 import { faClockNine } from '@fortawesome/pro-regular-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import { initiatePayment } from "../controller/contract-control"
@@ -24,6 +24,7 @@ const Pay = () => {
   const [containerWidth, setContainerWidth] = useState('w-20');
   const { openChainModal } = useChainModal();
   const [isClient, setIsClient] = useState(false);
+  const [showModal, setShowModal] = useState(false); // State to control the modal display
 
   useEffect(() => {
     setContainerWidth(chain?.name === 'Base Goerli' ? 'w-24' : 'w-20');
@@ -44,14 +45,13 @@ const Pay = () => {
     setCounter(counter.slice(0, -1));
   };
 
-  // @dev Allen's testing function. Feel free to amend during integration
-  // @dev initiatePayment return true if txn successful false if otherwise
-  // @dev can build front-end pop-up messages based on the returned bool
-  const handlePayClick = async () => { 
-    console.log(window.ethereum)
-    const status = await initiatePayment(window.ethereum, "0xAB60DdFE027D9D86C836e8e5f9133578E102F720", "0.001"  )
-    console.log(status)
-  }
+  const handlePayClick = () => {
+    setShowModal(true); // Show the modal when the Pay button is clicked
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false); // Hide the modal when the close button is clicked
+  };
 
 
   return (
@@ -116,6 +116,18 @@ const Pay = () => {
           Request
         </button>
       </div>
+     {/* User Selection Modal */}
+     {showModal && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-50">
+          <div className="bg-white w-full h-full relative">
+            <button onClick={handleCloseModal} className="absolute top-4 left-4 bg-gray-100 p-2 rounded-full focus:outline-none">
+              <FontAwesomeIcon icon={faChevronLeft} className="h-4 w-4 text-black" />
+            </button>
+            {/* Add your user selection content here */}
+          </div>
+        </div>
+      )}
+
       </main>
   );
 };

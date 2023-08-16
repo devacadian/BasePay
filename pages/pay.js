@@ -1,7 +1,7 @@
 import React, { useState, useEffect  } from 'react';
 import Head from 'next/head';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // Import FontAwesomeIcon
-import { faBarcodeRead, faPaperPlane, faFileInvoice, faChevronLeft, faMagnifyingGlass } from '@fortawesome/pro-solid-svg-icons'; // Import icons
+import { faBarcodeRead, faPaperPlane, faFileInvoice, faChevronLeft, faMagnifyingGlass, faXmark } from '@fortawesome/pro-solid-svg-icons'; // Import icons
 import { faClockNine } from '@fortawesome/pro-regular-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import { initiatePayment } from "../controller/contract-control"
@@ -118,32 +118,41 @@ const Pay = () => {
 
 
       
-     {/* User Selection Modal */}
-     {showModal && (
-  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-50">
-    <div className="bg-white w-full h-full relative">
-      <div className="px-4 pb-4 pt-6 flex items-center justify-between -ml-3">
-        <button onClick={handleCloseModal} className="p-2 rounded-full focus:outline-none">
-          <FontAwesomeIcon icon={faChevronLeft} className="h-6 w-8 text-black" />
+{/* User Selection Modal */}
+{showModal && (
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-20">
+    <div className="bg-white w-full h-full relative pt-2">
+      <div className="px-4 pt-0 grid grid-cols-3 items-center">
+        <button className="p-4 -ml-4 cursor-pointer" onClick={handleCloseModal}> {/* Close button */}
+          <FontAwesomeIcon icon={faXmark} className="h-7 w-7 text-black" />
         </button>
-        <div className="flex items-center w-full">
-          <div className="flex items-center border-2 border-blue-500 rounded-3xl w-full p-2 ml-0">
-            <FontAwesomeIcon icon={faMagnifyingGlass} className="pl-2 mr-2 text-black w-6 h-6" />
-            <input
-              type="text"
-              placeholder="Search for an ENS or Base address..."
-              className="w-full bg-transparent outline-none text-black"
-            />
-          </div>
-          <FontAwesomeIcon icon={faBarcodeRead} className="ml-4 mr-0 h-8 w-8 text-gray-600" />
+        <div className="text-black text-2xl font-bold flex items-center justify-center"> {/* Centered text */}
+          <FontAwesomeIcon icon={faEthereum} className="mr-0 text-black h-5 w-5" /> {/* Ethereum icon */}
+          0
+        </div>
+        <div className="flex justify-end"> {/* Pay button container */}
+          <button className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-10 w-24 rounded-3xl focus:outline-none">
+            <FontAwesomeIcon icon={faPaperPlane} className="mr-2 h-4 w-4 text-white" /> {/* Icon */}
+            Pay
+          </button>
         </div>
       </div>
+      <div className="border-t border-gray-300 mt-2"></div> {/* Thin gray border */}
+      <div className="px-4 py-2 flex items-center">
+        <label htmlFor="to" className="text-black text-lg font-bold mr-2">To:</label> {/* To: label */}
+        <input type="text" id="to" className="rounded p-2 flex-grow ml-1" placeholder="Enter ENS or Base address..." /> {/* Entry box */}
+        <FontAwesomeIcon icon={faBarcodeRead} className="h-6 w-6 text-black ml-2" /> {/* Scan icon */}
+      </div>
+      <div className="border-t border-gray-300"></div> {/* Thin gray border */}
+      <div className="px-4 py-2 flex items-center">
+        <label htmlFor="for" className="text-black text-lg font-bold mr-2">For:</label> {/* For: label */}
+        <input type="text" id="for" className="rounded p-2 flex-grow" placeholder="Add a note" /> {/* Entry box */}
+      </div>
+      <div className="border-t border-gray-300"></div> {/* Thin gray border */}
       {/* Add your user selection content here */}
     </div>
   </div>
 )}
-
-
 
       </main>
   );

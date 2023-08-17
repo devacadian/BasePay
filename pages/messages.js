@@ -81,7 +81,7 @@ export default function Messages() {
       <h1 className="text-black text-3xl font-semibold pt-2 ml-4">New Message</h1> {/* Added ml-4 to create space */}
     </div>
     <div className="px-4 pb-4 pt-0 flex items-center">
-      <div className="flex items-center border-2 border-blue-500 rounded-3xl w-full p-2">
+      <div className="flex items-center border-2 border-gray-600 rounded-3xl w-full p-2">
         <FontAwesomeIcon icon={faMagnifyingGlass} className="pl-2 mr-2 text-black w-6 h-6" />
         <input
           type="text"

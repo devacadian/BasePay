@@ -1,7 +1,7 @@
 import React, { useState, useEffect  } from 'react';
 import Head from 'next/head';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // Import FontAwesomeIcon
-import { faBarcodeRead, faPaperPlane, faFileInvoice } from '@fortawesome/pro-solid-svg-icons'; // Import icons
+import { faBarcodeRead, faPaperPlane, faFileInvoice, faChevronLeft, faMagnifyingGlass, faXmark } from '@fortawesome/pro-solid-svg-icons'; // Import icons
 import { faClockNine } from '@fortawesome/pro-regular-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import { initiatePayment } from "../controller/contract-control"
@@ -24,6 +24,11 @@ const Pay = () => {
   const [containerWidth, setContainerWidth] = useState('w-20');
   const { openChainModal } = useChainModal();
   const [isClient, setIsClient] = useState(false);
+  const [showModal, setShowModal] = useState(false); // State to control the modal display
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [toAddress, setToAddress] = useState('');
+  const [forValue, setForValue] = useState('');
+
 
   useEffect(() => {
     setContainerWidth(chain?.name === 'Base Goerli' ? 'w-24' : 'w-20');
@@ -44,14 +49,66 @@ const Pay = () => {
     setCounter(counter.slice(0, -1));
   };
 
-  // @dev Allen's testing function. Feel free to amend during integration
-  // @dev initiatePayment return true if txn successful false if otherwise
-  // @dev can build front-end pop-up messages based on the returned bool
-  const handlePayClick = async () => { 
-    console.log(window.ethereum)
-    const status = await initiatePayment(window.ethereum, "0xAB60DdFE027D9D86C836e8e5f9133578E102F720", "0.001"  )
-    console.log(status)
-  }
+  const handlePayClick = () => {
+    setShowModal(true); // Show the modal when the Pay button is clicked
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false); // Hide the modal when the close button is clicked
+  };
+
+
+  const handleOutsideClick = (e) => {
+    if (e.target.className.includes('outside-click')) {
+      document.body.style.overflowY = "scroll"; // Remove scroll lock
+      document.body.style.minHeight = "0px";
+      window.scrollBy(0, -1);
+      setShowPaymentModal(false); // Close the new payment modal when clicked outside of it
+    }
+  };
+
+  const [animateModal, setAnimateModal] = useState(false);
+
+  const handleCloseAnimation = () => {
+    setAnimateModal(true); // Start the animation
+    document.body.style.overflowY = "scroll"; // Remove scroll lock
+    document.body.style.minHeight = "0px";
+    window.scrollBy(0, -1);
+    setTimeout(() => {
+      setShowPaymentModal(false); // Close the modal after animation completes
+      setAnimateModal(false); // Reset the animation state
+    }, 300); // 300 milliseconds
+  };
+
+  const handleOpenPaymentModal = () => {
+    document.body.style.overflowY = "hidden";
+    document.body.style.minHeight = "calc(100vh + 1px)";
+    window.scrollBy(0, 1);
+    setShowPaymentModal(true);
+  };
+
+  // Function to close the payment modal
+  const handleClosePaymentModal = () => {
+    document.body.style.overflowY = "scroll";
+    document.body.style.minHeight = "0px";
+    window.scrollBy(0, -1);
+    setShowPaymentModal(false);
+  };
+
+
+  
+  const [touchStartY, setTouchStartY] = useState(0); // State to track the touch start position
+
+  const handleTouchStart = (e) => {
+    setTouchStartY(e.touches[0].clientY);
+  };
+
+  const handleTouchEnd = (e) => {
+    const touchEndY = e.changedTouches[0].clientY;
+    if (touchEndY > touchStartY + 50) { // 50px threshold for swipe-down
+      handleClosePaymentModal(); // or handleCloseModal() depending on the modal you want to close
+    }
+  };
 
 
   return (
@@ -104,7 +161,6 @@ const Pay = () => {
                 {number}
               </button>
             ))}
-          
       </div>
       <div className="w-full flex justify-center space-x-3 px-4 mb-20">
         <button onClick={handlePayClick} className="w-1/2 bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 rounded-3xl focus:outline-none">
@@ -116,7 +172,97 @@ const Pay = () => {
           Request
         </button>
       </div>
-      </main>
+
+
+      
+{/* User Selection Modal */}
+{showModal && (
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-20">
+    <div className="bg-white w-full h-full relative pt-2">
+      <div className="px-4 pt-0 grid grid-cols-3 items-center">
+        <button className="p-4 -ml-4 cursor-pointer" onClick={handleCloseModal}> {/* Close button */}
+          <FontAwesomeIcon icon={faXmark} className="h-7 w-7 text-black" />
+        </button>
+        <div className="text-black text-2xl font-bold flex items-center justify-center"> {/* Centered text */}
+          <FontAwesomeIcon icon={faEthereum} className="mr-0 text-black h-5 w-5" /> {/* Ethereum icon */}
+          {counter || '0'} {/* Display counter value */}
+        </div>
+        <div className="flex justify-end"> {/* Confirm Payment button container */}
+        <button onClick={handleOpenPaymentModal} className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-10 w-24 rounded-3xl focus:outline-none">
+              <FontAwesomeIcon icon={faPaperPlane} className="mr-2 h-4 w-4 text-white" /> {/* Icon */}
+              Pay
+            </button>
+          </div>
+      </div>
+      <div className="border-t border-gray-300 mt-2"></div> {/* Thin gray border */}
+      <div className="px-4 py-2 flex items-center">
+        <label htmlFor="to" className="text-black text-lg font-bold mr-2">To:</label> {/* To: label */}
+        <input
+  type="text"
+  id="to"
+  className="rounded p-2 flex-grow ml-1 text-black font-medium outline-none"
+  placeholder="Enter ENS or Base address..."
+  value={toAddress}
+  onChange={(e) => setToAddress(e.target.value)} // Update the state with the entered value
+/>
+        <FontAwesomeIcon icon={faBarcodeRead} className="h-6 w-6 text-black ml-2" /> {/* Scan icon */}
+      </div>
+      <div className="border-t border-gray-300"></div> {/* Thin gray border */}
+      <div className="px-4 py-2 flex items-center">
+        <label htmlFor="for" className="text-black text-lg font-bold mr-2">For:</label> {/* For: label */}
+        <input
+      type="text"
+      id="for"
+      className="rounded p-2 flex-grow text-gray-600 font-medium outline-none"
+      placeholder="Add a note"
+      value={forValue}
+      onChange={(e) => setForValue(e.target.value)} // Update the state with the entered value
+    />
+      </div>
+
+
+      <div className="bg-gray-100 h-10 flex items-center">
+        <span className="text-gray-500 text-base font-bold ml-4">Suggested</span>
+      </div>
+
+      <div className="text-center text-black text-sm font-medium my-10">
+        Start using BasePay to find suggested contacts!
+      </div>
+      {/* Add your user selection content here */}
+    </div>
+  </div>
+)}
+
+{/* New Payment Modal */}
+{showPaymentModal && (
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 outside-click" onClick={handleOutsideClick}>
+    <div className="bg-black opacity-50 w-full h-full outside-click"></div>
+    <div className={`bg-white w-full h-1/2 rounded-t-2xl absolute mt-10 ${animateModal ? 'top-full transition-all duration-300 ease-in-out' : 'top-1/2'}`}>
+      <div className="bg-gray-300 w-18 h-1 mx-auto mt-4 rounded-full cursor-pointer"
+           onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} // Adding touch handlers to the gray drag bar
+           onClick={handleCloseAnimation}></div> {/* Clickable drag bar */}
+      <div className="p-4">
+        <div className="flex items-center text-2xl text-black font-bold">
+          <FontAwesomeIcon icon={faEthereum} className="mr-2 text-black h-5 w-5" /> {/* Ethereum icon */}
+          {counter || '0'} {/* Display counter value */}
+        </div>
+        <div className="mt-4">
+          <div className="bg-gray-300 rounded-3xl w-24 h-12 flex items-center justify-center"> {/* Circle background */}
+            <span className="text-gray-600 font-medium text-lg">Pay To</span> {/* Display phrase */}
+          </div>
+        </div>
+        <div className="mt-4 ml-1 text-black font-medium text-2xl">{toAddress}</div> {/* Display address */}
+        <div className="mt-2 ml-1 text-gray-600 font-medium italic text-lg">{forValue}</div> {/* Display "for" value */}
+        <button className="bg-base-blue text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none mt-4">
+          Confirm
+        </button> {/* Confirm button */}
+      </div>
+      {/* Rest of the content for the new payment modal goes here */}
+    </div>
+  </div>
+)}
+
+    </main>
   );
 };
 

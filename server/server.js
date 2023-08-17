@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors')
+const firebase = require('firebase');
 const app = express()
 const router = express.Router()
 const PORT = process.env.port || 4000
@@ -28,7 +29,9 @@ router.post('/create-payment-request', async (req,res) => {
             request_recipient : request_recipient,
             ether_amount : ether_amount,
             transaction_message : transaction_message,
-            transaction_state : "Pending"
+            transaction_state : "Pending",
+            request_time: firebase.firestore.FieldValue.serverTimestamp(),
+            transaction_completion_time: false
         }
         
         // Add a new payment request document with an auto-generated ID.
@@ -71,31 +74,37 @@ router.get('/get-payment-request/:requestRecipient', async (req,res) => {
 // @dev get back to this function how how to verify update result
 router.patch('/update-transaction-state/:paymentRequestId', async (req,res) => {
     try {
+        // Destructure request params and body
         const payment_request_id = req.params.paymentRequestId
         const { decision } = req.body
 
+        // query the target payment request documnet
         const targetDocument = PaymentRequestRef.doc(payment_request_id)
 
+        // update the payment request document
         if (decision) {
-            await targetDocument.update({transaction_state:"Processed"}) // returning void
-            const updatedTargetDocument = await PaymentRequestRef.doc(payment_request_id).get()
-            const updatedTargetDocumentData = await updatedTargetDocument.data()
-            console.log(`Here is the updated document: `,updatedTargetDocumentData)
-            res.status(200).json(updatedTargetDocumentData)
-        } else {
-            await targetDocument.update({transaction_state:"Rejected"}) // returning void
-            const updatedTargetDocument = await PaymentRequestRef.doc(payment_request_id).get()
-            const updatedTargetDocumentData = await updatedTargetDocument.data()
-            console.log(`Here is the updated document: `,updatedTargetDocumentData)
-            res.status(200).json(updatedTargetDocumentData)
+            const updatedData = {
+                transaction_state : "Processed",
+                transaction_completion_time : firebase.firestore.FieldValue.serverTimestamp()
+            }
+            await targetDocument.update(updatedData) // returning void
+        } else{
+            const updatedData = {
+                transaction_state : "Rejected",
+                transaction_completion_time : firebase.firestore.FieldValue.serverTimestamp()
+            }
+            await targetDocument.update(updatedData) // returning void
         }
-        
+        // return the updated payment document data
+        const updatedTargetDocument = await PaymentRequestRef.doc(payment_request_id).get()
+        const updatedTargetDocumentData = await updatedTargetDocument.data()
+        console.log(`Here is the updated document: `,updatedTargetDocumentData)
+        res.status(200).json(updatedTargetDocumentData)
     } 
     catch(error) {
         res.status(500).send(error.message)
     }
 })
-
 
 /* ----- Start Server ----- */
 app.use('/', router)

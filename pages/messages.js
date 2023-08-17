@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMessagePen, faMagnifyingGlass, faArrowLeft, faBarcodeRead } from '@fortawesome/pro-solid-svg-icons';
+import { faMessagePen, faMagnifyingGlass, faArrowLeft, faBarcodeRead, faMessages } from '@fortawesome/pro-solid-svg-icons';
 
 export default function Messages() {
   const [showModal, setShowModal] = useState(false);
@@ -12,8 +12,9 @@ export default function Messages() {
         {/* Other head content */}
       </Head>
       <div className="p-4 flex items-center justify-between">
-        <div className="flex items-center">
+      <div className="flex items-center">
           <h1 className="text-black text-3xl font-semibold pt-2 mr-1">Messages</h1>
+          <FontAwesomeIcon icon={faMessages} className="h-6 w-6 text-black align-middle mt-3 ml-2" /> {/* Messages icon */}
         </div>
         <button
           onClick={() => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBells, faListCheck, faArrowUpRightFromSquare } from '@fortawesome/pro-solid-svg-icons';
+import { faBell, faListCheck, faArrowUpRightFromSquare } from '@fortawesome/pro-solid-svg-icons';
 import Head from 'next/head';
 
 const Notifications = () => {
@@ -11,7 +11,8 @@ const Notifications = () => {
       </Head>
       <div className="p-4 flex items-center justify-between">
         <div className="flex items-center">
-          <h1 className="text-black text-3xl font-semibold pt-2 mr-1">Notifications</h1>
+        <h1 className="text-black text-3xl font-semibold pt-2 mr-1">Notifications</h1>
+          <FontAwesomeIcon icon={faBell} className="h-6 w-6 text-black align-middle mt-2 ml-2" /> {/* Bell icon */}
         </div>
         <div className="bg-base-blue rounded-full h-8 w-8 flex items-center justify-center mt-2">
           <FontAwesomeIcon icon={faListCheck} className="text-white h-4 w-4" />

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMessagePen, faMagnifyingGlass, faArrowLeft } from '@fortawesome/pro-solid-svg-icons';
+import { faMessagePen, faMagnifyingGlass, faArrowLeft, faBarcodeRead } from '@fortawesome/pro-solid-svg-icons';
 
 export default function Messages() {
   const [showModal, setShowModal] = useState(false);
@@ -57,30 +57,52 @@ export default function Messages() {
       <div className="flex-grow flex items-center justify-center">
         {/* You can add other content here */}
       </div>
-      <button
-        className="bg-base-blue h-14 w-14 flex items-center justify-center rounded-full text-white fixed bottom-36 right-4 z-10"
-        onClick={() => setShowModal(true)} // Open modal on click
-      >
-        <FontAwesomeIcon icon={faMessagePen} className="h-7 w-7" />
-      </button>
+      {!showModal && (
+        <button
+          className="bg-base-blue h-14 w-14 flex items-center justify-center rounded-full text-white fixed bottom-36 right-4 z-10"
+          onClick={() => setShowModal(true)} // Open modal on click
+        >
+          <FontAwesomeIcon icon={faMessagePen} className="h-7 w-7" />
+        </button>
+      )}
       <div className="h-24 bg-white w-full absolute bottom-0">
 
+
+
+
+
+
       {showModal && (
-  <div className="fixed inset-0 bg-white z-50 flex flex-col">
+  <div className="fixed inset-0 bg-white z-0 flex flex-col">
     <div className="p-4 flex items-center">
       <button onClick={() => setShowModal(false)}> {/* Close modal on click */}
         <FontAwesomeIcon icon={faArrowLeft} className="h-6 w-6 text-black align-middle mt-3" />
       </button>
       <h1 className="text-black text-3xl font-semibold pt-2 ml-4">New Message</h1> {/* Added ml-4 to create space */}
     </div>
-    <div className="flex-grow">
-      {/* Add your message creation form or other content here */}
+    <div className="px-4 pb-4 pt-0 flex items-center">
+      <div className="flex items-center border-2 border-blue-500 rounded-3xl w-full p-2">
+        <FontAwesomeIcon icon={faMagnifyingGlass} className="pl-2 mr-2 text-black w-6 h-6" />
+        <input
+          type="text"
+          placeholder="Search for an ENS or Base address..."
+          className="w-full bg-transparent outline-none text-black"
+        />
+      </div>
+      <FontAwesomeIcon icon={faBarcodeRead} className="ml-4 mr-0 h-8 w-8 text-gray-600" />
     </div>
+
+    <div className="bg-gray-100 h-10 flex items-center mt-20">
+        <span className="text-gray-500 text-base font-bold ml-4">Last Messaged</span>
+      </div>
+
+      <div className="text-center text-black text-sm font-medium my-10">
+        Start using BasePay to find suggested contacts!
+      </div>
   </div>
 )}
-  
         
-        {/* Footer content */}
+
       </div>
     </main>
   );

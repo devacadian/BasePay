@@ -21,17 +21,24 @@ export default function Messages() {
           <FontAwesomeIcon icon={faMagnifyingGlass} className="h-6 w-6 text-black align-middle mt-3" /> {/* Magnifying glass icon */}
         </button>
       </div>
+      <div className="flex items-start p-4"> {/* Changed to items-start */}
+        <div className="bg-base-blue w-16 h-16 rounded-full flex-shrink-0"></div> {/* Circle, added flex-shrink-0 */}
+        <div className="ml-4">
+          <p className="text-black text-xl font-semibold mt-1">Acadian.eth</p>
+          <p className="text-black text-sm mt-1">Hey what are your plans this weekend?</p>
+        </div>
+      </div>
       <div className="bg-white w-full -mb-2"></div>
       <div className="flex-grow flex items-center justify-center">
         {/* You can add other content here */}
       </div>
       <button
-        className="bg-base-blue h-12 w-12 flex items-center justify-center rounded-full text-white fixed bottom-36 right-4" // Changed from "absolute" to "fixed"
+        className="bg-base-blue h-14 w-14 flex items-center justify-center rounded-full text-white fixed bottom-36 right-4" // Changed from "absolute" to "fixed"
         onClick={() => {
           // Handle the create message action here
         }}
       >
-        <FontAwesomeIcon icon={faMessagePen} className="h-6 w-6" /> {/* Icon size unchanged */}
+        <FontAwesomeIcon icon={faMessagePen} className="h-7 w-7" /> {/* Icon size unchanged */}
       </button>
       <div className="h-24 bg-white w-full absolute bottom-0">
         {/* Footer content */}

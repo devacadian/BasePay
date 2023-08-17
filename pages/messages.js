@@ -5,7 +5,7 @@ import { faMessagePen, faMagnifyingGlass } from '@fortawesome/pro-solid-svg-icon
 
 export default function Messages() {
   return (
-    <main className="flex flex-col min-h-screen bg-white relative">
+    <main className="flex flex-col min-h-screen bg-white">
       <Head>
         {/* Other head content */}
       </Head>
@@ -21,19 +21,22 @@ export default function Messages() {
           <FontAwesomeIcon icon={faMagnifyingGlass} className="h-6 w-6 text-black align-middle mt-3" /> {/* Magnifying glass icon */}
         </button>
       </div>
-      <div className="flex items-start p-4"> {/* Changed to items-start */}
-        <div className="bg-base-blue w-16 h-16 rounded-full flex-shrink-0"></div> {/* Circle, added flex-shrink-0 */}
-        <div className="ml-4">
-          <p className="text-black text-xl font-semibold mt-1">Acadian.eth</p>
-          <p className="text-black text-sm mt-1">Hey what are your plans this weekend?</p>
-        </div>
-      </div>
+      <div className="flex items-start p-4">
+  <div className="bg-base-blue w-16 h-16 rounded-full flex-shrink-0"></div> {/* Circle */}
+  <div className="ml-4 flex flex-col flex-grow relative"> {/* relative positioning */}
+    <p className="text-black text-xl font-semibold mt-1">Acadian.eth</p>
+    <div className="flex">
+      <p className="text-black text-sm truncate overflow-hidden whitespace-nowrap" style={{ maxWidth: 'calc(100% - 60px)' }}>Hey what are your plans this weekend?</p> {/* Text with truncation */}
+      <div className="bg-base-blue w-10 h-6 rounded-xl flex items-center justify-center text-white text-xs absolute right-0">1</div> {/* Circle with "1" positioned absolutely to the right */}
+    </div>
+  </div>
+</div>
       <div className="bg-white w-full -mb-2"></div>
       <div className="flex-grow flex items-center justify-center">
         {/* You can add other content here */}
       </div>
       <button
-        className="bg-base-blue h-14 w-14 flex items-center justify-center rounded-full text-white fixed bottom-36 right-4" // Changed from "absolute" to "fixed"
+        className="bg-base-blue h-14 w-14 flex items-center justify-center rounded-full text-white fixed bottom-36 right-4 z-10" // Changed from "absolute" to "fixed"
         onClick={() => {
           // Handle the create message action here
         }}

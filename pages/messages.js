@@ -23,14 +23,14 @@ export default function Messages() {
       </div>
       <div className="flex items-start p-4">
   <div className="bg-base-blue w-14 h-14 rounded-full flex-shrink-0"></div> {/* Circle */}
-  <div className="ml-4 flex flex-col flex-grow relative"> {/* relative positioning */}
-    <div className="flex justify-between items-center">
-      <p className="text-black text-xl font-semibold mt-1">Acadian.eth</p>
-      <span className="text-black text-sm font-semibold mr-1">12h</span> {/* "12h" text */}
+  <div className="ml-4 flex flex-col flex-grow">
+    <div className="grid grid-cols-[auto,1fr,auto] items-center gap-x-2">
+      <p className="text-black text-xl font-semibold mt-1 truncate">Acadian.eth</p> {/* Name with truncation */}
+      <span className="text-black text-sm font-semibold justify-self-end">12h</span> {/* "12h" text */}
     </div>
-    <div className="flex">
-      <p className="text-black text-sm truncate overflow-hidden whitespace-nowrap" style={{ maxWidth: 'calc(100% - 60px)' }}>Hey what are your plans this weekend?</p> {/* Text with truncation */}
-      <div className="bg-base-blue w-9 h-6 rounded-xl flex items-center justify-center text-white text-xs absolute right-0">1</div> {/* Circle with "1" positioned absolutely to the right */}
+    <div className="grid grid-cols-[1fr,auto] items-center gap-x-2">
+      <p className="text-black text-sm truncate overflow-hidden whitespace-nowrap">Hey what are your plans this weekend? test test test this should truncate</p> {/* Text with truncation */}
+      <div className="bg-base-blue w-9 h-6 rounded-xl flex items-center justify-center text-white text-xs">1</div> {/* Circle with "1" */}
     </div>
   </div>
 </div>

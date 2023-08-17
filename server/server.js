@@ -106,6 +106,31 @@ router.patch('/update-transaction-state/:paymentRequestId', async (req,res) => {
     }
 })
 
+//PATCH Request: Update payment request's transaction Hash
+// Returns back the entire updated document
+router.patch('/update-transaction-hash/:paymentRequestId/:transactionHash', async (req,res) => {
+    try {
+        // Destructure request params
+        const payment_request_id = req.params.paymentRequestId
+        const transaction_hash = req.params.transactionHash
+
+        // get target payment request document
+        const targetDocument = PaymentRequestRef.doc(payment_request_id)
+
+        // upate target payment request document
+        await targetDocument.update({transaction_hash : transaction_hash}) // returning void
+
+        // return the updated payment document data
+        const updatedTargetDocument = await PaymentRequestRef.doc(payment_request_id).get()
+        const updatedTargetDocumentData = await updatedTargetDocument.data()
+        console.log(`Here is the updated document: `,updatedTargetDocumentData)
+        res.status(200).json(updatedTargetDocumentData)
+    } 
+    catch(error) {
+        res.status(500).send(error.message)
+    }
+})
+
 /* ----- Start Server ----- */
 app.use('/', router)
 

@@ -86,19 +86,31 @@ export default function Messages() {
         <input
           type="text"
           placeholder="Search for an ENS or Base address..."
-          className="w-full bg-transparent outline-none text-black"
+          className="w-full bg-transparent outline-none text-black text-base"
         />
       </div>
       <FontAwesomeIcon icon={faBarcodeRead} className="ml-4 mr-0 h-8 w-8 text-gray-600" />
     </div>
 
-    <div className="bg-gray-100 h-10 flex items-center mt-20">
+    <div className="bg-gray-100 h-10 flex items-center shadow-sm mt-22">
         <span className="text-gray-500 text-base font-bold ml-4">Last Messaged</span>
       </div>
 
       <div className="text-center text-black text-sm font-medium my-10">
         Start using BasePay to find suggested contacts!
       </div>
+      <div className="text-center ">
+            <button
+              className="w-40 h-12 bg-base-blue text-white font-semibold text-sm rounded-3xl shadow-md"
+              onClick={() => {
+                // Logic for inviting to BasePay
+              }}
+            >
+              Invite to BasePay
+            </button>
+          </div>
+
+
   </div>
 )}
         

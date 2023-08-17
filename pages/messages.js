@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMessagePen, faMagnifyingGlass } from '@fortawesome/pro-solid-svg-icons';
+import { faMessagePen, faMagnifyingGlass, faArrowLeft } from '@fortawesome/pro-solid-svg-icons';
 
 export default function Messages() {
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <main className="flex flex-col min-h-screen bg-white">
       <Head>
@@ -56,14 +58,28 @@ export default function Messages() {
         {/* You can add other content here */}
       </div>
       <button
-        className="bg-base-blue h-14 w-14 flex items-center justify-center rounded-full text-white fixed bottom-36 right-4 z-10" // Changed from "absolute" to "fixed"
-        onClick={() => {
-          // Handle the create message action here
-        }}
+        className="bg-base-blue h-14 w-14 flex items-center justify-center rounded-full text-white fixed bottom-36 right-4 z-10"
+        onClick={() => setShowModal(true)} // Open modal on click
       >
-        <FontAwesomeIcon icon={faMessagePen} className="h-7 w-7" /> {/* Icon size unchanged */}
+        <FontAwesomeIcon icon={faMessagePen} className="h-7 w-7" />
       </button>
       <div className="h-24 bg-white w-full absolute bottom-0">
+
+      {showModal && (
+  <div className="fixed inset-0 bg-white z-50 flex flex-col">
+    <div className="p-4 flex items-center">
+      <button onClick={() => setShowModal(false)}> {/* Close modal on click */}
+        <FontAwesomeIcon icon={faArrowLeft} className="h-6 w-6 text-black align-middle mt-3" />
+      </button>
+      <h1 className="text-black text-3xl font-semibold pt-2 ml-4">New Message</h1> {/* Added ml-4 to create space */}
+    </div>
+    <div className="flex-grow">
+      {/* Add your message creation form or other content here */}
+    </div>
+  </div>
+)}
+  
+        
         {/* Footer content */}
       </div>
     </main>

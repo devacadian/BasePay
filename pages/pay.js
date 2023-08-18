@@ -1,7 +1,7 @@
 import React, { useState, useEffect  } from 'react';
 import Head from 'next/head';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // Import FontAwesomeIcon
-import { faBarcodeRead, faPaperPlane, faFileInvoice, faChevronLeft, faMagnifyingGlass, faXmark, faSpinner } from '@fortawesome/pro-solid-svg-icons'; // Import icons
+import { faBarcodeRead, faPaperPlane, faFileInvoice, faChevronLeft, faMagnifyingGlass, faXmark, faSpinner, faCircleCheck } from '@fortawesome/pro-solid-svg-icons'; // Import icons
 import { faClockNine } from '@fortawesome/pro-regular-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import { initiatePayment } from "../controller/contract-control"
@@ -122,6 +122,7 @@ const Pay = () => {
     
     const txHash = await initiatePayment(window.ethereum, toAddress, counter || '0', (receipt) => {
       // You can add other logic here to handle the successful or failed transaction
+      setTransactionPending(false);
     });
   
     if (txHash) {
@@ -305,10 +306,15 @@ const Pay = () => {
       <button className="p-4 cursor-pointer absolute top-0 left-0" onClick={() => setShowSuccessModal(false)}> {/* Close button */}
         <FontAwesomeIcon icon={faXmark} className="h-7 w-7 text-black" />
       </button>
-      {transactionPending && (
+      {transactionPending ? (
         <div className="flex items-start justify-start mt-12 ml-0">
           <FontAwesomeIcon icon={faSpinner} className="text-black h-7 w-7 animate-spin" /> {/* Spinner icon */}
           <span className="ml-2 text-black">Processing...</span>
+        </div>
+      ) : (
+        <div className="flex items-start justify-start mt-12 ml-0">
+          <FontAwesomeIcon icon={faCircleCheck} className="text-black h-7 w-7" /> {/* Success icon */}
+          <span className="ml-2 text-black">Transaction Successful!</span>
         </div>
       )}
       {/* Rest of the content for the success modal goes here */}

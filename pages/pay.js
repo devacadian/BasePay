@@ -253,9 +253,24 @@ const Pay = () => {
         </div>
         <div className="mt-4 ml-1 text-black font-medium text-2xl">{toAddress}</div> {/* Display address */}
         <div className="mt-2 ml-1 text-gray-600 font-medium italic text-lg">{forValue}</div> {/* Display "for" value */}
-        <button className="bg-base-blue text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none mt-4">
-          Confirm
-        </button> {/* Confirm button */}
+        <button
+  className="bg-base-blue text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none mt-4"
+  onClick={async () => {
+    // Make sure to handle the case when 'window.ethereum' is not available
+    if (window.ethereum) {
+      const success = await initiatePayment(window.ethereum, toAddress, counter || '0');
+      if (success) {
+        // Handle successful payment logic here, e.g., update UI, navigate to another page, etc.
+      } else {
+        // Handle failed payment logic here, e.g., show an error message, etc.
+      }
+    } else {
+      // Handle error when 'window.ethereum' is not available
+    }
+  }}
+>
+  Confirm
+</button>
       </div>
       {/* Rest of the content for the new payment modal goes here */}
     </div>

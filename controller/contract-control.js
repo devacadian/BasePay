@@ -26,7 +26,7 @@ async function initiatePayment(eth, _paymentRecipient, _etherValue, callback) {
         const basePayContractInstance = await connectNode(eth);
         const txResponse = await basePayContractInstance.initiatePayment(_paymentRecipient, {
             value: ethers.utils.parseEther(_etherValue),
-             gasLimit: 29000 // Setting a low gas limit to intentionally fail the transaction
+            // gasLimit: 29000 // Setting a low gas limit to intentionally fail the transaction
         });
   
         console.log("Transaction Hash: ", txResponse.hash);

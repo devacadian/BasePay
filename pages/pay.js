@@ -1,7 +1,7 @@
 import React, { useState, useEffect  } from 'react';
 import Head from 'next/head';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // Import FontAwesomeIcon
-import { faBarcodeRead, faPaperPlane, faFileInvoice, faXmark, faSpinner, faCircleCheck, faTimesCircle } from '@fortawesome/pro-solid-svg-icons'; // Import icons
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
+import { faBarcodeRead, faPaperPlane, faFileInvoice, faXmark, faSpinner, faCircleCheck, faTimesCircle } from '@fortawesome/pro-solid-svg-icons';
 import { faClockNine } from '@fortawesome/pro-regular-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import { initiatePayment } from "../controller/contract-control"
@@ -114,7 +114,7 @@ const Pay = () => {
   const handleTouchEnd = (e) => {
     const touchEndY = e.changedTouches[0].clientY;
     if (touchEndY > touchStartY + 50) { // 50px threshold for swipe-down
-      handleCloseconfirmpayModal(); // or handleCloseModal() depending on the modal you want to close
+      handleCloseconfirmpayModal(); 
     }
   };
   
@@ -170,7 +170,7 @@ const Pay = () => {
         </div>
       </div>
       <div className="text-6xl font-semibold mb-4 text-black flex justify-center items-baseline -ml-10 mt-10">
-            <FontAwesomeIcon icon={faEthereum} className="mr-0 text-black h-10 w-10" /> {/* Ethereum icon */}
+            <FontAwesomeIcon icon={faEthereum} className="mr-0 text-black h-10 w-10" /> 
             <span className="text-center">{counter || '0'}</span>
           </div>
           <div className="flex justify-center mb-6"> 
@@ -208,36 +208,36 @@ const Pay = () => {
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-20">
     <div className="bg-white w-full h-full relative pt-2">
       <div className="px-4 pt-0 grid grid-cols-3 items-center">
-        <button className="p-4 -ml-4 cursor-pointer" onClick={handleCloseModal}> {/* Close button */}
+        <button className="p-4 -ml-4 cursor-pointer" onClick={handleCloseModal}> 
           <FontAwesomeIcon icon={faXmark} className="h-7 w-7 text-black" />
         </button>
-        <div className="text-black text-2xl font-bold flex items-center justify-center"> {/* Centered text */}
-          <FontAwesomeIcon icon={faEthereum} className="mr-0 text-black h-5 w-5" /> {/* Ethereum icon */}
-          {counter || '0'} {/* Display counter value */}
+        <div className="text-black text-2xl font-bold flex items-center justify-center"> 
+          <FontAwesomeIcon icon={faEthereum} className="mr-0 text-black h-5 w-5" /> 
+          {counter || '0'} 
         </div>
-        <div className="flex justify-end"> {/* Confirm Payment button container */}
+        <div className="flex justify-end"> 
         <button onClick={handleOpenconfirmpayModal} className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-10 w-24 rounded-3xl focus:outline-none">
-              <FontAwesomeIcon icon={faPaperPlane} className="mr-2 h-4 w-4 text-white" /> {/* Icon */}
+              <FontAwesomeIcon icon={faPaperPlane} className="mr-2 h-4 w-4 text-white" /> 
               Pay
             </button>
           </div>
       </div>
-      <div className="border-t border-gray-300 mt-2"></div> {/* Thin gray border */}
+      <div className="border-t border-gray-300 mt-2"></div> 
       <div className="px-4 py-2 flex items-center">
-        <label htmlFor="to" className="text-black text-lg font-bold mr-2">To:</label> {/* To: label */}
+        <label htmlFor="to" className="text-black text-lg font-bold mr-2">To:</label> 
         <input
   type="text"
   id="to"
   className="rounded p-2 flex-grow ml-1 text-black font-medium outline-none"
   placeholder="Enter ENS or Base address..."
   value={toAddress}
-  onChange={(e) => setToAddress(e.target.value.trim())} // Use the trim method here
+  onChange={(e) => setToAddress(e.target.value.trim())} // Trim method here to prevent sending to incorrect addresses
 />
-        <FontAwesomeIcon icon={faBarcodeRead} className="h-6 w-6 text-black ml-2" /> {/* Scan icon */}
+        <FontAwesomeIcon icon={faBarcodeRead} className="h-6 w-6 text-black ml-2" /> 
       </div>
-      <div className="border-t border-gray-300"></div> {/* Thin gray border */}
+      <div className="border-t border-gray-300"></div> 
       <div className="px-4 py-2 flex items-center">
-        <label htmlFor="for" className="text-black text-lg font-bold mr-2">For:</label> {/* For: label */}
+        <label htmlFor="for" className="text-black text-lg font-bold mr-2">For:</label> 
         <input
       type="text"
       id="for"
@@ -261,23 +261,25 @@ const Pay = () => {
   </div>
 )}
 
-{/* New Payment Modal */}
+
+
+{/* Confirm Modal */}
 {showconfirmpayModal && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 outside-click" onClick={handleOutsideClick}>
     <div className="bg-black opacity-50 w-full h-full outside-click"></div>
     <div className={`bg-white w-full rounded-t-2xl absolute ${animateModal ? '-bottom-full motion-reduce:transition-all duration-700 ease-in-out' : 'bottom-0'}`}>
 
       <div className="bg-gray-300 w-18 h-1 mx-auto mt-4 rounded-full cursor-pointer"
-           onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} // Adding touch handlers to the gray drag bar
+           onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} // Touch handler to the gray drag bar
            onClick={handleCloseAnimation}></div> {/* Clickable drag bar */}
       <div className="p-4">
         <div className="flex items-center text-2xl text-black font-bold">
-          <FontAwesomeIcon icon={faEthereum} className="mr-2 text-black h-5 w-5" /> {/* Ethereum icon */}
-          {counter || '0'} {/* Display counter value */}
+          <FontAwesomeIcon icon={faEthereum} className="mr-2 text-black h-5 w-5" />
+          {counter || '0'} 
         </div>
         <div className="mt-4">
-          <div className="bg-gray-300 rounded-3xl w-24 h-12 flex items-center justify-center"> {/* Circle background */}
-            <span className="text-gray-600 font-medium text-lg">Pay To</span> {/* Display phrase */}
+          <div className="bg-gray-300 rounded-3xl w-24 h-12 flex items-center justify-center"> 
+            <span className="text-gray-600 font-medium text-lg">Pay To</span> 
           </div>
         </div>
         <div className="mt-4 ml-1 text-black font-medium text-2xl">
@@ -290,12 +292,11 @@ const Pay = () => {
 </div>
 <button
             className="bg-base-blue text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none mt-4 mb-2"
-            onClick={handleConfirmPayment} // Updated to use the new handler function
+            onClick={handleConfirmPayment} 
           >
             Confirm
           </button>
       </div>
-      {/* Rest of the content for the new payment modal goes here */}
     </div>
   </div>
 )}
@@ -303,37 +304,38 @@ const Pay = () => {
 
 
 
-{/* New Success Modal */}
+{/* Transaction Modal */}
+
 {showtransactionModal && (
   <div className="fixed top-0 left-0 w-full h-full z-40 flex items-center justify-center">
     <div className="bg-black opacity-50 w-full h-full absolute"></div>
-    <div className="bg-white p-4 rounded-xl absolute top-1/6 inset-x-4"> {/* Removed fixed height */}
+    <div className="bg-white p-4 rounded-xl absolute top-1/6 inset-x-4"> 
       <button className="p-4 cursor-pointer absolute top-0 left-0" onClick={() => {
           document.body.style.overflowY = "scroll"; // Remove scroll lock
           document.body.style.minHeight = "0px";
           window.scrollBy(0, -1);
-          setShowtransactionModal(false); // Close the success modal
-        }}> {/* Close button */}
+          setShowtransactionModal(false); // Close the transaction modal
+        }}> 
           <FontAwesomeIcon icon={faXmark} className="h-7 w-7 text-black" />
       </button>
 
 
 {transactionStatus === 'pending' && (
   <div className="mt-20 ml-0">
-    <div className="flex justify-center items-center mb-10 relative"> {/* Centered the Ethereum symbol */}
-      <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> {/* Gray circle */}
-      <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> {/* Ethereum icon */}
+    <div className="flex justify-center items-center mb-10 relative"> 
+      <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> 
+      <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
     </div>
-    <div className="text-center mb-8"> {/* Centered only the counter value */}
+    <div className="text-center mb-8"> 
       <div className="text-black font-bold text-2xl">{counter || '0'} ETH</div>
     </div>
 
-    <div className="flex items-center justify-start mb-6"> {/* Left-aligned the icon and "Transaction Successful!" text */}
-    <FontAwesomeIcon icon={faSpinner} className="text-base-blue h-7 w-7 animate-spin" /> {/* Spinner icon */}
+    <div className="flex items-center justify-start mb-6"> 
+    <FontAwesomeIcon icon={faSpinner} className="text-base-blue h-7 w-7 animate-spin" />
           <span className="ml-4 mt-0.5 text-black font-semibold">Transaction in Progress...</span>
         </div>
 
-    <div className=" mb-4"> {/* Centered the "Sent successfully to" text */}
+    <div className=" mb-4"> 
       <div className="text-black font-semibold">Transaction to {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress} on Goerli Base Chain is processing.</div>
     </div>
     <div className="ml-0">
@@ -349,20 +351,20 @@ const Pay = () => {
 
 {transactionStatus === 'success' && (
   <div className="mt-20 ml-0">
-    <div className="flex justify-center items-center mb-10 relative"> {/* Centered the Ethereum symbol */}
-      <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> {/* Gray circle */}
-      <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> {/* Ethereum icon */}
+    <div className="flex justify-center items-center mb-10 relative"> 
+      <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> 
+      <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
     </div>
-    <div className="text-center mb-8"> {/* Centered only the counter value */}
+    <div className="text-center mb-8"> 
       <div className="text-black font-bold text-2xl">{counter || '0'} ETH</div>
     </div>
 
-    <div className="flex items-center justify-start mb-6"> {/* Left-aligned the icon and "Transaction Successful!" text */}
-      <FontAwesomeIcon icon={faCircleCheck} className="text-base-blue h-7 w-7" /> {/* Success icon */}
+    <div className="flex items-center justify-start mb-6"> 
+      <FontAwesomeIcon icon={faCircleCheck} className="text-base-blue h-7 w-7" /> 
       <span className="ml-4 mt-0.5 text-black font-semibold">Transaction Successful!</span>
     </div>
 
-    <div className=" mb-4"> {/* Centered the "Sent successfully to" text */}
+    <div className=" mb-4"> 
       <div className="text-black font-semibold">Sent successfully to {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress} on Goerli Base Chain!</div>
     </div>
     <div className="ml-0">
@@ -381,24 +383,22 @@ const Pay = () => {
 
 
 
-
-
 {transactionStatus === 'fail' && (
   <div className="mt-20 ml-0">
-    <div className="flex justify-center items-center mb-10 relative"> {/* Centered the Ethereum symbol */}
-      <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> {/* Gray circle */}
-      <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> {/* Ethereum icon */}
+    <div className="flex justify-center items-center mb-10 relative">
+      <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div>
+      <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
     </div>
-    <div className="text-center mb-8"> {/* Centered only the counter value */}
+    <div className="text-center mb-8"> 
       <div className="text-black font-bold text-2xl">{counter || '0'} ETH</div>
     </div>
 
-    <div className="flex items-center justify-start mb-6"> {/* Left-aligned the icon and "Transaction Successful!" text */}
-    <FontAwesomeIcon icon={faTimesCircle} className="text-red-600 h-7 w-7" /> {/* Fail icon */}
+    <div className="flex items-center justify-start mb-6"> 
+    <FontAwesomeIcon icon={faTimesCircle} className="text-red-600 h-7 w-7" /> 
           <span className="ml-4 mt-0.5 text-black font-semibold">Transaction Failed!</span>
         </div>
 
-    <div className=" mb-4"> {/* Centered the "Sent successfully to" text */}
+    <div className=" mb-4">
       <div className="text-black font-semibold">Transaction to {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress} on Goerli Base Chain failed!</div>
     </div>
     <div className="ml-0">
@@ -416,9 +416,6 @@ const Pay = () => {
 )}
 
 
-
-
-      {/* Rest of the content for the success modal goes here */}
     </div>
   </div>
 )}

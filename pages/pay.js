@@ -1,7 +1,7 @@
 import React, { useState, useEffect  } from 'react';
 import Head from 'next/head';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // Import FontAwesomeIcon
-import { faBarcodeRead, faPaperPlane, faFileInvoice, faChevronLeft, faMagnifyingGlass, faXmark, faSpinner, faCircleCheck } from '@fortawesome/pro-solid-svg-icons'; // Import icons
+import { faBarcodeRead, faPaperPlane, faFileInvoice, faChevronLeft, faMagnifyingGlass, faXmark, faSpinner, faCircleCheck, faTimesCircle } from '@fortawesome/pro-solid-svg-icons'; // Import icons
 import { faClockNine } from '@fortawesome/pro-regular-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import { initiatePayment } from "../controller/contract-control"
@@ -29,7 +29,7 @@ const Pay = () => {
   const [toAddress, setToAddress] = useState('');
   const [forValue, setForValue] = useState('');
   const [showSuccessModal, setShowSuccessModal] = useState(false); // State for the new modal
-  const [transactionPending, setTransactionPending] = useState(false); // State to track transaction status
+  const [transactionStatus, setTransactionStatus] = useState(null); // State to track transaction status
 
 
   useEffect(() => {
@@ -119,18 +119,20 @@ const Pay = () => {
   };
   
   const handleConfirmPayment = async () => {
-    
+    setTransactionStatus('pending'); // Set the status to pending before initiating payment
+  
     const txHash = await initiatePayment(window.ethereum, toAddress, counter || '0', (receipt) => {
-      // You can add other logic here to handle the successful or failed transaction
-      setTransactionPending(false);
+      if (receipt.status === 1) {
+        setTransactionStatus('success'); // Update the status to success if the transaction succeeded
+      } else {
+        setTransactionStatus('fail'); // Update the status to fail if the transaction failed
+      }
     });
   
     if (txHash) {
-      setShowPaymentModal(false); // Close the payment modal
-      setShowSuccessModal(true); // Open the success modal
-      setShowModal(false); // Close the user selection modal
-      setTransactionPending(true);
-      // Other logic to handle the submitted transaction
+      setShowPaymentModal(false);
+      setShowSuccessModal(true);
+      setShowModal(false);
     } else {
       // Handle failed payment logic here
     }
@@ -306,21 +308,29 @@ const Pay = () => {
       <button className="p-4 cursor-pointer absolute top-0 left-0" onClick={() => setShowSuccessModal(false)}> {/* Close button */}
         <FontAwesomeIcon icon={faXmark} className="h-7 w-7 text-black" />
       </button>
-      {transactionPending ? (
+      {transactionStatus === 'pending' && (
         <div className="flex items-start justify-start mt-12 ml-0">
           <FontAwesomeIcon icon={faSpinner} className="text-black h-7 w-7 animate-spin" /> {/* Spinner icon */}
           <span className="ml-2 text-black">Processing...</span>
         </div>
-      ) : (
+      )}
+      {transactionStatus === 'success' && (
         <div className="flex items-start justify-start mt-12 ml-0">
           <FontAwesomeIcon icon={faCircleCheck} className="text-black h-7 w-7" /> {/* Success icon */}
           <span className="ml-2 text-black">Transaction Successful!</span>
+        </div>
+      )}
+      {transactionStatus === 'fail' && (
+        <div className="flex items-start justify-start mt-12 ml-0">
+          <FontAwesomeIcon icon={faTimesCircle} className="text-black h-7 w-7" /> {/* Fail icon */}
+          <span className="ml-2 text-black">Transaction Failed!</span>
         </div>
       )}
       {/* Rest of the content for the success modal goes here */}
     </div>
   </div>
 )}
+
 
 
     </main>

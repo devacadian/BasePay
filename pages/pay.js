@@ -125,11 +125,13 @@ const Pay = () => {
     if (txHash) {
       setShowPaymentModal(false); // Close the payment modal
       setShowSuccessModal(true); // Open the success modal
+      setShowModal(false); // Close the user selection modal
       // Other logic to handle the submitted transaction
     } else {
       // Handle failed payment logic here
     }
   };
+
 
   return (
 <main className="min-h-screen flex flex-col bg-white pb-20">
@@ -292,18 +294,21 @@ const Pay = () => {
   </div>
 )}
 
-    {/* New Success Modal */}
-    {showSuccessModal && (
-        <div className="fixed top-0 left-0 w-full h-full z-40">
-          <div className="bg-black opacity-50 w-full h-full absolute"></div>
-          <div className="bg-white w-full h-full absolute p-4 pt-8 pb-8">
-            <button className="p-4 -ml-4 cursor-pointer" onClick={() => setShowSuccessModal(false)}> {/* Close button */}
-              <FontAwesomeIcon icon={faXmark} className="h-7 w-7 text-black" />
-            </button>
-            {/* Rest of the content for the success modal goes here */}
-          </div>
-        </div>
-      )}
+{/* New Success Modal */}
+{showSuccessModal && (
+  <div className="fixed top-0 left-0 w-full h-full z-40 flex items-center justify-center">
+    <div className="bg-black opacity-50 w-full h-full absolute"></div>
+    <div className="bg-white p-8 rounded-xl h-2/3 absolute inset-x-4">
+      <button className="p-4 cursor-pointer absolute top-0 left-0" onClick={() => setShowSuccessModal(false)}> {/* Close button */}
+        <FontAwesomeIcon icon={faXmark} className="h-7 w-7 text-black" />
+      </button>
+      {/* Rest of the content for the success modal goes here */}
+    </div>
+  </div>
+)}
+
+
+
     </main>
   );
 };

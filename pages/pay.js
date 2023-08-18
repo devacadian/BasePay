@@ -324,7 +324,7 @@ const Pay = () => {
 {transactionStatus === 'pending' && (
   <div className="mt-20 ml-0">
     <div className="flex justify-center items-center mb-10 relative"> {/* Centered the Ethereum symbol */}
-      <div className="bg-gray-200 w-16 h-16 rounded-full absolute drop-shadow"></div> {/* Gray circle */}
+      <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> {/* Gray circle */}
       <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> {/* Ethereum icon */}
     </div>
     <div className="text-center mb-8"> {/* Centered only the counter value */}
@@ -353,7 +353,7 @@ const Pay = () => {
 {transactionStatus === 'success' && (
   <div className="mt-20 ml-0">
     <div className="flex justify-center items-center mb-10 relative"> {/* Centered the Ethereum symbol */}
-      <div className="bg-gray-200 w-16 h-16 rounded-full absolute drop-shadow"></div> {/* Gray circle */}
+      <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> {/* Gray circle */}
       <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> {/* Ethereum icon */}
     </div>
     <div className="text-center mb-8"> {/* Centered only the counter value */}
@@ -371,7 +371,7 @@ const Pay = () => {
     <div className="ml-0">
       <div className="text-gray-600 font-medium text-lg"> {forValue || "No note added"}</div>
     </div>
-    <button className="bg-base-blue text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" onClick={() => {
+    <button className="bg-base-blue shadow-sm drop-shadow text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" onClick={() => {
         document.body.style.overflowY = "scroll"; // Remove scroll lock
         document.body.style.minHeight = "0px";
         window.scrollBy(0, -1);
@@ -389,7 +389,7 @@ const Pay = () => {
 {transactionStatus === 'fail' && (
   <div className="mt-20 ml-0">
     <div className="flex justify-center items-center mb-10 relative"> {/* Centered the Ethereum symbol */}
-      <div className="bg-gray-200 w-16 h-16 rounded-full absolute drop-shadow"></div> {/* Gray circle */}
+      <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> {/* Gray circle */}
       <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> {/* Ethereum icon */}
     </div>
     <div className="text-center mb-8"> {/* Centered only the counter value */}
@@ -407,7 +407,7 @@ const Pay = () => {
     <div className="ml-0">
       <div className="text-gray-700 font-medium text-lg"> {forValue || "No note added"}</div>
     </div>
-    <button className="bg-base-blue text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" onClick={() => {
+    <button className="bg-base-blue shadow-sm drop-shadow text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" onClick={() => {
         document.body.style.overflowY = "scroll"; // Remove scroll lock
         document.body.style.minHeight = "0px";
         window.scrollBy(0, -1);

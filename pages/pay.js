@@ -305,7 +305,12 @@ const Pay = () => {
   <div className="fixed top-0 left-0 w-full h-full z-40 flex items-center justify-center">
     <div className="bg-black opacity-50 w-full h-full absolute"></div>
     <div className="bg-white p-4 rounded-xl h-2/3 absolute top-1/6 inset-x-4">
-      <button className="p-4 cursor-pointer absolute top-0 left-0" onClick={() => setShowSuccessModal(false)}> {/* Close button */}
+    <button className="p-4 cursor-pointer absolute top-0 left-0" onClick={() => {
+        document.body.style.overflowY = "scroll"; // Remove scroll lock
+        document.body.style.minHeight = "0px";
+        window.scrollBy(0, -1);
+        setShowSuccessModal(false); // Close the success modal
+      }}> {/* Close button */}
         <FontAwesomeIcon icon={faXmark} className="h-7 w-7 text-black" />
       </button>
       {transactionStatus === 'pending' && (

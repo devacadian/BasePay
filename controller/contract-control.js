@@ -27,7 +27,7 @@ async function initiatePayment(eth, _paymentRecipient, _etherValue, callback) {
         const txResponse = await basePayContractInstance.initiatePayment(_paymentRecipient, {value: ethers.utils.parseEther(_etherValue)});
         console.log("Transaction Hash: ", txResponse.hash);
 
-        // Return the transaction hash immediately
+        // Return the transaction hash immediately - 
         const txHash = txResponse.hash;
 
         // Wait for the transaction to be mined

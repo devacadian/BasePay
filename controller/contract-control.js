@@ -21,27 +21,37 @@ async function connectNode(eth) {
 
 // pass in window.ethereum to eth
 // note that _etherValue is in Ether NOT Wei
-async function initiatePayment(eth, _paymentRecipient, _etherValue) {
+async function initiatePayment(eth, _paymentRecipient, _etherValue, callback) {
     try {
-        const basePayContractInstance = await connectNode(eth)
-        const txResponse = await basePayContractInstance.initiatePayment(_paymentRecipient, {value: ethers.utils.parseEther(_etherValue)})
-        console.log("Transaction Hash: ",txResponse.hash)
-        // Wait for the transaction to be mined
-        const receipt = await txResponse.wait();
+        const basePayContractInstance = await connectNode(eth);
+        const txResponse = await basePayContractInstance.initiatePayment(_paymentRecipient, {value: ethers.utils.parseEther(_etherValue)});
+        console.log("Transaction Hash: ", txResponse.hash);
 
-        if (receipt.status === 1) {
-            console.log("Transaction successful!");
-            return true
-        } else {
-            console.log("Transaction failed or reverted.");
-            return false
-        }
+        // Return the transaction hash immediately
+        const txHash = txResponse.hash;
+
+        // Wait for the transaction to be mined
+        txResponse.wait().then(receipt => {
+            if (receipt.status === 1) {
+                console.log("Transaction successful!");
+            } else {
+                console.log("Transaction failed or reverted.");
+            }
+            // Call the callback with the receipt if provided
+            if (callback) callback(receipt);
+        });
+
+        return txHash;
     } catch(error) {
-        console.log(error.message)
-        return false
+        console.log(error.message);
+        return null;
     }
 }
 
 module.exports = {
     initiatePayment
-}
+};
+
+module.exports = {
+    initiatePayment
+};

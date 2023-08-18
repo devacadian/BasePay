@@ -28,6 +28,7 @@ const Pay = () => {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [toAddress, setToAddress] = useState('');
   const [forValue, setForValue] = useState('');
+  const [showSuccessModal, setShowSuccessModal] = useState(false); // State for the new modal
 
 
   useEffect(() => {
@@ -115,7 +116,20 @@ const Pay = () => {
       handleClosePaymentModal(); // or handleCloseModal() depending on the modal you want to close
     }
   };
-
+  
+  const handleConfirmPayment = async () => {
+    const txHash = await initiatePayment(window.ethereum, toAddress, counter || '0', (receipt) => {
+      // You can add other logic here to handle the successful or failed transaction
+    });
+  
+    if (txHash) {
+      setShowPaymentModal(false); // Close the payment modal
+      setShowSuccessModal(true); // Open the success modal
+      // Other logic to handle the submitted transaction
+    } else {
+      // Handle failed payment logic here
+    }
+  };
 
   return (
 <main className="min-h-screen flex flex-col bg-white pb-20">
@@ -266,30 +280,30 @@ const Pay = () => {
         <div className="mt-2 ml-1 text-gray-600 font-medium text-lg">
   {forValue || "No note added"}
 </div>
-        <button
-  className="bg-base-blue text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none mt-4 mb-2"
-  onClick={async () => {
-    // Make sure to handle the case when 'window.ethereum' is not available
-    if (window.ethereum) {
-      const success = await initiatePayment(window.ethereum, toAddress, counter || '0');
-      if (success) {
-        // Handle successful payment logic here, e.g., update UI, navigate to another page, etc.
-      } else {
-        // Handle failed payment logic here, e.g., show an error message, etc.
-      }
-    } else {
-      // Handle error when 'window.ethereum' is not available
-    }
-  }}
->
-  Confirm
-</button>
+<button
+            className="bg-base-blue text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none mt-4 mb-2"
+            onClick={handleConfirmPayment} // Updated to use the new handler function
+          >
+            Confirm
+          </button>
       </div>
       {/* Rest of the content for the new payment modal goes here */}
     </div>
   </div>
 )}
 
+    {/* New Success Modal */}
+    {showSuccessModal && (
+        <div className="fixed top-0 left-0 w-full h-full z-40">
+          <div className="bg-black opacity-50 w-full h-full absolute"></div>
+          <div className="bg-white w-full h-full absolute p-4 pt-8 pb-8">
+            <button className="p-4 -ml-4 cursor-pointer" onClick={() => setShowSuccessModal(false)}> {/* Close button */}
+              <FontAwesomeIcon icon={faXmark} className="h-7 w-7 text-black" />
+            </button>
+            {/* Rest of the content for the success modal goes here */}
+          </div>
+        </div>
+      )}
     </main>
   );
 };

@@ -316,31 +316,59 @@ const Pay = () => {
       }}> {/* Close button */}
         <FontAwesomeIcon icon={faXmark} className="h-7 w-7 text-black" />
       </button>
+
+
       {transactionStatus === 'pending' && (
         <div className="flex items-start justify-start mt-12 ml-0">
           <FontAwesomeIcon icon={faSpinner} className="text-base-blue h-7 w-7 animate-spin" /> {/* Spinner icon */}
           <span className="ml-4 mt-0.5 text-black font-semibold">Transaction in Progress...</span>
         </div>
       )}
-    {transactionStatus === 'success' && (
-        <div className="mt-12 ml-0">
-          <div className="flex items-center justify-start">
-            <FontAwesomeIcon icon={faCircleCheck} className="text-base-blue h-7 w-7" /> {/* Success icon */}
-            <span className="ml-4 mt-0.5 text-black font-semibold">Transaction Successful!</span>
-          </div>
-          <div className="ml-2 mt-2">
-            <div className="text-black">To: {toAddress}</div>
-            <div className="text-black">Value: {counter || '0'}</div>
-            <div className="text-black">Note: {forValue || "No note added"}</div>
-          </div>
-        </div>
-      )}
+
+
+
+{transactionStatus === 'success' && (
+  <div className="mt-20 ml-0">
+    <div className="flex justify-center items-center mb-10 relative"> {/* Centered the Ethereum symbol */}
+      <div className="bg-gray-200 w-16 h-16 rounded-full absolute drop-shadow"></div> {/* Gray circle */}
+      <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> {/* Ethereum icon */}
+    </div>
+    <div className="text-center mb-8"> {/* Centered only the counter value */}
+      <div className="text-black font-bold text-2xl">{counter || '0'} ETH</div>
+    </div>
+
+    <div className="flex items-center justify-start mb-6"> {/* Left-aligned the icon and "Transaction Successful!" text */}
+      <FontAwesomeIcon icon={faCircleCheck} className="text-base-blue h-7 w-7" /> {/* Success icon */}
+      <span className="ml-4 mt-0.5 text-black font-semibold">Transaction Successful!</span>
+    </div>
+
+    <div className=" mb-4"> {/* Centered the "Sent successfully to" text */}
+      <div className="text-black font-semibold">Sent successfully to {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress} on Goerli Base Chain!</div>
+    </div>
+    <div className="ml-0">
+      <div className="text-gray-600 font-medium text-lg"> Note: {forValue || "No note added"}</div>
+    </div>
+    <button className="bg-base-blue text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-8 mb-2" onClick={() => {
+        document.body.style.overflowY = "scroll"; // Remove scroll lock
+        document.body.style.minHeight = "0px";
+        window.scrollBy(0, -1);
+        setShowSuccessModal(false); // Close the success modal
+      }}>
+      Continue
+    </button>
+  </div>
+)}
+
+
       {transactionStatus === 'fail' && (
         <div className="flex items-start justify-start mt-12 ml-0">
           <FontAwesomeIcon icon={faTimesCircle} className="text-red h-7 w-7" /> {/* Fail icon */}
           <span className="ml-4 mt-0.5 text-black font-semibold">Transaction Failed!</span>
         </div>
       )}
+
+
+
       {/* Rest of the content for the success modal goes here */}
     </div>
   </div>

@@ -25,7 +25,7 @@ const Pay = () => {
   const { openChainModal } = useChainModal();
   const [isClient, setIsClient] = useState(false);
   const [showModal, setShowModal] = useState(false); // State to control the modal display
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [showconfirmpayModal, setShowconfirmpayModal] = useState(false);
   const [toAddress, setToAddress] = useState('');
   const [forValue, setForValue] = useState('');
   const [showtransactionModal, setShowtransactionModal] = useState(false); // State for the new modal
@@ -69,7 +69,7 @@ const Pay = () => {
       document.body.style.minHeight = "0px";
       window.scrollBy(0, -1);
       setTimeout(() => {
-        setShowPaymentModal(false); // Close the modal after animation completes
+        setShowconfirmpayModal(false); // Close the modal after animation completes
         setAnimateModal(false); // Reset the animation state
       }, 150); // 150 milliseconds
     }
@@ -83,24 +83,24 @@ const Pay = () => {
     document.body.style.minHeight = "0px";
     window.scrollBy(0, -1);
     setTimeout(() => {
-      setShowPaymentModal(false); // Close the modal after animation completes
+      setShowconfirmpayModal(false); // Close the modal after animation completes
       setAnimateModal(false); // Reset the animation state
     }, 300); // 300 milliseconds
   };
 
-  const handleOpenPaymentModal = () => {
+  const handleOpenconfirmpayModal = () => {
     document.body.style.overflowY = "hidden";
     document.body.style.minHeight = "calc(100vh + 1px)";
     window.scrollBy(0, 1);
-    setShowPaymentModal(true);
+    setShowconfirmpayModal(true);
   };
 
   // Function to close the payment modal
-  const handleClosePaymentModal = () => {
+  const handleCloseconfirmpayModal = () => {
     document.body.style.overflowY = "scroll";
     document.body.style.minHeight = "0px";
     window.scrollBy(0, -1);
-    setShowPaymentModal(false);
+    setShowconfirmpayModal(false);
   };
 
 
@@ -114,7 +114,7 @@ const Pay = () => {
   const handleTouchEnd = (e) => {
     const touchEndY = e.changedTouches[0].clientY;
     if (touchEndY > touchStartY + 50) { // 50px threshold for swipe-down
-      handleClosePaymentModal(); // or handleCloseModal() depending on the modal you want to close
+      handleCloseconfirmpayModal(); // or handleCloseModal() depending on the modal you want to close
     }
   };
   
@@ -130,7 +130,7 @@ const Pay = () => {
     });
   
     if (txHash) {
-      setShowPaymentModal(false);
+      setShowconfirmpayModal(false);
       setShowtransactionModal(true);
       setShowModal(false);
     } else {
@@ -216,7 +216,7 @@ const Pay = () => {
           {counter || '0'} {/* Display counter value */}
         </div>
         <div className="flex justify-end"> {/* Confirm Payment button container */}
-        <button onClick={handleOpenPaymentModal} className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-10 w-24 rounded-3xl focus:outline-none">
+        <button onClick={handleOpenconfirmpayModal} className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-10 w-24 rounded-3xl focus:outline-none">
               <FontAwesomeIcon icon={faPaperPlane} className="mr-2 h-4 w-4 text-white" /> {/* Icon */}
               Pay
             </button>
@@ -262,7 +262,7 @@ const Pay = () => {
 )}
 
 {/* New Payment Modal */}
-{showPaymentModal && (
+{showconfirmpayModal && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 outside-click" onClick={handleOutsideClick}>
     <div className="bg-black opacity-50 w-full h-full outside-click"></div>
     <div className={`bg-white w-full rounded-t-2xl absolute ${animateModal ? '-bottom-full motion-reduce:transition-all duration-700 ease-in-out' : 'bottom-0'}`}>
@@ -316,9 +316,6 @@ const Pay = () => {
         }}> {/* Close button */}
           <FontAwesomeIcon icon={faXmark} className="h-7 w-7 text-black" />
       </button>
-
-   
-
 
 
 {transactionStatus === 'pending' && (

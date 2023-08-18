@@ -48,9 +48,6 @@ async function initiatePayment(eth, _paymentRecipient, _etherValue, callback) {
     }
 }
 
-module.exports = {
-    initiatePayment
-};
 
 module.exports = {
     initiatePayment

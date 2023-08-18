@@ -307,16 +307,15 @@ const Pay = () => {
 {showSuccessModal && (
   <div className="fixed top-0 left-0 w-full h-full z-40 flex items-center justify-center">
     <div className="bg-black opacity-50 w-full h-full absolute"></div>
-    <div className="bg-white p-4 rounded-xl h-2/3 absolute top-1/6 inset-x-4">
-    <button className="p-4 cursor-pointer absolute top-0 left-0" onClick={() => {
-        document.body.style.overflowY = "scroll"; // Remove scroll lock
-        document.body.style.minHeight = "0px";
-        window.scrollBy(0, -1);
-        setShowSuccessModal(false); // Close the success modal
-      }}> {/* Close button */}
-        <FontAwesomeIcon icon={faXmark} className="h-7 w-7 text-black" />
+    <div className="bg-white p-4 rounded-xl absolute top-1/6 inset-x-4"> {/* Removed fixed height */}
+      <button className="p-4 cursor-pointer absolute top-0 left-0" onClick={() => {
+          document.body.style.overflowY = "scroll"; // Remove scroll lock
+          document.body.style.minHeight = "0px";
+          window.scrollBy(0, -1);
+          setShowSuccessModal(false); // Close the success modal
+        }}> {/* Close button */}
+          <FontAwesomeIcon icon={faXmark} className="h-7 w-7 text-black" />
       </button>
-
 
    
 
@@ -341,9 +340,9 @@ const Pay = () => {
       <div className="text-black font-semibold">Transaction to {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress} on Goerli Base Chain is processing.</div>
     </div>
     <div className="ml-0">
-      <div className="text-gray-600 font-medium text-lg"> Note: {forValue || "No note added"}</div>
+      <div className="text-gray-600 font-medium text-lg"> {forValue || "No note added"}</div>
     </div>
-    <button className="bg-gray-400 text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-8 mb-2" >
+    <button className="bg-gray-400 text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" >
       Continue
     </button>
   </div>
@@ -370,9 +369,9 @@ const Pay = () => {
       <div className="text-black font-semibold">Sent successfully to {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress} on Goerli Base Chain!</div>
     </div>
     <div className="ml-0">
-      <div className="text-gray-600 font-medium text-lg"> Note: {forValue || "No note added"}</div>
+      <div className="text-gray-600 font-medium text-lg"> {forValue || "No note added"}</div>
     </div>
-    <button className="bg-base-blue text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-8 mb-2" onClick={() => {
+    <button className="bg-base-blue text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" onClick={() => {
         document.body.style.overflowY = "scroll"; // Remove scroll lock
         document.body.style.minHeight = "0px";
         window.scrollBy(0, -1);
@@ -406,9 +405,9 @@ const Pay = () => {
       <div className="text-black font-semibold">Transaction to {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress} on Goerli Base Chain failed!</div>
     </div>
     <div className="ml-0">
-      <div className="text-gray-700 font-medium text-lg"> Note: {forValue || "No note added"}</div>
+      <div className="text-gray-700 font-medium text-lg"> {forValue || "No note added"}</div>
     </div>
-    <button className="bg-base-blue text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-8 mb-2" onClick={() => {
+    <button className="bg-base-blue text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" onClick={() => {
         document.body.style.overflowY = "scroll"; // Remove scroll lock
         document.body.style.minHeight = "0px";
         window.scrollBy(0, -1);

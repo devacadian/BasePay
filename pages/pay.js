@@ -28,7 +28,7 @@ const Pay = () => {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [toAddress, setToAddress] = useState('');
   const [forValue, setForValue] = useState('');
-  const [showSuccessModal, setShowSuccessModal] = useState(false); // State for the new modal
+  const [showtransactionModal, setShowtransactionModal] = useState(false); // State for the new modal
   const [transactionStatus, setTransactionStatus] = useState(null); // State to track transaction status
 
 
@@ -131,7 +131,7 @@ const Pay = () => {
   
     if (txHash) {
       setShowPaymentModal(false);
-      setShowSuccessModal(true);
+      setShowtransactionModal(true);
       setShowModal(false);
     } else {
       // Handle failed payment logic here
@@ -304,7 +304,7 @@ const Pay = () => {
 
 
 {/* New Success Modal */}
-{showSuccessModal && (
+{showtransactionModal && (
   <div className="fixed top-0 left-0 w-full h-full z-40 flex items-center justify-center">
     <div className="bg-black opacity-50 w-full h-full absolute"></div>
     <div className="bg-white p-4 rounded-xl absolute top-1/6 inset-x-4"> {/* Removed fixed height */}
@@ -312,7 +312,7 @@ const Pay = () => {
           document.body.style.overflowY = "scroll"; // Remove scroll lock
           document.body.style.minHeight = "0px";
           window.scrollBy(0, -1);
-          setShowSuccessModal(false); // Close the success modal
+          setShowtransactionModal(false); // Close the success modal
         }}> {/* Close button */}
           <FontAwesomeIcon icon={faXmark} className="h-7 w-7 text-black" />
       </button>
@@ -342,7 +342,7 @@ const Pay = () => {
     <div className="ml-0">
       <div className="text-gray-600 font-medium text-lg"> {forValue || "No note added"}</div>
     </div>
-    <button className="bg-gray-400 text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" >
+    <button className="bg-gray-300 text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" >
       Continue
     </button>
   </div>
@@ -375,7 +375,7 @@ const Pay = () => {
         document.body.style.overflowY = "scroll"; // Remove scroll lock
         document.body.style.minHeight = "0px";
         window.scrollBy(0, -1);
-        setShowSuccessModal(false); // Close the success modal
+        setShowtransactionModal(false); // Close the success modal
       }}>
       Continue
     </button>
@@ -411,7 +411,7 @@ const Pay = () => {
         document.body.style.overflowY = "scroll"; // Remove scroll lock
         document.body.style.minHeight = "0px";
         window.scrollBy(0, -1);
-        setShowSuccessModal(false); // Close the success modal
+        setShowtransactionModal(false); // Close the success modal
       }}>
       Retry
     </button>

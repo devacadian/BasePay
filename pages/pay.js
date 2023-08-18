@@ -318,12 +318,36 @@ const Pay = () => {
       </button>
 
 
-      {transactionStatus === 'pending' && (
-        <div className="flex items-start justify-start mt-12 ml-0">
-          <FontAwesomeIcon icon={faSpinner} className="text-base-blue h-7 w-7 animate-spin" /> {/* Spinner icon */}
+   
+
+
+
+{transactionStatus === 'pending' && (
+  <div className="mt-20 ml-0">
+    <div className="flex justify-center items-center mb-10 relative"> {/* Centered the Ethereum symbol */}
+      <div className="bg-gray-200 w-16 h-16 rounded-full absolute drop-shadow"></div> {/* Gray circle */}
+      <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> {/* Ethereum icon */}
+    </div>
+    <div className="text-center mb-8"> {/* Centered only the counter value */}
+      <div className="text-black font-bold text-2xl">{counter || '0'} ETH</div>
+    </div>
+
+    <div className="flex items-center justify-start mb-6"> {/* Left-aligned the icon and "Transaction Successful!" text */}
+    <FontAwesomeIcon icon={faSpinner} className="text-base-blue h-7 w-7 animate-spin" /> {/* Spinner icon */}
           <span className="ml-4 mt-0.5 text-black font-semibold">Transaction in Progress...</span>
         </div>
-      )}
+
+    <div className=" mb-4"> {/* Centered the "Sent successfully to" text */}
+      <div className="text-black font-semibold">Transaction to {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress} on Goerli Base Chain is processing.</div>
+    </div>
+    <div className="ml-0">
+      <div className="text-gray-600 font-medium text-lg"> Note: {forValue || "No note added"}</div>
+    </div>
+    <button className="bg-gray-400 text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-8 mb-2" >
+      Continue
+    </button>
+  </div>
+)}
 
 
 

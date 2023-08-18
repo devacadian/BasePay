@@ -62,10 +62,14 @@ const Pay = () => {
 
   const handleOutsideClick = (e) => {
     if (e.target.className.includes('outside-click')) {
+      setAnimateModal(true); // Start the animation
       document.body.style.overflowY = "scroll"; // Remove scroll lock
       document.body.style.minHeight = "0px";
       window.scrollBy(0, -1);
-      setShowPaymentModal(false); // Close the new payment modal when clicked outside of it
+      setTimeout(() => {
+        setShowPaymentModal(false); // Close the modal after animation completes
+        setAnimateModal(false); // Reset the animation state
+      }, 150); // 150 milliseconds
     }
   };
 
@@ -205,7 +209,7 @@ const Pay = () => {
   className="rounded p-2 flex-grow ml-1 text-black font-medium outline-none"
   placeholder="Enter ENS or Base address..."
   value={toAddress}
-  onChange={(e) => setToAddress(e.target.value)} // Update the state with the entered value
+  onChange={(e) => setToAddress(e.target.value.trim())} // Use the trim method here
 />
         <FontAwesomeIcon icon={faBarcodeRead} className="h-6 w-6 text-black ml-2" /> {/* Scan icon */}
       </div>
@@ -239,7 +243,8 @@ const Pay = () => {
 {showPaymentModal && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 outside-click" onClick={handleOutsideClick}>
     <div className="bg-black opacity-50 w-full h-full outside-click"></div>
-    <div className={`bg-white w-full h-1/2 rounded-t-2xl absolute mt-10 ${animateModal ? 'top-full transition-all duration-300 ease-in-out' : 'top-1/2'}`}>
+    <div className={`bg-white w-full rounded-t-2xl absolute ${animateModal ? '-bottom-full motion-reduce:transition-all duration-700 ease-in-out' : 'bottom-0'}`}>
+
       <div className="bg-gray-300 w-18 h-1 mx-auto mt-4 rounded-full cursor-pointer"
            onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} // Adding touch handlers to the gray drag bar
            onClick={handleCloseAnimation}></div> {/* Clickable drag bar */}
@@ -262,7 +267,7 @@ const Pay = () => {
   {forValue || "No note added"}
 </div>
         <button
-  className="bg-base-blue text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none mt-4"
+  className="bg-base-blue text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none mt-4 mb-2"
   onClick={async () => {
     // Make sure to handle the case when 'window.ethereum' is not available
     if (window.ethereum) {

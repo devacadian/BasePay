@@ -253,8 +253,14 @@ const Pay = () => {
             <span className="text-gray-600 font-medium text-lg">Pay To</span> {/* Display phrase */}
           </div>
         </div>
-        <div className="mt-4 ml-1 text-black font-medium text-2xl">{toAddress}</div> {/* Display address */}
-        <div className="mt-2 ml-1 text-gray-600 font-medium italic text-lg">{forValue}</div> {/* Display "for" value */}
+        <div className="mt-4 ml-1 text-black font-medium text-2xl">
+  {toAddress.length === 42
+    ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6)
+    : toAddress}
+</div>
+        <div className="mt-2 ml-1 text-gray-600 font-medium text-lg">
+  {forValue || "No note added"}
+</div>
         <button
   className="bg-base-blue text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none mt-4"
   onClick={async () => {

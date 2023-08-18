@@ -1,7 +1,7 @@
 import React, { useState, useEffect  } from 'react';
 import Head from 'next/head';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // Import FontAwesomeIcon
-import { faBarcodeRead, faPaperPlane, faFileInvoice, faChevronLeft, faMagnifyingGlass, faXmark } from '@fortawesome/pro-solid-svg-icons'; // Import icons
+import { faBarcodeRead, faPaperPlane, faFileInvoice, faChevronLeft, faMagnifyingGlass, faXmark, faSpinner } from '@fortawesome/pro-solid-svg-icons'; // Import icons
 import { faClockNine } from '@fortawesome/pro-regular-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import { initiatePayment } from "../controller/contract-control"
@@ -29,6 +29,7 @@ const Pay = () => {
   const [toAddress, setToAddress] = useState('');
   const [forValue, setForValue] = useState('');
   const [showSuccessModal, setShowSuccessModal] = useState(false); // State for the new modal
+  const [transactionPending, setTransactionPending] = useState(false); // State to track transaction status
 
 
   useEffect(() => {
@@ -118,6 +119,7 @@ const Pay = () => {
   };
   
   const handleConfirmPayment = async () => {
+    
     const txHash = await initiatePayment(window.ethereum, toAddress, counter || '0', (receipt) => {
       // You can add other logic here to handle the successful or failed transaction
     });
@@ -126,6 +128,7 @@ const Pay = () => {
       setShowPaymentModal(false); // Close the payment modal
       setShowSuccessModal(true); // Open the success modal
       setShowModal(false); // Close the user selection modal
+      setTransactionPending(true);
       // Other logic to handle the submitted transaction
     } else {
       // Handle failed payment logic here
@@ -298,15 +301,20 @@ const Pay = () => {
 {showSuccessModal && (
   <div className="fixed top-0 left-0 w-full h-full z-40 flex items-center justify-center">
     <div className="bg-black opacity-50 w-full h-full absolute"></div>
-    <div className="bg-white p-8 rounded-xl h-2/3 absolute inset-x-4">
+    <div className="bg-white p-4 rounded-xl h-2/3 absolute top-1/6 inset-x-4">
       <button className="p-4 cursor-pointer absolute top-0 left-0" onClick={() => setShowSuccessModal(false)}> {/* Close button */}
         <FontAwesomeIcon icon={faXmark} className="h-7 w-7 text-black" />
       </button>
+      {transactionPending && (
+        <div className="flex items-start justify-start mt-12 ml-0">
+          <FontAwesomeIcon icon={faSpinner} className="text-black h-7 w-7 animate-spin" /> {/* Spinner icon */}
+          <span className="ml-2 text-black">Processing...</span>
+        </div>
+      )}
       {/* Rest of the content for the success modal goes here */}
     </div>
   </div>
 )}
-
 
 
     </main>

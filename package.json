@@ -17,6 +17,7 @@
     "@fortawesome/pro-solid-svg-icons": "^6.4.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@rainbow-me/rainbowkit": "^1.0.7",
+    "@sentry/nextjs": "^7.64.0",
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
     "eslint": "8.47.0",

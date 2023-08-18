@@ -40,6 +40,8 @@ const Pay = () => {
     setFormattedBalance(balanceValue.toFixed(4));
 }, [data]);
 
+
+
   const handleNumberClick = (number) => {
     if (number === '.' && counter.includes('.')) return; // Prevent more than one decimal point
     setCounter(counter + number);

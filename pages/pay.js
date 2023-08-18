@@ -1,7 +1,7 @@
 import React, { useState, useEffect  } from 'react';
 import Head from 'next/head';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // Import FontAwesomeIcon
-import { faBarcodeRead, faPaperPlane, faFileInvoice, faChevronLeft, faMagnifyingGlass, faXmark, faSpinner, faCircleCheck, faTimesCircle } from '@fortawesome/pro-solid-svg-icons'; // Import icons
+import { faBarcodeRead, faPaperPlane, faFileInvoice, faXmark, faSpinner, faCircleCheck, faTimesCircle } from '@fortawesome/pro-solid-svg-icons'; // Import icons
 import { faClockNine } from '@fortawesome/pro-regular-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import { initiatePayment } from "../controller/contract-control"
@@ -300,6 +300,9 @@ const Pay = () => {
   </div>
 )}
 
+
+
+
 {/* New Success Modal */}
 {showSuccessModal && (
   <div className="fixed top-0 left-0 w-full h-full z-40 flex items-center justify-center">
@@ -315,26 +318,35 @@ const Pay = () => {
       </button>
       {transactionStatus === 'pending' && (
         <div className="flex items-start justify-start mt-12 ml-0">
-          <FontAwesomeIcon icon={faSpinner} className="text-black h-7 w-7 animate-spin" /> {/* Spinner icon */}
-          <span className="ml-2 text-black">Processing...</span>
+          <FontAwesomeIcon icon={faSpinner} className="text-base-blue h-7 w-7 animate-spin" /> {/* Spinner icon */}
+          <span className="ml-4 mt-0.5 text-black font-semibold">Transaction in Progress...</span>
         </div>
       )}
-      {transactionStatus === 'success' && (
-        <div className="flex items-start justify-start mt-12 ml-0">
-          <FontAwesomeIcon icon={faCircleCheck} className="text-black h-7 w-7" /> {/* Success icon */}
-          <span className="ml-2 text-black">Transaction Successful!</span>
+    {transactionStatus === 'success' && (
+        <div className="mt-12 ml-0">
+          <div className="flex items-center justify-start">
+            <FontAwesomeIcon icon={faCircleCheck} className="text-base-blue h-7 w-7" /> {/* Success icon */}
+            <span className="ml-4 mt-0.5 text-black font-semibold">Transaction Successful!</span>
+          </div>
+          <div className="ml-2 mt-2">
+            <div className="text-black">To: {toAddress}</div>
+            <div className="text-black">Value: {counter || '0'}</div>
+            <div className="text-black">Note: {forValue || "No note added"}</div>
+          </div>
         </div>
       )}
       {transactionStatus === 'fail' && (
         <div className="flex items-start justify-start mt-12 ml-0">
-          <FontAwesomeIcon icon={faTimesCircle} className="text-black h-7 w-7" /> {/* Fail icon */}
-          <span className="ml-2 text-black">Transaction Failed!</span>
+          <FontAwesomeIcon icon={faTimesCircle} className="text-red h-7 w-7" /> {/* Fail icon */}
+          <span className="ml-4 mt-0.5 text-black font-semibold">Transaction Failed!</span>
         </div>
       )}
       {/* Rest of the content for the success modal goes here */}
     </div>
   </div>
 )}
+
+
 
 
     </main>

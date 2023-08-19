@@ -48,6 +48,12 @@ export default function Home() {
       <div className="px-4 mt-6 text-xl font-semibold text-black"> {/* Quick Actions */}
         Quick Actions
       </div>
+      <div className="px-8 mt-4 flex justify-between text-xl text-black"> {/* Action Buttons */}
+        <span>Pay</span>
+        <span>Request</span>
+        <span>Share</span>
+        <span>Test</span>
+      </div>
       <div className="flex-grow flex items-center justify-center">
         <a
           className="pointer-events-none flex place-items-center gap-2 p-8 pointer-events-auto lg:p-0"
@@ -59,5 +65,5 @@ export default function Home() {
         </a>
       </div>
     </main>
-  );  
+  );
 }

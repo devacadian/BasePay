@@ -45,35 +45,40 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+
       <div className="px-4 mt-6 text-xl font-semibold text-black"> {/* Quick Actions */}
         Quick Actions
       </div>
-      <div className="px-8 mt-6 flex justify-between text-xl text-black"> {/* Action Buttons */}
+  <div className="px-8 mt-6 flex justify-between text-xl text-black"> {/* Action Buttons */}
   <div className="flex flex-col items-center"> {/* Pay */}
     <div className="flex justify-center items-center relative w-12 h-12 mb-2 rounded-full bg-gray-300 shadow drop-shadow">
       <FontAwesomeIcon icon={faPaperPlane} className="text-black h-5 w-5 z-10" />
     </div>
-    <div>Pay</div>
+    <div className="font-semibold text-base">Pay</div>
   </div>
   <div className="flex flex-col items-center"> {/* Request */}
     <div className="flex justify-center items-center relative w-12 h-12 rounded-full bg-gray-300 shadow drop-shadow mb-2">
       <FontAwesomeIcon icon={faFileInvoice} className="text-black h-5 w-5 z-10" />
     </div>
-    <div>Request</div>
+    <div className="font-semibold text-base">Request</div>
   </div>
   <div className="flex flex-col items-center"> {/* Share */}
     <div className="flex justify-center items-center relative w-12 h-12 mb-2 rounded-full bg-gray-300 shadow drop-shadow">
       <FontAwesomeIcon icon={faMessagePen} className="text-black h-5 w-5 z-10" />
     </div>
-    <div>Share</div>
+    <div className="font-semibold text-base">Message</div>
   </div>
   <div className="flex flex-col items-center"> {/* Test */}
     <div className="flex justify-center items-center relative w-12 h-12 mb-2 rounded-full bg-gray-300 shadow drop-shadow">
       <FontAwesomeIcon icon={faShareFromSquare} className="text-black h-5 w-5 z-10" />
     </div>
-    <div>Test</div>
+    <div className="font-semibold text-base">Share</div>
   </div>
 </div>
+
+
+
       <div className="flex-grow flex items-center justify-center">
         <a
           className="pointer-events-none flex place-items-center gap-2 p-8 pointer-events-auto lg:p-0"

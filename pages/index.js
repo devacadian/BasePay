@@ -84,14 +84,16 @@ export default function Home() {
 </div>
 
 
+<div className="px-4 mt-6 mb-0 text-xl font-semibold text-base-blue"> {/* Quick Actions */}
+  Send Assets
+</div>
 
-
-<div className="px-4 mt-8 mb-1"> {/* Container div */}
-  <div className="bg-gray-100 p-2 rounded-3xl shadow-sm  drop-shadow-sm text-black text-lg font-semibold text-left px-4"> {/* Inner div */}
+<div className="px-4 mt-4 mb-1"> {/* Container div */}
+  <div className="bg-gray-100 p-2 rounded-3xl shadow-sm drop-shadow-sm text-black text-lg font-semibold text-left px-4"> {/* Inner div */}
     <div className="mt-2"> {/* Margin above the text */}
       Personalize payments <br /> with emojis and messages! 🎉
-      <div className="text-black text-base font-semibold mt-8 mb-1"> {/* Additional text */}
-        Send ETH now
+      <div className="text-black text-base font-semibold mt-8 mb-4"> {/* Additional text */}
+        <span className="bg-base-blue p-2 rounded-2xl text-white px-5">Send ETH now</span>
       </div>
     </div>
   </div>
@@ -120,7 +122,7 @@ export default function Home() {
 
 
 
-<div className=" -ml-2 flex items-center justify-left">
+<div className=" -ml-2 flex items-center justify-center mt-4 mb-34">
   <a
     className="pointer-events-none flex place-items-center gap-2 p-8 pointer-events-auto"
     target="_blank"

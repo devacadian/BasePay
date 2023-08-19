@@ -89,7 +89,7 @@ export default function Home() {
 </div>
 
 <div className="px-4 mt-4 mb-1"> {/* Container div */}
-  <div className="bg-gray-100 p-2 rounded-3xl shadow-sm drop-shadow-sm text-black text-lg font-semibold text-left px-4"> {/* Inner div */}
+  <div className="bg-gray-100 p-2 rounded-2xl shadow-sm drop-shadow-sm text-black text-lg font-semibold text-left px-4"> {/* Inner div */}
     <div className="mt-2"> {/* Margin above the text */}
       Personalize payments <br /> with emojis and messages! 🎉
       <div className="text-black text-base font-semibold mt-8 mb-4"> {/* Additional text */}

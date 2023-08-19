@@ -24,14 +24,14 @@ const Pay = () => {
   const [containerWidth, setContainerWidth] = useState('w-20');
   const { openChainModal } = useChainModal();
   const [isClient, setIsClient] = useState(false);
-  const [showModal, setShowModal] = useState(false); // State to control the modal display
+  const [showPaySelectionModal, setshowPaySelectionModal] = useState(false); // State to control the modal display
   const [showconfirmpayModal, setShowconfirmpayModal] = useState(false);
   const [toAddress, setToAddress] = useState('');
   const [forValue, setForValue] = useState('');
   const [showtransactionModal, setShowtransactionModal] = useState(false); // State for the new modal
   const [transactionStatus, setTransactionStatus] = useState(null); // State to track transaction status
   const [txHashState, setTxHashState] = useState('');
-
+  const [showRequestSelectionModal, setshowRequestSelectionModal] = useState(false);
 
   useEffect(() => {
     setContainerWidth(chain?.name === 'Base Goerli' ? 'w-24' : 'w-20');
@@ -55,11 +55,11 @@ const Pay = () => {
   };
 
   const handlePayClick = () => {
-    setShowModal(true); // Show the modal when the Pay button is clicked
+    setshowPaySelectionModal(true); // Show the modal when the Pay button is clicked
   };
 
   const handleCloseModal = () => {
-    setShowModal(false); // Hide the modal when the close button is clicked
+    setshowPaySelectionModal(false); // Hide the modal when the close button is clicked
   };
 
 
@@ -134,7 +134,7 @@ const Pay = () => {
       setTxHashState(txHash);
       setShowconfirmpayModal(false);
       setShowtransactionModal(true);
-      setShowModal(false);
+      setshowPaySelectionModal(false);
     } else {
       // Handle failed payment logic here
     }
@@ -205,8 +205,8 @@ const Pay = () => {
 
 
       
-{/* User Selection Modal */}
-{showModal && (
+{/* Pay User Selection Modal */}
+{showPaySelectionModal && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-20">
     <div className="bg-white w-full h-full relative pt-2">
       <div className="px-4 pt-0 grid grid-cols-3 items-center">
@@ -436,10 +436,70 @@ const Pay = () => {
   </div>
 )}
 
-
     </div>
   </div>
 )}
+
+
+{/* Request User Selection Modal */}
+{showRequestSelectionModal && (
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-20">
+    <div className="bg-white w-full h-full relative pt-2">
+      <div className="px-4 pt-0 grid grid-cols-3 items-center">
+        <button className="p-4 -ml-4 cursor-pointer" onClick={handleCloseModal}> 
+          <FontAwesomeIcon icon={faXmark} className="h-7 w-7 text-black" />
+        </button>
+        <div className="text-black text-2xl font-bold flex items-center justify-center"> 
+          <FontAwesomeIcon icon={faEthereum} className="mr-0 text-black h-5 w-5" /> 
+          {counter || '0'} 
+        </div>
+        <div className="flex justify-end"> 
+        <button onClick={handleOpenconfirmpayModal} className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-10 w-24 rounded-3xl focus:outline-none">
+              <FontAwesomeIcon icon={faPaperPlane} className="mr-2 h-4 w-4 text-white" /> 
+              Pay
+            </button>
+          </div>
+      </div>
+      <div className="border-t border-gray-300 mt-2"></div> 
+      <div className="px-4 py-2 flex items-center">
+        <label htmlFor="to" className="text-black text-lg font-bold mr-2">To:</label> 
+        <input
+  type="text"
+  id="to"
+  className="rounded p-2 flex-grow ml-1 text-black font-medium outline-none"
+  placeholder="Enter ENS or Base address..."
+  value={toAddress}
+  onChange={(e) => setToAddress(e.target.value.trim())} // Trim method here to prevent sending to incorrect addresses
+/>
+        <FontAwesomeIcon icon={faBarcodeRead} className="h-6 w-6 text-black ml-2" /> 
+      </div>
+      <div className="border-t border-gray-300"></div> 
+      <div className="px-4 py-2 flex items-center">
+        <label htmlFor="for" className="text-black text-lg font-bold mr-2">For:</label> 
+        <input
+      type="text"
+      id="for"
+      className="rounded p-2 flex-grow text-gray-600 font-medium outline-none"
+      placeholder="Add a note"
+      value={forValue}
+      onChange={(e) => setForValue(e.target.value)} // Update the state with the entered value
+    />
+      </div>
+
+
+      <div className="bg-gray-100 h-10 flex items-center">
+        <span className="text-gray-500 text-base font-bold ml-4">Suggested</span>
+      </div>
+
+      <div className="text-center text-black text-sm font-medium my-10">
+        Start using BasePay to find suggested contacts!
+      </div>
+      {/* Add your user selection content here */}
+    </div>
+  </div>
+)}
+
+
 
 
 

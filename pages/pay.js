@@ -305,7 +305,6 @@ const Pay = () => {
 
 
 
-
 {/* Transaction Modal */}
 
 {showtransactionModal && (

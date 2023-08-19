@@ -1,7 +1,7 @@
 import React, { useState, useEffect  } from 'react';
 import Head from 'next/head';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
-import { faBarcodeRead, faPaperPlane, faFileInvoice, faXmark, faSpinner, faCircleCheck, faTimesCircle } from '@fortawesome/pro-solid-svg-icons';
+import { faBarcodeRead, faPaperPlane, faFileInvoice, faXmark, faSpinner, faCircleCheck, faTimesCircle, faUpRightFromSquare } from '@fortawesome/pro-solid-svg-icons';
 import { faClockNine } from '@fortawesome/pro-regular-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import { initiatePayment } from "../controller/contract-control"
@@ -30,6 +30,7 @@ const Pay = () => {
   const [forValue, setForValue] = useState('');
   const [showtransactionModal, setShowtransactionModal] = useState(false); // State for the new modal
   const [transactionStatus, setTransactionStatus] = useState(null); // State to track transaction status
+  const [txHashState, setTxHashState] = useState('');
 
 
   useEffect(() => {
@@ -130,6 +131,7 @@ const Pay = () => {
     });
   
     if (txHash) {
+      setTxHashState(txHash);
       setShowconfirmpayModal(false);
       setShowtransactionModal(true);
       setShowModal(false);
@@ -326,9 +328,17 @@ const Pay = () => {
       <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> 
       <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
     </div>
-    <div className="text-center mb-8"> 
+    <div className="text-center mb-4"> 
       <div className="text-black font-bold text-2xl">{counter || '0'} ETH</div>
     </div>
+
+
+    <div className="mb-10 text-center text-gray-600 font-medium"> {/* Added a "View on Basescan" link */}
+  <a href={`https://goerli.basescan.org/tx/${txHashState}`} target="_blank" rel="noopener noreferrer" className="flex justify-center items-center">
+    View on <span className="text-gray-600 ml-1 font-semibold">BaseScan</span> <FontAwesomeIcon icon={faUpRightFromSquare} className="h-4.5 w-4.5 ml-2 text-gray-500" />
+  </a>
+</div>
+
 
     <div className="flex items-center justify-start mb-6"> 
     <FontAwesomeIcon icon={faSpinner} className="text-base-blue h-7 w-7 animate-spin" />
@@ -355,9 +365,15 @@ const Pay = () => {
       <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> 
       <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
     </div>
-    <div className="text-center mb-8"> 
+    <div className="text-center mb-4"> 
       <div className="text-black font-bold text-2xl">{counter || '0'} ETH</div>
     </div>
+
+    <div className="mb-10 text-center text-gray-600 font-medium"> {/* Added a "View on Basescan" link */}
+  <a href={`https://goerli.basescan.org/tx/${txHashState}`} target="_blank" rel="noopener noreferrer" className="flex justify-center items-center">
+    View on <span className="text-gray-600 ml-1 font-semibold">BaseScan</span> <FontAwesomeIcon icon={faUpRightFromSquare} className="h-4.5 w-4.5 ml-2 text-gray-500" />
+  </a>
+</div>
 
     <div className="flex items-center justify-start mb-6"> 
       <FontAwesomeIcon icon={faCircleCheck} className="text-base-blue h-7 w-7" /> 
@@ -389,9 +405,15 @@ const Pay = () => {
       <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div>
       <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
     </div>
-    <div className="text-center mb-8"> 
+    <div className="text-center mb-4"> 
       <div className="text-black font-bold text-2xl">{counter || '0'} ETH</div>
     </div>
+
+    <div className="mb-10 text-center text-gray-600 font-medium"> {/* Added a "View on Basescan" link */}
+  <a href={`https://goerli.basescan.org/tx/${txHashState}`} target="_blank" rel="noopener noreferrer" className="flex justify-center items-center">
+    View on <span className="text-gray-600 ml-1 font-semibold">BaseScan</span> <FontAwesomeIcon icon={faUpRightFromSquare} className="h-4.5 w-4.5 ml-2 text-gray-500" />
+  </a>
+</div>
 
     <div className="flex items-center justify-start mb-6"> 
     <FontAwesomeIcon icon={faTimesCircle} className="text-red-600 h-7 w-7" /> 

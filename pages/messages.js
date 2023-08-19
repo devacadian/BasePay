@@ -14,14 +14,14 @@ export default function Messages() {
       <div className="p-4 flex items-center justify-between">
       <div className="flex items-center">
           <h1 className="text-black text-3xl font-semibold pt-2 mr-1">Messages</h1>
-          <FontAwesomeIcon icon={faMessages} className="h-6 w-6 text-black align-middle mt-3 ml-2" /> {/* Messages icon */}
+          <FontAwesomeIcon icon={faMessages} className="h-6 w-6 text-black align-middle mt-3 ml-2" /> 
         </div>
         <button
           onClick={() => {
             // Handle the search action here
           }}
         >
-          <FontAwesomeIcon icon={faMagnifyingGlass} className="h-6 w-6 text-black align-middle mt-3" /> {/* Magnifying glass icon */}
+          <FontAwesomeIcon icon={faMagnifyingGlass} className="h-6 w-6 text-black align-middle mt-3" /> 
         </button>
       </div>
 
@@ -56,7 +56,7 @@ export default function Messages() {
 
       <div className="bg-white w-full -mb-2"></div>
       <div className="flex-grow flex items-center justify-center">
-        {/* You can add other content here */}
+        {/* other content here */}
       </div>
       {!showModal && (
         <button
@@ -79,7 +79,7 @@ export default function Messages() {
       <button onClick={() => setShowModal(false)}> {/* Close modal on click */}
         <FontAwesomeIcon icon={faArrowLeft} className="h-6 w-6 text-black align-middle mt-3" />
       </button>
-      <h1 className="text-black text-3xl font-semibold pt-2 ml-4">New Message</h1> {/* Added ml-4 to create space */}
+      <h1 className="text-black text-3xl font-semibold pt-2 ml-4">New Message</h1> 
     </div>
     <div className="px-4 pb-4 pt-0 flex items-center">
       <div className="flex items-center border-2 border-gray-600 rounded-3xl w-full p-2">

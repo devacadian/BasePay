@@ -1,7 +1,7 @@
 import React, { useState, useEffect  } from 'react';
 import Head from 'next/head';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
-import { faBarcodeRead, faPaperPlane, faFileInvoice, faXmark, faSpinner, faCircleCheck, faTimesCircle, faUpRightFromSquare } from '@fortawesome/pro-solid-svg-icons';
+import { faBarcodeRead, faPaperPlane, faFileInvoice, faXmark, faSpinner, faCircleCheck, faTimesCircle, faUpRightFromSquare, faArrowLeft } from '@fortawesome/pro-solid-svg-icons';
 import { faClockNine } from '@fortawesome/pro-regular-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import { initiatePayment } from "../controller/contract-control"
@@ -141,6 +141,15 @@ const Pay = () => {
   };
 
 
+  const handleRequestClick = () => {
+    setshowRequestSelectionModal(true); // Show the modal when the Request button is clicked
+  };
+
+  const handleCloseRequestModal = () => {
+    setshowRequestSelectionModal(false); // Hide the modal when the close button is clicked
+  };
+
+
   return (
 <main className="min-h-screen flex flex-col bg-white pb-20">
       <div style={{ background: 'linear-gradient(to bottom, #0e76fd, #ffffff)' }} className="flex-grow flex flex-col">
@@ -197,7 +206,7 @@ const Pay = () => {
           <FontAwesomeIcon icon={faPaperPlane} className="mr-2 h-4 w-4 text-white" />
           Pay
         </button>
-        <button className="w-1/2 bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 rounded-3xl focus:outline-none">
+        <button onClick={handleRequestClick} className="w-1/2 bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 rounded-3xl focus:outline-none"> {/* Update here */}
           <FontAwesomeIcon icon={faFileInvoice} className="mr-2 h-4 w-4 text-white" />
           Request
         </button>
@@ -441,51 +450,38 @@ const Pay = () => {
 )}
 
 
+
+
+
+
 {/* Request User Selection Modal */}
 {showRequestSelectionModal && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-20">
     <div className="bg-white w-full h-full relative pt-2">
       <div className="px-4 pt-0 grid grid-cols-3 items-center">
-        <button className="p-4 -ml-4 cursor-pointer" onClick={handleCloseModal}> 
-          <FontAwesomeIcon icon={faXmark} className="h-7 w-7 text-black" />
+        <button className="p-4 -ml-4 cursor-pointer" onClick={handleCloseRequestModal}> 
+          <FontAwesomeIcon icon={faArrowLeft} className="h-7 w-7 text-black" />
         </button>
         <div className="text-black text-2xl font-bold flex items-center justify-center"> 
-          <FontAwesomeIcon icon={faEthereum} className="mr-0 text-black h-5 w-5" /> 
-          {counter || '0'} 
+          Request
         </div>
-        <div className="flex justify-end"> 
-        <button onClick={handleOpenconfirmpayModal} className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-10 w-24 rounded-3xl focus:outline-none">
-              <FontAwesomeIcon icon={faPaperPlane} className="mr-2 h-4 w-4 text-white" /> 
-              Pay
-            </button>
-          </div>
+        <div className="flex justify-end"></div> {/* Empty div to keep the grid layout */}
       </div>
       <div className="border-t border-gray-300 mt-2"></div> 
       <div className="px-4 py-2 flex items-center">
         <label htmlFor="to" className="text-black text-lg font-bold mr-2">To:</label> 
         <input
-  type="text"
-  id="to"
-  className="rounded p-2 flex-grow ml-1 text-black font-medium outline-none"
-  placeholder="Enter ENS or Base address..."
-  value={toAddress}
-  onChange={(e) => setToAddress(e.target.value.trim())} // Trim method here to prevent sending to incorrect addresses
-/>
+          type="text"
+          id="to"
+          className="rounded p-2 flex-grow ml-1 text-black font-medium outline-none"
+          placeholder="Enter ENS or Base address..."
+          value={toAddress}
+          onChange={(e) => setToAddress(e.target.value.trim())}
+        />
         <FontAwesomeIcon icon={faBarcodeRead} className="h-6 w-6 text-black ml-2" /> 
       </div>
-      <div className="border-t border-gray-300"></div> 
-      <div className="px-4 py-2 flex items-center">
-        <label htmlFor="for" className="text-black text-lg font-bold mr-2">For:</label> 
-        <input
-      type="text"
-      id="for"
-      className="rounded p-2 flex-grow text-gray-600 font-medium outline-none"
-      placeholder="Add a note"
-      value={forValue}
-      onChange={(e) => setForValue(e.target.value)} // Update the state with the entered value
-    />
-      </div>
 
+    
 
       <div className="bg-gray-100 h-10 flex items-center">
         <span className="text-gray-500 text-base font-bold ml-4">Suggested</span>
@@ -495,14 +491,16 @@ const Pay = () => {
         Start using BasePay to find suggested contacts!
       </div>
       {/* Add your user selection content here */}
+      
+      <div className="fixed bottom-0 left-0 right-0 px-4 pb-6"> {/* Button container */}
+        <button onClick={handleOpenconfirmpayModal} className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-10 w-full rounded-3xl focus:outline-none">
+          <FontAwesomeIcon icon={faFileInvoice} className="mr-2 h-4 w-4 text-white" />
+          Request
+        </button>
+      </div> {/* End of Button container */}
     </div>
   </div>
 )}
-
-
-
-
-
 
     </main>
   );

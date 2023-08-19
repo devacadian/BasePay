@@ -39,15 +39,17 @@ export default function Home() {
           <div className="flex justify-center items-center relative w-10 h-10 rounded-full bg-gray-300 shadow drop-shadow ml-4"> {/* Ethereum logo */}
             <FontAwesomeIcon icon={faEthereum} className="text-black h-6 w-6 z-10" />
           </div>
-          <div className="text-left text-black ml-4 flex flex-col">
+          <div className="text-left text-black font-semibold ml-4 flex flex-col">
             <div>{formattedBalance} ETH</div> {/* Display formatted balance */}
-            <div className="text-sm text-black">Goerli Basechain Balance</div> {/* Label */}
+            <div className="text-sm text-black font-semibold">Goerli Basechain Balance</div> {/* Label */}
           </div>
         </div>
       </div>
 
 
-      <div className="px-4 mt-6 mb-4 text-xl font-semibold text-black"> {/* Quick Actions */}
+
+
+      <div className="px-4 mt-6 mb-4 text-xl font-semibold text-base-blue"> {/* Quick Actions */}
   Quick Actions
 </div>
 <div className="px-4"> {/* Wrapper div for side padding */}
@@ -82,16 +84,18 @@ export default function Home() {
 </div>
 
 
-      <div className="flex-grow flex items-center justify-center">
-        <a
-          className="pointer-events-none flex place-items-center gap-2 p-8 pointer-events-auto lg:p-0"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {' '}
-          <ConnectButton className="dark:invert" width={100} height={24} priority />
-        </a>
-      </div>
+<div className=" -ml-2 flex items-center justify-left">
+  <a
+    className="pointer-events-none flex place-items-center gap-2 p-8 pointer-events-auto"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    {' '}
+    <ConnectButton className="dark:invert" width={100} height={24} priority />
+  </a>
+</div>
+
+
     </main>
   );
 }

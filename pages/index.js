@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faBarcodeRead, faPaperPlane, faFileInvoice, faMessagePen, faShareFromSquare } from '@fortawesome/pro-solid-svg-icons';
+import { faMagnifyingGlass, faBarcodeRead, faPaperPlane, faFileInvoice, faMessagePen, faShareFromSquare, faUserGroup, faCopy, faQrcode } from '@fortawesome/pro-solid-svg-icons';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useBalance } from 'wagmi';
 import { useAccount } from "wagmi";
@@ -75,13 +75,36 @@ export default function Home() {
       </div>
       <div className="flex flex-col items-center"> {/* Test */}
         <div className="flex justify-center items-center relative w-12 h-12 mb-2 rounded-full bg-base-blue shadow drop-shadow-sm">
-          <FontAwesomeIcon icon={faShareFromSquare} className="text-white h-5 w-5 z-10" />
+          <FontAwesomeIcon icon={faUserGroup} className="text-white h-5 w-5 z-10" />
         </div>
-        <div className="font-semibold text-base">Share</div>
+        <div className="font-semibold text-base">Invite</div>
       </div>
     </div>
   </div>
 </div>
+
+
+<div className="px-4 mt-6 mb-0 text-xl font-semibold text-base-blue"> {/* Receive Assets */}
+  Receive Assets
+</div>
+<div className="px-4 flex justify-end -mt-0 mb-0"> {/* QR Code */}
+  <div className="text-right text-black flex items-center justify-center">
+    <div className="bg-base-blue rounded-full w-10 h-10 flex items-center justify-center"> {/* Blue circle */}
+      <FontAwesomeIcon icon={faQrcode} className="h-5 w-5 text-white" />
+    </div>
+  </div>
+</div>
+<div className="px-4  -mt-6 text-black text-md mb-6 font-semibold"> {/* New text */}
+  Send and receive assets on BasePay. <br /> Experience fast and low-cost transactions <br /> on Goerli Base Chain.
+</div>
+
+<div className="mb-4 px-4"> {/* Removed left and right padding */}
+  <button className="bg-base-blue text-base text-white font-semibold h-10 rounded-2xl w-full flex items-center justify-center"> {/* Copy Address Button */}
+    <FontAwesomeIcon icon={faCopy} className="mr-2 h-4 w-4" /> Copy Address
+  </button>
+</div>
+
+
 
 
 <div className=" -ml-2 flex items-center justify-left">

@@ -280,8 +280,8 @@ const Pay = () => {
           {counter || '0'} 
         </div>
         <div className="mt-4">
-          <div className="bg-gray-300 rounded-3xl w-24 h-12 flex items-center justify-center"> 
-            <span className="text-gray-600 font-medium text-lg">Pay To</span> 
+          <div className="bg-gray-200 rounded-3xl w-26 h-12 flex items-center justify-center"> 
+            <span className="text-black font-medium text-lg">Pay To</span> 
           </div>
         </div>
         <div className="mt-4 ml-1 text-black font-medium text-2xl">
@@ -350,7 +350,7 @@ const Pay = () => {
     <div className="ml-0">
       <div className="text-gray-600 font-medium text-lg"> {forValue || "No note added"}</div>
     </div>
-    <button className="bg-gray-300 text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" >
+    <button className="bg-gray-300 text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" >
       Continue
     </button>
   </div>
@@ -380,12 +380,12 @@ const Pay = () => {
     </div>
 
     <div className=" mb-4"> 
-      <div className="text-black font-semibold">Sent successfully to {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress} on Goerli Base Chain!</div>
+      <div className="text-black font-semibold">Sent successfully to {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress} on Goerli Base Chain using BasePay!</div>
     </div>
     <div className="ml-0">
       <div className="text-gray-600 font-medium text-lg"> {forValue || "No note added"}</div>
     </div>
-    <button className="bg-base-blue shadow-sm drop-shadow text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" onClick={() => {
+    <button className="bg-base-blue shadow-sm drop-shadow text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" onClick={() => {
         document.body.style.overflowY = "scroll"; // Remove scroll lock
         document.body.style.minHeight = "0px";
         window.scrollBy(0, -1);
@@ -425,7 +425,7 @@ const Pay = () => {
     <div className="ml-0">
       <div className="text-gray-700 font-medium text-lg"> {forValue || "No note added"}</div>
     </div>
-    <button className="bg-base-blue shadow-sm drop-shadow text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" onClick={() => {
+    <button className="bg-base-blue shadow-sm drop-shadow text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" onClick={() => {
         document.body.style.overflowY = "scroll"; // Remove scroll lock
         document.body.style.minHeight = "0px";
         window.scrollBy(0, -1);

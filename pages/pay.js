@@ -311,19 +311,19 @@ const Pay = () => {
 {showtransactionModal && (
   <div className="fixed top-0 left-0 w-full h-full z-40 flex items-center justify-center">
     <div className="bg-black opacity-50 w-full h-full absolute"></div>
-    <div className="bg-white p-4 rounded-xl absolute top-1/6 inset-x-4"> 
-      <button className="p-4 cursor-pointer absolute top-0 left-0" onClick={() => {
+    <div className="bg-white p-6 rounded-xl absolute top-1/6 inset-x-4 shadow-xl drop-shadow"> 
+      <button className="p-4 cursor-pointer absolute top-2 left-1" onClick={() => {
           document.body.style.overflowY = "scroll"; // Remove scroll lock
           document.body.style.minHeight = "0px";
           window.scrollBy(0, -1);
           setShowtransactionModal(false); // Close the transaction modal
         }}> 
-          <FontAwesomeIcon icon={faXmark} className="h-7 w-7 text-black" />
+          <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
       </button>
 
 
 {transactionStatus === 'pending' && (
-  <div className="mt-20 ml-0">
+  <div className="mt-14 ml-0">
     <div className="flex justify-center items-center mb-10 relative"> 
       <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> 
       <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
@@ -360,7 +360,7 @@ const Pay = () => {
 
 
 {transactionStatus === 'success' && (
-  <div className="mt-20 ml-0">
+  <div className="mt-14 ml-0">
     <div className="flex justify-center items-center mb-10 relative"> 
       <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> 
       <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
@@ -400,7 +400,7 @@ const Pay = () => {
 
 
 {transactionStatus === 'fail' && (
-  <div className="mt-20 ml-0">
+  <div className="mt-14 ml-0">
     <div className="flex justify-center items-center mb-10 relative">
       <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div>
       <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 

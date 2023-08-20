@@ -1,7 +1,7 @@
 import React, { useState, useEffect  } from 'react';
 import Head from 'next/head';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
-import { faBarcodeRead, faPaperPlane, faFileInvoice, faXmark, faSpinner, faCircleCheck, faTimesCircle, faUpRightFromSquare, faArrowLeft } from '@fortawesome/pro-solid-svg-icons';
+import { faBarcodeRead, faPaperPlane, faFileInvoice, faXmark, faSpinner, faCircleCheck, faTimesCircle, faUpRightFromSquare, faArrowLeft, faPaste } from '@fortawesome/pro-solid-svg-icons';
 import { faClockNine } from '@fortawesome/pro-regular-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import { initiatePayment } from "../controller/contract-control"
@@ -164,6 +164,11 @@ const handleCloseRequestModal = () => {
 };
 
 
+const handlePasteClick = () => {
+  navigator.clipboard.readText().then((text) => {
+    setToAddress(text.trim());
+  });
+};
 
 
 
@@ -493,11 +498,11 @@ const handleCloseRequestModal = () => {
           value={toAddress}
           onChange={(e) => setToAddress(e.target.value.trim())}
         />
-        <FontAwesomeIcon icon={faBarcodeRead} className="h-6 w-6 text-black ml-2" /> 
-      </div>
-
-    
-
+         <button onClick={handlePasteClick} className="ml-1 mr-2"> {/* Add button wrapper */}
+    <FontAwesomeIcon icon={faPaste} className="h-5 w-5 text-black" /> {/* Paste icon */}
+  </button>
+  <FontAwesomeIcon icon={faBarcodeRead} className="h-6 w-6 text-black ml-2" /> {/* Scan icon */}
+</div>
       <div className="bg-gray-100 h-10 flex items-center">
         <span className="text-gray-500 text-base font-bold ml-4">Suggested</span>
       </div>

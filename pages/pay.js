@@ -535,7 +535,18 @@ const handleCloseRequestModal = () => {
       <div className="text-center text-black text-lg font-medium mt-6"> {/* Displaying the truncated toAddress */}
         {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress}
       </div>
+   
       {/* Add your content for the Request Modal here */}
+
+
+      <div className="text-5xl font-semibold mb-4 text-black flex justify-center items-baseline -ml-5 mt-5">
+            <FontAwesomeIcon icon={faEthereum} className="mr-0 text-black h-9 w-9" /> 
+            <span className="text-center">0.00</span>
+          </div>
+          <div className="text-center mt-2 text-lg text-gray-600 font-semibold"> {/* Add a Note */}
+        Add a Note
+      </div>
+
 
       <div className="fixed bottom-0 left-0 right-0 px-4 pb-6"> {/* Request button container */}
         <button className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none">

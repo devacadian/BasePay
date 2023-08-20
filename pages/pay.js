@@ -282,6 +282,7 @@ const handleCloseConfirmRequestModal = () => {
 
 
 const handleConfirmRequest = async () => {
+  setShowRequestTransactionModal(true);
   setRequestTransactionStatus('pending');
  
   try {
@@ -307,11 +308,14 @@ const handleConfirmRequest = async () => {
   console.log(`Created payment request with ID: ${documentId}`);
 
   if (documentId) {
-    setRequestTransactionStatus('success'); // Update the status to success if the request succeeded
-    setRequestTxHashState(documentId); // Store the new document ID
-    setShowConfirmRequestModal(false); // Close the confirm request modal
-    setShowRequestTransactionModal(true);
-  } // Added the missing closing brace here
+    // Introducing a delay of 3 seconds (3000 milliseconds) before updating the status
+    setTimeout(() => {
+      setRequestTransactionStatus('success'); // Update the status to success if the request succeeded
+      setRequestTxHashState(documentId); // Store the new document ID
+      setShowConfirmRequestModal(false); // Close the confirm request modal
+      setShowRequestTransactionModal(true);
+    }, 750); // You can adjust the delay time as needed
+  }
 } catch (error) {
   console.error('Error creating payment request:', error);
   // Handle the error appropriately
@@ -828,9 +832,28 @@ const handleCloseAnimationRequest = () => {
       </button>
 
       {requestTransactionStatus === 'pending' && (
-        <div>
-          {/* Content for the 'pending' state */}
-          {/* Add any relevant elements, icons, or text to describe the pending state */}
+        <div className="mt-14 ml-0">
+          <div className="flex justify-center items-center mb-10 relative"> 
+            <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> 
+            <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
+          </div>
+          <div className="text-center mb-4"> 
+            <div className="text-black font-bold text-2xl">{counter || '0'} ETH</div>
+          </div>
+          {/* Removed the "View on Basescan" link as it's not relevant for the request */}
+          <div className="flex items-center justify-start mb-6"> 
+            <FontAwesomeIcon icon={faSpinner} className="text-base-blue h-7 w-7 animate-spin" />
+            <span className="ml-4 mt-0.5 text-black font-semibold">Request in Progress...</span>
+          </div>
+          <div className="mb-4"> 
+            <div className="text-black font-semibold">Request to {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress} on Goerli Base Chain is processing.</div>
+          </div>
+          <div className="ml-0">
+            <div className="text-gray-600 font-medium text-lg"> {requestNote || "No note added"}</div>
+          </div>
+          <button className="bg-gray-300 text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" >
+            Continue
+          </button>
         </div>
       )}
 

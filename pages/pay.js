@@ -266,6 +266,10 @@ const handlePasteClick = () => {
   value={toAddress}
   onChange={(e) => setToAddress(e.target.value.trim())} // Trim method here to prevent sending to incorrect addresses
 />
+
+<button onClick={handlePasteClick} className="mr-2"> {/* Paste Button */}
+    <FontAwesomeIcon icon={faPaste} className="h-5.5 w-5.5 text-black" />
+  </button>
         <FontAwesomeIcon icon={faBarcodeRead} className="h-6 w-6 text-black ml-2" /> 
       </div>
       <div className="border-t border-gray-300"></div> 
@@ -499,7 +503,7 @@ const handlePasteClick = () => {
           onChange={(e) => setToAddress(e.target.value.trim())}
         />
          <button onClick={handlePasteClick} className="ml-1 mr-2"> {/* Add button wrapper */}
-    <FontAwesomeIcon icon={faPaste} className="h-5 w-5 text-black" /> {/* Paste icon */}
+    <FontAwesomeIcon icon={faPaste} className="h-5.5 w-5.5 text-black" /> {/* Paste icon */}
   </button>
   <FontAwesomeIcon icon={faBarcodeRead} className="h-6 w-6 text-black ml-2" /> {/* Scan icon */}
 </div>

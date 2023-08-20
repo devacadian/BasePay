@@ -171,6 +171,16 @@ const handlePasteClick = () => {
 };
 
 
+const handleCounterChange = (e) => {
+  // Get the value from the event
+  let value = e.target.value.trim();
+
+  // Allow only numbers and a single decimal point
+  if (/^(\d+\.?\d{0,2}|\.\d{0,2})$/.test(value) || value === '') {
+    setCounter(value);
+  }
+};
+
 
   return (
 <main className="min-h-screen flex flex-col bg-white pb-20">
@@ -546,14 +556,26 @@ const handlePasteClick = () => {
         {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress}
       </div>
    
-      {/* Add your content for the Request Modal here */}
 
-      <div className="text-5xl font-semibold mb-4 text-black flex justify-center items-baseline -ml-5 mt-5">
-        <FontAwesomeIcon icon={faEthereum} className="mr-0 text-black h-9 w-9" /> 
-        <span className="text-center">{counter || '0.00'}</span> {/* Displaying the counter value */}
-      </div>
 
-      <div className="text-center mt-2 text-lg text-gray-600 font-medium">
+     
+
+
+<div className="text-5xl font-semibold mb-2 text-black flex justify-center items-baseline -ml-5 mt-5">
+  <FontAwesomeIcon icon={faEthereum} className="-mr-0 text-black h-9 w-9" />
+  <input
+    type="text"
+    style={{ width: `${(counter.length || 4) }ch` }} // Adjust width based on content
+    className="text-center bg-transparent outline-none border-none" // Tailwind CSS classes
+    value={counter}
+    onChange={handleCounterChange}
+    placeholder="0.00"
+  />
+</div>
+   
+
+
+      <div className="text-center mt-0 text-lg text-gray-600 font-medium">
   <input
     type="text"
     className="rounded p-2 text-center w-2/3 outline-none" // Added outline-none here

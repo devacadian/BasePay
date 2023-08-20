@@ -26,6 +26,14 @@ router.post('/create-payment-request', async (req,res) => {
     try {
         const {payment_requester, request_recipient, ether_amount, transaction_message} = req.body
 
+        if (ether_amount <= 0){
+            res.status(400).send("Invalid transaction amount")
+        }
+
+        if (payment_requester == request_recipient) {
+            res.status(400).send("Invalid receipient: You are no allowed to send funds to your own address")
+        }
+
         const data = {
             payment_requester : payment_requester,
             request_recipient : request_recipient,

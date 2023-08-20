@@ -32,6 +32,9 @@ const Pay = () => {
   const [transactionStatus, setTransactionStatus] = useState(null); // State to track transaction status
   const [txHashState, setTxHashState] = useState('');
   const [showRequestSelectionModal, setshowRequestSelectionModal] = useState(false);
+  const [showRequestModal, setShowRequestModal] = useState(false); // Add this state variable for the new Request Modal
+
+
 
   useEffect(() => {
     setContainerWidth(chain?.name === 'Base Goerli' ? 'w-24' : 'w-20');
@@ -145,9 +148,22 @@ const Pay = () => {
     setshowRequestSelectionModal(true); // Show the modal when the Request button is clicked
   };
 
-  const handleCloseRequestModal = () => {
+  const handleCloseRequestSelectionModal = () => {
     setshowRequestSelectionModal(false); // Hide the modal when the close button is clicked
   };
+
+ // Function to handle opening the Request Modal
+ const handleOpenRequestModal = () => {
+  setShowRequestModal(true);
+};
+
+// Function to handle closing the Request Modal
+const handleCloseRequestModal = () => {
+  setShowRequestModal(false);
+};
+
+
+
 
 
   return (
@@ -452,14 +468,12 @@ const Pay = () => {
 
 
 
-
-
 {/* Request User Selection Modal */}
 {showRequestSelectionModal && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-20">
     <div className="bg-white w-full h-full relative pt-2">
       <div className="px-4 pt-0 grid grid-cols-3 items-center">
-        <button className="p-4 -ml-4 cursor-pointer" onClick={handleCloseRequestModal}> 
+        <button className="p-4 -ml-4 cursor-pointer" onClick={handleCloseRequestSelectionModal}> 
           <FontAwesomeIcon icon={faArrowLeft} className="h-7 w-7 text-black" />
         </button>
         <div className="text-black text-2xl font-bold flex items-center justify-center"> 
@@ -493,14 +507,39 @@ const Pay = () => {
       {/* Add your user selection content here */}
       
       <div className="fixed bottom-0 left-0 right-0 px-4 pb-6"> {/* Button container */}
-        <button onClick={handleOpenconfirmpayModal} className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-10 w-full rounded-3xl focus:outline-none">
-          <FontAwesomeIcon icon={faFileInvoice} className="mr-2 h-4 w-4 text-white" />
-          Request
+        <button onClick={handleOpenRequestModal} className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-10 w-full rounded-3xl focus:outline-none">
+          Next
         </button>
       </div> {/* End of Button container */}
     </div>
   </div>
 )}
+
+    {/* Request Modal */}
+    {showRequestModal && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-20">
+          <div className="bg-white w-full h-full relative pt-2">
+            <div className="px-4 pt-0 grid grid-cols-3 items-center">
+              <button className="p-4 -ml-4 cursor-pointer" onClick={handleCloseRequestModal}> 
+                <FontAwesomeIcon icon={faArrowLeft} className="h-7 w-7 text-black" />
+              </button>
+              <div className="text-black text-2xl font-bold flex items-center justify-center"> 
+                Request
+              </div>
+              <div className="flex justify-end"></div> {/* Empty div to keep the grid layout */}
+            </div>
+            {/* Add your content for the Request Modal here */}
+          </div>
+        </div>
+      )}
+
+
+
+
+
+
+
+
 
     </main>
   );

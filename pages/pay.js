@@ -36,6 +36,11 @@ const Pay = () => {
   const [showRequestSelectionModal, setshowRequestSelectionModal] = useState(router.query.request === 'true');
   const [showRequestModal, setShowRequestModal] = useState(false); // Add this state variable for the new Request Modal
   const [showConfirmRequestModal, setShowConfirmRequestModal] = useState(false);
+  const [showRequestTransactionModal, setShowRequestTransactionModal] = useState(false); // State for the request transaction modal
+  const [requestTransactionStatus, setRequestTransactionStatus] = useState(null); // State to track request transaction status
+  const [requestTxHashState, setRequestTxHashState] = useState(''); // State to store the transaction hash for the request
+
+
 
 
   useEffect(() => {
@@ -277,6 +282,8 @@ const handleCloseConfirmRequestModal = () => {
 
 
 const handleConfirmRequest = async () => {
+  setRequestTransactionStatus('pending');
+ 
   try {
     // Define the request data based on the state variables
     const requestData = {
@@ -295,18 +302,21 @@ const handleConfirmRequest = async () => {
       body: JSON.stringify(requestData)
     });
 
-    // Get the new document ID from the response
-    const documentId = await response.json();
-    console.log(`Created payment request with ID: ${documentId}`);
+  // Get the new document ID from the response
+  const documentId = await response.json();
+  console.log(`Created payment request with ID: ${documentId}`);
 
-    // Close the modal and handle any additional logic here
-    setShowConfirmRequestModal(false);
-  } catch (error) {
-    console.error('Error creating payment request:', error);
-    // Handle the error appropriately
-  }
+  if (documentId) {
+    setRequestTransactionStatus('success'); // Update the status to success if the request succeeded
+    setRequestTxHashState(documentId); // Store the new document ID
+    setShowConfirmRequestModal(false); // Close the confirm request modal
+    setShowRequestTransactionModal(true);
+  } // Added the missing closing brace here
+} catch (error) {
+  console.error('Error creating payment request:', error);
+  // Handle the error appropriately
+}
 };
-
 
 
 
@@ -802,6 +812,61 @@ const handleCloseAnimationRequest = () => {
 
 
 
+
+
+{showRequestTransactionModal && (
+  <div className="fixed top-0 left-0 w-full h-full z-40 flex items-center justify-center">
+    <div className="bg-black opacity-50 w-full h-full absolute"></div>
+    <div className="bg-white p-6 rounded-xl absolute top-1/6 inset-x-4 shadow-xl drop-shadow">
+      <button className="p-4 cursor-pointer absolute top-2 left-1" onClick={() => {
+          document.body.style.overflowY = "scroll"; // Remove scroll lock
+          document.body.style.minHeight = "0px";
+          window.scrollBy(0, -1);
+          setShowRequestTransactionModal(false); // Close the request transaction modal
+        }}> 
+        <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
+      </button>
+
+      {requestTransactionStatus === 'pending' && (
+        <div>
+          {/* Content for the 'pending' state */}
+          {/* Add any relevant elements, icons, or text to describe the pending state */}
+        </div>
+      )}
+
+      {requestTransactionStatus === 'success' && (
+        <div className="mt-14 ml-0">
+          <div className="flex justify-center items-center mb-10 relative"> 
+            <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> 
+            <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
+          </div>
+          <div className="text-center mb-4"> 
+            <div className="text-black font-bold text-2xl">{counter || '0'} ETH</div>
+          </div>
+          {/* You can customize the link as needed */}
+          <div className="flex items-center justify-start mb-6"> 
+            <FontAwesomeIcon icon={faCircleCheck} className="text-base-blue h-7 w-7" /> 
+            <span className="ml-4 mt-0.5 text-black font-semibold">Request Successful!</span>
+          </div>
+          <div className="mb-4"> 
+            <div className="text-black font-semibold">Request sent successfully to {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress} on Goerli Base Chain using BasePay!</div>
+          </div>
+          <div className="ml-0">
+            <div className="text-gray-600 font-medium text-lg"> {requestNote || "No note added"}</div>
+          </div>
+          <button className="bg-base-blue shadow-sm drop-shadow text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" onClick={() => {
+              document.body.style.overflowY = "scroll"; // Remove scroll lock
+              document.body.style.minHeight = "0px";
+              window.scrollBy(0, -1);
+              setShowRequestTransactionModal(false); // Close the success modal
+            }}>
+            Continue
+          </button>
+        </div>
+      )}
+    </div>
+  </div>
+)}
 
 
 

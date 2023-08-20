@@ -192,6 +192,7 @@ const handleNumberClick = (number) => {
     setshowRequestSelectionModal(false);
     setToAddress('');
     setrequestNote('');
+    setCounter('0');
   };
 
  // Function to handle opening the Request Modal
@@ -212,7 +213,6 @@ const handleNumberClick = (number) => {
 // Function to handle closing the Request Modal
 const handleCloseRequestModal = () => {
   // Reset the counter value back to '0' when closing the request modal
-  setCounter('0');
   // Clear the 'toAddress' and 'requestNote' fields
 
   setShowRequestModal(false);
@@ -276,11 +276,38 @@ const handleCloseConfirmRequestModal = () => {
 };
 
 
-const handleConfirmRequest = () => {
-  // Logic for confirming the request
-  // You may need to add additional code here to handle the request action
-  setShowConfirmRequestModal(false); // Close the modal after confirming
+const handleConfirmRequest = async () => {
+  try {
+    // Define the request data based on the state variables
+    const requestData = {
+      payment_requester: address, // Assuming this is the requester's address
+      request_recipient: toAddress,
+      ether_amount: counter || '0',
+      transaction_message: requestNote || ''
+    };
+
+    // Make a POST request to the correct endpoint
+    const response = await fetch('https://basepay-api.onrender.com/create-payment-request', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestData)
+    });
+
+    // Get the new document ID from the response
+    const documentId = await response.json();
+    console.log(`Created payment request with ID: ${documentId}`);
+
+    // Close the modal and handle any additional logic here
+    setShowConfirmRequestModal(false);
+  } catch (error) {
+    console.error('Error creating payment request:', error);
+    // Handle the error appropriately
+  }
 };
+
+
 
 
 const [animateRequestModal, setAnimateRequestModal] = useState(false);

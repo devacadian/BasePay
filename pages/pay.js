@@ -56,7 +56,12 @@ const handleNumberClick = (number) => {
 
   // If the counter starts with '00', replace with '0'
   if (newCounter.startsWith('00')) {
-    newCounter = '0' + newCounter.substring(2);
+    newCounter = newCounter.substring(1);
+  }
+
+  // If the counter starts with '0' followed by a number, remove the '0'
+  if (newCounter.length > 1 && newCounter.startsWith('0') && newCounter[1] !== '.') {
+    newCounter = newCounter.substring(1);
   }
 
   // If the counter starts with '.', prepend with '0'
@@ -73,6 +78,7 @@ const handleNumberClick = (number) => {
   setCounter(newCounter);
 };
 
+
   const handleBackspace = () => {
     setCounter(counter.slice(0, -1));
   };
@@ -82,7 +88,11 @@ const handleNumberClick = (number) => {
   };
 
   const handleCloseModal = () => {
-    setshowPaySelectionModal(false); // Hide the modal when the close button is clicked
+    setshowPaySelectionModal(false);
+    setToAddress('');
+    setForValue('');
+    setCounter('0');
+
   };
 
 
@@ -169,7 +179,10 @@ const handleNumberClick = (number) => {
   };
 
   const handleCloseRequestSelectionModal = () => {
-    setshowRequestSelectionModal(false); // Hide the modal when the close button is clicked
+    setshowRequestSelectionModal(false);
+    
+    setToAddress('');
+    setrequestNote('');// Hide the modal when the close button is clicked
   };
 
  // Function to handle opening the Request Modal
@@ -180,7 +193,7 @@ const handleNumberClick = (number) => {
     setCounter(counter);
   } else {
     // If not, set the request counter to '0.00'
-    setCounter('0.00');
+    setCounter('');
   }
 
 
@@ -191,6 +204,8 @@ const handleNumberClick = (number) => {
 const handleCloseRequestModal = () => {
   // Reset the counter value back to '0' when closing the request modal
   setCounter('0');
+  // Clear the 'toAddress' and 'requestNote' fields
+
   setShowRequestModal(false);
 };
 
@@ -205,13 +220,25 @@ const handleCounterChange = (e) => {
   // Get the value from the event
   let value = e.target.value.trim();
 
+  // If the value starts with '00', replace with '0'
+  if (value.startsWith('00')) {
+    value = value.substring(1);
+  }
+
+  // If the value starts with '0' followed by a number, remove the '0'
+  if (value.length > 1 && value.startsWith('0') && value[1] !== '.') {
+    value = value.substring(1);
+  }
+
+  // If the value starts with '.', prepend with '0'
   if (value.startsWith('.')) {
     value = '0' + value;
   }
 
-  // Replace leading '00' with a single '0'
-  if (value.startsWith('00')) {
-    value = '0' + value.substring(2);
+  // Ensure that there are no more than 4 digits after the decimal point
+  const parts = value.split('.');
+  if (parts.length > 1 && parts[1].length > 4) {
+    value = parts[0] + '.' + parts[1].substring(0, 4);
   }
 
   // Allow only numbers and up to 4 decimal points
@@ -219,6 +246,8 @@ const handleCounterChange = (e) => {
     setCounter(value);
   }
 };
+
+
 
   return (
 <main className="min-h-screen flex flex-col bg-white pb-20">

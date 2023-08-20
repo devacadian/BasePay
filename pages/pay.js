@@ -308,13 +308,12 @@ const handleConfirmRequest = async () => {
   console.log(`Created payment request with ID: ${documentId}`);
 
   if (documentId) {
-    // Introducing a delay of 3 seconds (3000 milliseconds) before updating the status
     setTimeout(() => {
       setRequestTransactionStatus('success'); // Update the status to success if the request succeeded
       setRequestTxHashState(documentId); // Store the new document ID
       setShowConfirmRequestModal(false); // Close the confirm request modal
       setShowRequestTransactionModal(true);
-    }, 750); // You can adjust the delay time as needed
+    }, 750); // Introducing a delay of 0.75 seconds (750 milliseconds) before updating the status for better UX
   }
 } catch (error) {
   console.error('Error creating payment request:', error);

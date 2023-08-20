@@ -18,6 +18,8 @@ router.get("/", (req,res) => {
     res.send("<h1>Server On!!!</h1>")
 })
 
+/* ------------------------- Payment Request Related Endpoints ------------------------- */
+
 // POST Request: Create a "payment request document" to the "payment request collection" 
 // returns back the newly created document id 
 router.post('/create-payment-request', async (req,res) => {

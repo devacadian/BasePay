@@ -18,6 +18,13 @@ export default function Home() {
     setFormattedBalance(balanceValue.toFixed(4));
   }, [data]);
 
+  const handleCopyAddress = () => {
+    navigator.clipboard.writeText(address).then(() => {
+      // You can add a success message or other behavior here if needed
+    });
+  };
+
+
   return (
     <main className="flex flex-col min-h-screen bg-white">
       <Head>
@@ -114,9 +121,12 @@ export default function Home() {
 </div>
 
 <div className="mb-4 px-4"> {/* Removed left and right padding */}
-  <button className="bg-base-blue text-base text-white font-semibold h-10 rounded-2xl w-full flex items-center justify-center"> {/* Copy Address Button */}
-    <FontAwesomeIcon icon={faCopy} className="mr-2 h-4 w-4" /> Copy Address
-  </button>
+<button
+  className="bg-base-blue text-base text-white font-semibold h-10 rounded-2xl w-full flex items-center justify-center"
+  onClick={handleCopyAddress} // Add onClick handler here
+>
+  <FontAwesomeIcon icon={faCopy} className="mr-2 h-4 w-4" /> Copy Address
+</button>
 </div>
 
 

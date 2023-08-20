@@ -35,7 +35,7 @@ const Pay = () => {
   const [txHashState, setTxHashState] = useState('');
   const [showRequestSelectionModal, setshowRequestSelectionModal] = useState(router.query.request === 'true');
   const [showRequestModal, setShowRequestModal] = useState(false); // Add this state variable for the new Request Modal
-
+  const [showConfirmRequestModal, setShowConfirmRequestModal] = useState(false);
 
 
   useEffect(() => {
@@ -255,6 +255,72 @@ const handleCounterChange = (e) => {
     setCounter(value);
   }
 };
+
+
+const handleOpenConfirmRequestModal = () => {
+  document.body.style.overflowY = "hidden";
+  document.body.style.minHeight = "calc(100vh + 1px)";
+  window.scrollBy(0, 1);
+  setShowConfirmRequestModal(true); // Open the confirm request modal
+};
+
+const handleCloseConfirmRequestModal = () => {
+  setAnimateModal(true); // Start the animation
+  document.body.style.overflowY = "scroll"; // Remove scroll lock
+  document.body.style.minHeight = "0px";
+  window.scrollBy(0, -1);
+  setTimeout(() => {
+    setShowConfirmRequestModal(false); // Close the modal after animation completes
+    setAnimateModal(false); // Reset the animation state
+  }, 300); // 300 milliseconds
+};
+
+
+const handleConfirmRequest = () => {
+  // Logic for confirming the request
+  // You may need to add additional code here to handle the request action
+  setShowConfirmRequestModal(false); // Close the modal after confirming
+};
+
+
+const [animateRequestModal, setAnimateRequestModal] = useState(false);
+const [touchStartRequestY, setTouchStartRequestY] = useState(0);
+
+const handleOutsideClickRequest = (e) => {
+  if (e.target.className.includes('outside-click')) {
+    setAnimateRequestModal(true);
+    document.body.style.overflowY = "scroll";
+    document.body.style.minHeight = "0px";
+    window.scrollBy(0, -1);
+    setTimeout(() => {
+      setShowConfirmRequestModal(false);
+      setAnimateRequestModal(false);
+    }, 150);
+  }
+};
+
+const handleTouchStartRequest = (e) => {
+  setTouchStartRequestY(e.touches[0].clientY);
+};
+
+const handleTouchEndRequest = (e) => {
+  const touchEndY = e.changedTouches[0].clientY;
+  if (touchEndY > touchStartRequestY + 50) {
+    handleCloseConfirmRequestModal();
+  }
+};
+
+const handleCloseAnimationRequest = () => {
+  setAnimateRequestModal(true);
+  document.body.style.overflowY = "scroll";
+  document.body.style.minHeight = "0px";
+  window.scrollBy(0, -1);
+  setTimeout(() => {
+    setShowConfirmRequestModal(false);
+    setAnimateRequestModal(false);
+  }, 300);
+};
+
 
 
 
@@ -631,11 +697,6 @@ const handleCounterChange = (e) => {
       <div className="text-center text-black text-lg font-medium mt-6"> {/* Displaying the truncated toAddress */}
         {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress}
       </div>
-   
-
-
-     
-
 
 <div className="text-5xl font-semibold mb-2 text-black flex justify-center items-baseline -ml-5 mt-5">
   <FontAwesomeIcon icon={faEthereum} className="-mr-0 text-black h-9 w-9" />
@@ -648,8 +709,6 @@ const handleCounterChange = (e) => {
     placeholder="0.00"
   />
 </div>
-   
-
 
       <div className="text-center mt-0 text-lg text-gray-600 font-medium">
   <input
@@ -662,7 +721,10 @@ const handleCounterChange = (e) => {
 </div>
 
 <div className="fixed bottom-0 left-0 right-0 px-4 pb-6"> {/* Request button container */}
-  <button className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none">
+<button 
+    className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none" 
+    onClick={handleOpenConfirmRequestModal} // Call the function to open the Confirm Request Modal
+  >
     <FontAwesomeIcon icon={faFileInvoice} className="mr-2 h-4 w-4 text-white" /> {/* File invoice icon */}
     Request
   </button>
@@ -670,6 +732,53 @@ const handleCounterChange = (e) => {
     </div>
   </div>
 )}
+
+
+
+
+{/* Request Confirm Modal */}
+{showConfirmRequestModal && (
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 outside-click" onClick={handleOutsideClickRequest}>
+    <div className="bg-black opacity-50 w-full h-full outside-click"></div>
+    <div className={`bg-white w-full rounded-t-2xl absolute ${animateRequestModal ? '-bottom-full motion-reduce:transition-all duration-700 ease-in-out' : 'bottom-0'}`}>
+      <div className="bg-gray-300 w-18 h-1 mx-auto mt-4 rounded-full cursor-pointer"
+           onTouchStart={handleTouchStartRequest} onTouchEnd={handleTouchEndRequest}
+           onClick={handleCloseAnimationRequest}></div> {/* Clickable drag bar */}
+      <div className="p-4">
+        <div className="flex items-center text-2xl text-black font-bold">
+          <FontAwesomeIcon icon={faEthereum} className="mr-2 text-black h-5 w-5" />
+          {counter || '0'} 
+        </div>
+        <div className="mt-4">
+          <div className="bg-gray-200 rounded-3xl w-34 h-12 flex items-center justify-center"> 
+            <span className="text-black font-medium text-lg">Request To</span> 
+          </div>
+        </div>
+        <div className="mt-4 ml-1 text-black font-medium text-2xl">
+          {toAddress.length === 42
+            ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6)
+            : toAddress}
+        </div>
+        <div className="mt-2 ml-1 text-gray-600 font-medium text-lg">
+          {requestNote || "No note added"}
+        </div>
+        <button
+            className="bg-base-blue text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none mt-4 mb-2"
+            onClick={handleConfirmRequest} 
+          >
+            Confirm
+          </button>
+      </div>
+    </div>
+  </div>
+)}
+
+
+
+
+
+
+
 
 
     </main>

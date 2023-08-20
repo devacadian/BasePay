@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faBarcodeRead, faPaperPlane, faFileInvoice, faMessagePen, faShareFromSquare, faUserGroup, faCopy, faQrcode } from '@fortawesome/pro-solid-svg-icons';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
@@ -12,6 +14,7 @@ export default function Home() {
   const { address } = useAccount();
   const { data } = useBalance({ address });
   const [formattedBalance, setFormattedBalance] = useState('0.0000');
+  const router = useRouter();
 
   useEffect(() => {
     const balanceValue = parseFloat(data?.formatted || '0.0000');
@@ -22,6 +25,10 @@ export default function Home() {
     navigator.clipboard.writeText(address).then(() => {
       // You can add a success message or other behavior here if needed
     });
+  };
+
+  const handleRequestClick = () => {
+    router.push('/pay?request=true');
   };
 
 
@@ -69,7 +76,10 @@ export default function Home() {
         <div className="font-semibold text-base">Pay</div>
       </div>
       <div className="flex flex-col items-center"> {/* Request */}
-        <div className="flex justify-center items-center relative w-12 h-12 mb-2 rounded-full bg-base-blue shadow drop-shadow-sm">
+      <div
+      className="flex justify-center items-center relative w-12 h-12 mb-2 rounded-full bg-base-blue shadow drop-shadow-sm"
+      onClick={handleRequestClick} // Adding onClick handler
+    >
           <FontAwesomeIcon icon={faFileInvoice} className="text-white h-5 w-5 z-10" />
         </div>
         <div className="font-semibold text-base">Request</div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect  } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
 import { faBarcodeRead, faPaperPlane, faFileInvoice, faXmark, faSpinner, faCircleCheck, faTimesCircle, faUpRightFromSquare, faArrowLeft, faPaste } from '@fortawesome/pro-solid-svg-icons';
 import { faClockNine } from '@fortawesome/pro-regular-svg-icons';
@@ -17,7 +18,7 @@ const Pay = () => {
   const { chain } = useNetwork();
   const { address } = useAccount();
   const { data, isLoading } = useBalance({ address });
-
+  const router = useRouter();
   const defaultNetworkName = 'Ethereum';
   const chainName = chain?.name || defaultNetworkName;
   const isBaseGoerli = chain?.name === 'Base Goerli';
@@ -32,7 +33,7 @@ const Pay = () => {
   const [showtransactionModal, setShowtransactionModal] = useState(false); // State for the new modal
   const [transactionStatus, setTransactionStatus] = useState(null); // State to track transaction status
   const [txHashState, setTxHashState] = useState('');
-  const [showRequestSelectionModal, setshowRequestSelectionModal] = useState(false);
+  const [showRequestSelectionModal, setshowRequestSelectionModal] = useState(router.query.request === 'true');
   const [showRequestModal, setShowRequestModal] = useState(false); // Add this state variable for the new Request Modal
 
 
@@ -652,11 +653,12 @@ const handleCounterChange = (e) => {
   />
 </div>
 
-      <div className="fixed bottom-0 left-0 right-0 px-4 pb-6"> {/* Request button container */}
-        <button className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none">
-          Request
-        </button>
-      </div> {/* End of Request button container */}
+<div className="fixed bottom-0 left-0 right-0 px-4 pb-6"> {/* Request button container */}
+  <button className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none">
+    <FontAwesomeIcon icon={faFileInvoice} className="mr-2 h-4 w-4 text-white" /> {/* File invoice icon */}
+    Request
+  </button>
+</div>
     </div>
   </div>
 )}

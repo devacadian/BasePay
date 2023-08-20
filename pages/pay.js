@@ -28,6 +28,7 @@ const Pay = () => {
   const [showconfirmpayModal, setShowconfirmpayModal] = useState(false);
   const [toAddress, setToAddress] = useState('');
   const [forValue, setForValue] = useState('');
+  const [requestNote, setrequestNote] = useState('');
   const [showtransactionModal, setShowtransactionModal] = useState(false); // State for the new modal
   const [transactionStatus, setTransactionStatus] = useState(null); // State to track transaction status
   const [txHashState, setTxHashState] = useState('');
@@ -538,15 +539,20 @@ const handleCloseRequestModal = () => {
    
       {/* Add your content for the Request Modal here */}
 
-
       <div className="text-5xl font-semibold mb-4 text-black flex justify-center items-baseline -ml-5 mt-5">
-            <FontAwesomeIcon icon={faEthereum} className="mr-0 text-black h-9 w-9" /> 
-            <span className="text-center">0.00</span>
-          </div>
-          <div className="text-center mt-2 text-lg text-gray-600 font-semibold"> {/* Add a Note */}
-        Add a Note
+        <FontAwesomeIcon icon={faEthereum} className="mr-0 text-black h-9 w-9" /> 
+        <span className="text-center">{counter || '0.00'}</span> {/* Displaying the counter value */}
       </div>
 
+      <div className="text-center mt-2 text-lg text-gray-600 font-medium">
+  <input
+    type="text"
+    className="rounded p-2 text-center w-2/3 outline-none" // Added outline-none here
+    placeholder="Add a Note"
+    value={requestNote}
+    onChange={(e) => setrequestNote(e.target.value)}
+  />
+</div>
 
       <div className="fixed bottom-0 left-0 right-0 px-4 pb-6"> {/* Request button container */}
         <button className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none">

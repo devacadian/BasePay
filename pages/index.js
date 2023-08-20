@@ -39,6 +39,10 @@ export default function Home() {
     router.push('/messages?newmessage=true');
   };
 
+  const handleSendETHNowClick = () => {
+    router.push('/pay');
+  };
+
   return (
     <main className="flex flex-col min-h-screen bg-white">
       <Head>
@@ -50,7 +54,7 @@ export default function Home() {
           <input
             type="text"
             placeholder="Search for an ENS or Base address..."
-            className="w-full bg-transparent outline-none"
+            className="w-full bg-transparent outline-none text-black"
           />
         </div>
         <FontAwesomeIcon icon={faBarcodeRead} className="ml-4 mr-0 h-8 w-8 text-gray-600" />
@@ -117,7 +121,9 @@ export default function Home() {
     <div className="mt-2"> {/* Margin above the text */}
       Personalize payments <br /> with emojis and messages! 🎉
       <div className="text-black text-base font-semibold mt-8 mb-4"> {/* Additional text */}
-        <span className="bg-base-blue p-2 rounded-2xl text-white px-5">Send ETH now</span>
+      <span onClick={handleSendETHNowClick} className="bg-base-blue p-2 rounded-2xl text-white px-5 cursor-pointer">
+              Send ETH now
+            </span>
       </div>
     </div>
   </div>

@@ -1,10 +1,27 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMessagePen, faMagnifyingGlass, faArrowLeft, faBarcodeRead, faMessages } from '@fortawesome/pro-solid-svg-icons';
 
 export default function Messages() {
-  const [showModal, setShowModal] = useState(false);
+  const router = useRouter();
+  const [showModal, setShowModal] = useState(router.query.newmessage === 'true');
+
+  
+  const handleCloseModal = () => {
+    // Create a copy of the query object without the 'newmessage' key
+    const { newmessage, ...newQuery } = router.query;
+  
+    // Replace the URL with the new query object
+    router.replace({
+      pathname: router.pathname,
+      query: newQuery,
+    });
+    
+    // Close the modal
+    setShowModal(false);
+  };
 
   return (
     <main className="flex flex-col min-h-screen bg-white">
@@ -76,7 +93,7 @@ export default function Messages() {
       {showModal && (
   <div className="fixed inset-0 bg-white z-0 flex flex-col">
     <div className="p-4 flex items-center">
-      <button onClick={() => setShowModal(false)}> {/* Close modal on click */}
+    <button onClick={handleCloseModal}> {/* Close modal on click */}
         <FontAwesomeIcon icon={faArrowLeft} className="h-6 w-6 text-black align-middle mt-3" />
       </button>
       <h1 className="text-black text-3xl font-semibold pt-2 ml-4">New Message</h1> 

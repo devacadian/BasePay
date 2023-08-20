@@ -180,10 +180,18 @@ const handleNumberClick = (number) => {
   };
 
   const handleCloseRequestSelectionModal = () => {
+    // Create a copy of the query object without the 'request' key
+    const { request, ...newQuery } = router.query;
+  
+    // Replace the URL with the new query object
+    router.replace({
+      pathname: router.pathname,
+      query: newQuery,
+    });
+  
     setshowRequestSelectionModal(false);
-    
     setToAddress('');
-    setrequestNote('');// Hide the modal when the close button is clicked
+    setrequestNote('');
   };
 
  // Function to handle opening the Request Modal

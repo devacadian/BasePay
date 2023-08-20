@@ -31,6 +31,13 @@ export default function Home() {
     router.push('/pay?request=true');
   };
 
+  const handlePayClick = () => {
+    router.push('/pay');
+  };
+
+  const handleMessageClick = () => {
+    router.push('/messages?newmessage=true');
+  };
 
   return (
     <main className="flex flex-col min-h-screen bg-white">
@@ -69,12 +76,12 @@ export default function Home() {
 <div className="px-4"> {/* Wrapper div for side padding */}
   <div className="bg-gray-100 p-2 rounded-3xl shadow-sm drop-shadow-sm"> {/* Background div for Action Buttons */}
     <div className="px-4 mt-2 flex justify-between text-xl text-black"> {/* Action Buttons */}
-      <div className="flex flex-col items-center"> {/* Pay */}
-        <div className="flex justify-center items-center relative w-12 h-12 mb-2 rounded-full bg-base-blue shadow drop-shadow-sm">
-          <FontAwesomeIcon icon={faPaperPlane} className="text-white h-5 w-5 z-10" />
-        </div>
-        <div className="font-semibold text-base">Pay</div>
-      </div>
+    <div className="flex flex-col items-center cursor-pointer" onClick={handlePayClick}> {/* Pay */}
+  <div className="flex justify-center items-center relative w-12 h-12 mb-2 rounded-full bg-base-blue shadow drop-shadow-sm">
+    <FontAwesomeIcon icon={faPaperPlane} className="text-white h-5 w-5 z-10" />
+  </div>
+  <div className="font-semibold text-base">Pay</div>
+</div>
       <div className="flex flex-col items-center"> {/* Request */}
       <div
       className="flex justify-center items-center relative w-12 h-12 mb-2 rounded-full bg-base-blue shadow drop-shadow-sm"
@@ -84,12 +91,12 @@ export default function Home() {
         </div>
         <div className="font-semibold text-base">Request</div>
       </div>
-      <div className="flex flex-col items-center"> {/* Share */}
-        <div className="flex justify-center items-center relative w-12 h-12 mb-2 rounded-full bg-base-blue shadow drop-shadow-sm">
-          <FontAwesomeIcon icon={faMessagePen} className="text-white h-5 w-5 z-10" />
-        </div>
-        <div className="font-semibold text-base">Message</div>
-      </div>
+      <div className="flex flex-col items-center cursor-pointer" onClick={handleMessageClick}> {/* Message */}
+  <div className="flex justify-center items-center relative w-12 h-12 mb-2 rounded-full bg-base-blue shadow drop-shadow-sm">
+    <FontAwesomeIcon icon={faMessagePen} className="text-white h-5 w-5 z-10" />
+  </div>
+  <div className="font-semibold text-base">Message</div>
+</div>
       <div className="flex flex-col items-center"> {/* Test */}
         <div className="flex justify-center items-center relative w-12 h-12 mb-2 rounded-full bg-base-blue shadow drop-shadow-sm">
           <FontAwesomeIcon icon={faUserGroup} className="text-white h-5 w-5 z-10" />

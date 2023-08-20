@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faBarcodeRead, faPaperPlane, faFileInvoice, faMessagePen, faShareFromSquare, faUserGroup, faCopy, faQrcode } from '@fortawesome/pro-solid-svg-icons';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
@@ -12,11 +14,34 @@ export default function Home() {
   const { address } = useAccount();
   const { data } = useBalance({ address });
   const [formattedBalance, setFormattedBalance] = useState('0.0000');
+  const router = useRouter();
 
   useEffect(() => {
     const balanceValue = parseFloat(data?.formatted || '0.0000');
     setFormattedBalance(balanceValue.toFixed(4));
   }, [data]);
+
+  const handleCopyAddress = () => {
+    navigator.clipboard.writeText(address).then(() => {
+      // You can add a success message or other behavior here if needed
+    });
+  };
+
+  const handleRequestClick = () => {
+    router.push('/pay?request=true');
+  };
+
+  const handlePayClick = () => {
+    router.push('/pay');
+  };
+
+  const handleMessageClick = () => {
+    router.push('/messages?newmessage=true');
+  };
+
+  const handleSendETHNowClick = () => {
+    router.push('/pay');
+  };
 
   return (
     <main className="flex flex-col min-h-screen bg-white">
@@ -29,7 +54,7 @@ export default function Home() {
           <input
             type="text"
             placeholder="Search for an ENS or Base address..."
-            className="w-full bg-transparent outline-none"
+            className="w-full bg-transparent outline-none text-black"
           />
         </div>
         <FontAwesomeIcon icon={faBarcodeRead} className="ml-4 mr-0 h-8 w-8 text-gray-600" />
@@ -55,24 +80,27 @@ export default function Home() {
 <div className="px-4"> {/* Wrapper div for side padding */}
   <div className="bg-gray-100 p-2 rounded-3xl shadow-sm drop-shadow-sm"> {/* Background div for Action Buttons */}
     <div className="px-4 mt-2 flex justify-between text-xl text-black"> {/* Action Buttons */}
-      <div className="flex flex-col items-center"> {/* Pay */}
-        <div className="flex justify-center items-center relative w-12 h-12 mb-2 rounded-full bg-base-blue shadow drop-shadow-sm">
-          <FontAwesomeIcon icon={faPaperPlane} className="text-white h-5 w-5 z-10" />
-        </div>
-        <div className="font-semibold text-base">Pay</div>
-      </div>
+    <div className="flex flex-col items-center cursor-pointer" onClick={handlePayClick}> {/* Pay */}
+  <div className="flex justify-center items-center relative w-12 h-12 mb-2 rounded-full bg-base-blue shadow drop-shadow-sm">
+    <FontAwesomeIcon icon={faPaperPlane} className="text-white h-5 w-5 z-10" />
+  </div>
+  <div className="font-semibold text-base">Pay</div>
+</div>
       <div className="flex flex-col items-center"> {/* Request */}
-        <div className="flex justify-center items-center relative w-12 h-12 mb-2 rounded-full bg-base-blue shadow drop-shadow-sm">
+      <div
+      className="flex justify-center items-center relative w-12 h-12 mb-2 rounded-full bg-base-blue shadow drop-shadow-sm"
+      onClick={handleRequestClick} // Adding onClick handler
+    >
           <FontAwesomeIcon icon={faFileInvoice} className="text-white h-5 w-5 z-10" />
         </div>
         <div className="font-semibold text-base">Request</div>
       </div>
-      <div className="flex flex-col items-center"> {/* Share */}
-        <div className="flex justify-center items-center relative w-12 h-12 mb-2 rounded-full bg-base-blue shadow drop-shadow-sm">
-          <FontAwesomeIcon icon={faMessagePen} className="text-white h-5 w-5 z-10" />
-        </div>
-        <div className="font-semibold text-base">Message</div>
-      </div>
+      <div className="flex flex-col items-center cursor-pointer" onClick={handleMessageClick}> {/* Message */}
+  <div className="flex justify-center items-center relative w-12 h-12 mb-2 rounded-full bg-base-blue shadow drop-shadow-sm">
+    <FontAwesomeIcon icon={faMessagePen} className="text-white h-5 w-5 z-10" />
+  </div>
+  <div className="font-semibold text-base">Message</div>
+</div>
       <div className="flex flex-col items-center"> {/* Test */}
         <div className="flex justify-center items-center relative w-12 h-12 mb-2 rounded-full bg-base-blue shadow drop-shadow-sm">
           <FontAwesomeIcon icon={faUserGroup} className="text-white h-5 w-5 z-10" />
@@ -89,11 +117,13 @@ export default function Home() {
 </div>
 
 <div className="px-4 mt-4 mb-1"> {/* Container div */}
-  <div className="bg-gray-100 p-2 rounded-3xl shadow-sm drop-shadow-sm text-black text-lg font-semibold text-left px-4"> {/* Inner div */}
+  <div className="bg-gray-100 p-2 rounded-2xl shadow-sm drop-shadow-sm text-black text-lg font-semibold text-left px-4"> {/* Inner div */}
     <div className="mt-2"> {/* Margin above the text */}
       Personalize payments <br /> with emojis and messages! 🎉
       <div className="text-black text-base font-semibold mt-8 mb-4"> {/* Additional text */}
-        <span className="bg-base-blue p-2 rounded-2xl text-white px-5">Send ETH now</span>
+      <span onClick={handleSendETHNowClick} className="bg-base-blue p-2 rounded-2xl text-white px-5 cursor-pointer">
+              Send ETH now
+            </span>
       </div>
     </div>
   </div>
@@ -114,9 +144,12 @@ export default function Home() {
 </div>
 
 <div className="mb-4 px-4"> {/* Removed left and right padding */}
-  <button className="bg-base-blue text-base text-white font-semibold h-10 rounded-2xl w-full flex items-center justify-center"> {/* Copy Address Button */}
-    <FontAwesomeIcon icon={faCopy} className="mr-2 h-4 w-4" /> Copy Address
-  </button>
+<button
+  className="bg-base-blue text-base text-white font-semibold h-10 rounded-2xl w-full flex items-center justify-center"
+  onClick={handleCopyAddress} // Add onClick handler here
+>
+  <FontAwesomeIcon icon={faCopy} className="mr-2 h-4 w-4" /> Copy Address
+</button>
 </div>
 
 

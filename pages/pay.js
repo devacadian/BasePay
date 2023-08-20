@@ -1,7 +1,8 @@
 import React, { useState, useEffect  } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
-import { faBarcodeRead, faPaperPlane, faFileInvoice, faXmark, faSpinner, faCircleCheck, faTimesCircle, faUpRightFromSquare } from '@fortawesome/pro-solid-svg-icons';
+import { faBarcodeRead, faPaperPlane, faFileInvoice, faXmark, faSpinner, faCircleCheck, faTimesCircle, faUpRightFromSquare, faArrowLeft, faPaste } from '@fortawesome/pro-solid-svg-icons';
 import { faClockNine } from '@fortawesome/pro-regular-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import { initiatePayment } from "../controller/contract-control"
@@ -12,25 +13,34 @@ import { useChainModal } from '@rainbow-me/rainbowkit';
 
 
 const Pay = () => {
-  const [counter, setCounter] = useState('');
+  const [counter, setCounter] = useState('0');
   const [formattedBalance, setFormattedBalance] = useState('0.0000'); // State for formatted balance
   const { chain } = useNetwork();
   const { address } = useAccount();
   const { data, isLoading } = useBalance({ address });
-
+  const router = useRouter();
   const defaultNetworkName = 'Ethereum';
   const chainName = chain?.name || defaultNetworkName;
   const isBaseGoerli = chain?.name === 'Base Goerli';
   const [containerWidth, setContainerWidth] = useState('w-20');
   const { openChainModal } = useChainModal();
   const [isClient, setIsClient] = useState(false);
-  const [showModal, setShowModal] = useState(false); // State to control the modal display
+  const [showPaySelectionModal, setshowPaySelectionModal] = useState(false); // State to control the modal display
   const [showconfirmpayModal, setShowconfirmpayModal] = useState(false);
   const [toAddress, setToAddress] = useState('');
   const [forValue, setForValue] = useState('');
+  const [requestNote, setrequestNote] = useState('');
   const [showtransactionModal, setShowtransactionModal] = useState(false); // State for the new modal
   const [transactionStatus, setTransactionStatus] = useState(null); // State to track transaction status
   const [txHashState, setTxHashState] = useState('');
+  const [showRequestSelectionModal, setshowRequestSelectionModal] = useState(router.query.request === 'true');
+  const [showRequestModal, setShowRequestModal] = useState(false); // Add this state variable for the new Request Modal
+  const [showConfirmRequestModal, setShowConfirmRequestModal] = useState(false);
+  const [showRequestTransactionModal, setShowRequestTransactionModal] = useState(false); // State for the request transaction modal
+  const [requestTransactionStatus, setRequestTransactionStatus] = useState(null); // State to track request transaction status
+  const [requestTxHashState, setRequestTxHashState] = useState(''); // State to store the transaction hash for the request
+
+
 
 
   useEffect(() => {
@@ -45,21 +55,50 @@ const Pay = () => {
 
 
 
-  const handleNumberClick = (number) => {
-    if (number === '.' && counter.includes('.')) return; // Prevent more than one decimal point
-    setCounter(counter + number);
-  };
+const handleNumberClick = (number) => {
+  if (number === '.' && counter.includes('.')) return; // Prevent more than one decimal point
+
+  let newCounter = counter + number;
+
+  // If the counter starts with '00', replace with '0'
+  if (newCounter.startsWith('00')) {
+    newCounter = newCounter.substring(1);
+  }
+
+  // If the counter starts with '0' followed by a number, remove the '0'
+  if (newCounter.length > 1 && newCounter.startsWith('0') && newCounter[1] !== '.') {
+    newCounter = newCounter.substring(1);
+  }
+
+  // If the counter starts with '.', prepend with '0'
+  if (newCounter.startsWith('.')) {
+    newCounter = '0' + newCounter;
+  }
+
+  // Ensure that there are no more than 4 digits after the decimal point
+  const parts = newCounter.split('.');
+  if (parts.length > 1 && parts[1].length > 4) {
+    newCounter = parts[0] + '.' + parts[1].substring(0, 4);
+  }
+
+  setCounter(newCounter);
+};
+
 
   const handleBackspace = () => {
     setCounter(counter.slice(0, -1));
   };
 
   const handlePayClick = () => {
-    setShowModal(true); // Show the modal when the Pay button is clicked
+    setshowPaySelectionModal(true); // Show the modal when the Pay button is clicked
   };
 
   const handleCloseModal = () => {
-    setShowModal(false); // Hide the modal when the close button is clicked
+    setshowPaySelectionModal(false);
+    setToAddress('');
+    setForValue('');
+    setCounter('0');
+
   };
 
 
@@ -134,11 +173,195 @@ const Pay = () => {
       setTxHashState(txHash);
       setShowconfirmpayModal(false);
       setShowtransactionModal(true);
-      setShowModal(false);
+      setshowPaySelectionModal(false);
     } else {
       // Handle failed payment logic here
     }
   };
+
+
+  const handleRequestClick = () => {
+    setshowRequestSelectionModal(true); // Show the modal when the Request button is clicked
+  };
+
+  const handleCloseRequestSelectionModal = () => {
+    // Create a copy of the query object without the 'request' key
+    const { request, ...newQuery } = router.query;
+  
+    // Replace the URL with the new query object
+    router.replace({
+      pathname: router.pathname,
+      query: newQuery,
+    });
+  
+    setshowRequestSelectionModal(false);
+    setToAddress('');
+    setrequestNote('');
+    setCounter('0');
+  };
+
+ // Function to handle opening the Request Modal
+ const handleOpenRequestModal = () => {
+
+  if (counter && counter !== '0') {
+    // Set the request counter to be the same value
+    setCounter(counter);
+  } else {
+    // If not, set the request counter to '0.00'
+    setCounter('');
+  }
+
+
+  setShowRequestModal(true);
+};
+
+// Function to handle closing the Request Modal
+const handleCloseRequestModal = () => {
+  // Reset the counter value back to '0' when closing the request modal
+  // Clear the 'toAddress' and 'requestNote' fields
+
+  setShowRequestModal(false);
+};
+
+const handlePasteClick = () => {
+  navigator.clipboard.readText().then((text) => {
+    setToAddress(text.trim());
+  });
+};
+
+
+const handleCounterChange = (e) => {
+  // Get the value from the event
+  let value = e.target.value.trim();
+
+  // If the value starts with '00', replace with '0'
+  if (value.startsWith('00')) {
+    value = value.substring(1);
+  }
+
+  // If the value starts with '0' followed by a number, remove the '0'
+  if (value.length > 1 && value.startsWith('0') && value[1] !== '.') {
+    value = value.substring(1);
+  }
+
+  // If the value starts with '.', prepend with '0'
+  if (value.startsWith('.')) {
+    value = '0' + value;
+  }
+
+  // Ensure that there are no more than 4 digits after the decimal point
+  const parts = value.split('.');
+  if (parts.length > 1 && parts[1].length > 4) {
+    value = parts[0] + '.' + parts[1].substring(0, 4);
+  }
+
+  // Allow only numbers and up to 4 decimal points
+  if (/^(\d+\.?\d{0,4}|\.\d{0,4})$/.test(value) || value === '') {
+    setCounter(value);
+  }
+};
+
+
+const handleOpenConfirmRequestModal = () => {
+  document.body.style.overflowY = "hidden";
+  document.body.style.minHeight = "calc(100vh + 1px)";
+  window.scrollBy(0, 1);
+  setShowConfirmRequestModal(true); // Open the confirm request modal
+};
+
+const handleCloseConfirmRequestModal = () => {
+  setAnimateModal(true); // Start the animation
+  document.body.style.overflowY = "scroll"; // Remove scroll lock
+  document.body.style.minHeight = "0px";
+  window.scrollBy(0, -1);
+  setTimeout(() => {
+    setShowConfirmRequestModal(false); // Close the modal after animation completes
+    setAnimateModal(false); // Reset the animation state
+  }, 300); // 300 milliseconds
+};
+
+
+const handleConfirmRequest = async () => {
+  setShowRequestTransactionModal(true);
+  setRequestTransactionStatus('pending');
+ 
+  try {
+    // Define the request data based on the state variables
+    const requestData = {
+      payment_requester: address, // Assuming this is the requester's address
+      request_recipient: toAddress,
+      ether_amount: counter || '0',
+      transaction_message: requestNote || ''
+    };
+
+    // Make a POST request to the correct endpoint
+    const response = await fetch('https://basepay-api.onrender.com/create-payment-request', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestData)
+    });
+
+  // Get the new document ID from the response
+  const documentId = await response.json();
+  console.log(`Created payment request with ID: ${documentId}`);
+
+  if (documentId) {
+    setTimeout(() => {
+      setRequestTransactionStatus('success'); // Update the status to success if the request succeeded
+      setRequestTxHashState(documentId); // Store the new document ID
+      setShowConfirmRequestModal(false); // Close the confirm request modal
+      setShowRequestTransactionModal(true);
+    }, 750); // Introducing a delay of 0.75 seconds (750 milliseconds) before updating the status for better UX
+  }
+} catch (error) {
+  console.error('Error creating payment request:', error);
+  // Handle the error appropriately
+}
+};
+
+
+
+const [animateRequestModal, setAnimateRequestModal] = useState(false);
+const [touchStartRequestY, setTouchStartRequestY] = useState(0);
+
+const handleOutsideClickRequest = (e) => {
+  if (e.target.className.includes('outside-click')) {
+    setAnimateRequestModal(true);
+    document.body.style.overflowY = "scroll";
+    document.body.style.minHeight = "0px";
+    window.scrollBy(0, -1);
+    setTimeout(() => {
+      setShowConfirmRequestModal(false);
+      setAnimateRequestModal(false);
+    }, 150);
+  }
+};
+
+const handleTouchStartRequest = (e) => {
+  setTouchStartRequestY(e.touches[0].clientY);
+};
+
+const handleTouchEndRequest = (e) => {
+  const touchEndY = e.changedTouches[0].clientY;
+  if (touchEndY > touchStartRequestY + 50) {
+    handleCloseConfirmRequestModal();
+  }
+};
+
+const handleCloseAnimationRequest = () => {
+  setAnimateRequestModal(true);
+  document.body.style.overflowY = "scroll";
+  document.body.style.minHeight = "0px";
+  window.scrollBy(0, -1);
+  setTimeout(() => {
+    setShowConfirmRequestModal(false);
+    setAnimateRequestModal(false);
+  }, 300);
+};
+
+
 
 
   return (
@@ -197,7 +420,7 @@ const Pay = () => {
           <FontAwesomeIcon icon={faPaperPlane} className="mr-2 h-4 w-4 text-white" />
           Pay
         </button>
-        <button className="w-1/2 bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 rounded-3xl focus:outline-none">
+        <button onClick={handleRequestClick} className="w-1/2 bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 rounded-3xl focus:outline-none"> {/* Update here */}
           <FontAwesomeIcon icon={faFileInvoice} className="mr-2 h-4 w-4 text-white" />
           Request
         </button>
@@ -205,8 +428,8 @@ const Pay = () => {
 
 
       
-{/* User Selection Modal */}
-{showModal && (
+{/* Pay User Selection Modal */}
+{showPaySelectionModal && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-20">
     <div className="bg-white w-full h-full relative pt-2">
       <div className="px-4 pt-0 grid grid-cols-3 items-center">
@@ -235,6 +458,10 @@ const Pay = () => {
   value={toAddress}
   onChange={(e) => setToAddress(e.target.value.trim())} // Trim method here to prevent sending to incorrect addresses
 />
+
+<button onClick={handlePasteClick} className="mr-2"> {/* Paste Button */}
+    <FontAwesomeIcon icon={faPaste} className="h-5.5 w-5.5 text-black" />
+  </button>
         <FontAwesomeIcon icon={faBarcodeRead} className="h-6 w-6 text-black ml-2" /> 
       </div>
       <div className="border-t border-gray-300"></div> 
@@ -436,10 +663,237 @@ const Pay = () => {
   </div>
 )}
 
-
     </div>
   </div>
 )}
+
+
+
+
+{/* Request User Selection Modal */}
+{showRequestSelectionModal && (
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-20">
+    <div className="bg-white w-full h-full relative pt-2">
+      <div className="px-4 pt-0 grid grid-cols-3 items-center">
+        <button className="p-4 -ml-4 cursor-pointer" onClick={handleCloseRequestSelectionModal}> 
+          <FontAwesomeIcon icon={faArrowLeft} className="h-7 w-7 text-black" />
+        </button>
+        <div className="text-black text-2xl font-bold flex items-center justify-center"> 
+          Request
+        </div>
+        <div className="flex justify-end"></div> {/* Empty div to keep the grid layout */}
+      </div>
+      <div className="border-t border-gray-300 mt-2"></div> 
+      <div className="px-4 py-2 flex items-center">
+        <label htmlFor="to" className="text-black text-lg font-bold mr-2">To:</label> 
+        <input
+          type="text"
+          id="to"
+          className="rounded p-2 flex-grow ml-1 text-black font-medium outline-none"
+          placeholder="Enter ENS or Base address..."
+          value={toAddress}
+          onChange={(e) => setToAddress(e.target.value.trim())}
+        />
+         <button onClick={handlePasteClick} className="ml-1 mr-2"> {/* Add button wrapper */}
+    <FontAwesomeIcon icon={faPaste} className="h-5.5 w-5.5 text-black" /> {/* Paste icon */}
+  </button>
+  <FontAwesomeIcon icon={faBarcodeRead} className="h-6 w-6 text-black ml-2" /> {/* Scan icon */}
+</div>
+      <div className="bg-gray-100 h-10 flex items-center">
+        <span className="text-gray-500 text-base font-bold ml-4">Suggested</span>
+      </div>
+
+      <div className="text-center text-black text-sm font-medium my-10">
+        Start using BasePay to find suggested contacts!
+      </div>
+      {/* Add your user selection content here */}
+      
+      <div className="fixed bottom-0 left-0 right-0 px-4 pb-6"> {/* Button container */}
+        <button onClick={handleOpenRequestModal} className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none">
+          Next
+        </button>
+      </div> {/* End of Button container */}
+    </div>
+  </div>
+)}
+
+
+{/* Request Modal */}
+{showRequestModal && (
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-20">
+    <div className="bg-white w-full h-full relative pt-2">
+      <div className="px-4 pt-0 grid grid-cols-3 items-center">
+        <button className="p-4 -ml-4 cursor-pointer" onClick={handleCloseRequestModal}> 
+          <FontAwesomeIcon icon={faArrowLeft} className="h-7 w-7 text-black" />
+        </button>
+        <div className="text-black text-2xl font-bold flex items-center justify-center">
+          Request
+        </div>
+        <div className="flex justify-end"></div> {/* Empty div to keep the grid layout */}
+      </div>
+      <div className="flex justify-center"> {/* Gray circle */}
+        <div className="bg-gray-300 rounded-full h-20 w-20 mt-6"></div>
+      </div>
+      <div className="text-center text-black text-lg font-medium mt-6"> {/* Displaying the truncated toAddress */}
+        {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress}
+      </div>
+
+<div className="text-5xl font-semibold mb-2 text-black flex justify-center items-baseline -ml-5 mt-5">
+  <FontAwesomeIcon icon={faEthereum} className="-mr-0 text-black h-9 w-9" />
+  <input
+    type="text"
+    style={{ width: `${(counter.length || 4) }ch` }} // Adjust width based on content
+    className="text-center bg-transparent outline-none border-none" // Tailwind CSS classes
+    value={counter}
+    onChange={handleCounterChange}
+    placeholder="0.00"
+  />
+</div>
+
+      <div className="text-center mt-0 text-lg text-gray-600 font-medium">
+  <input
+    type="text"
+    className="rounded p-2 text-center w-2/3 outline-none" // Added outline-none here
+    placeholder="Add a Note"
+    value={requestNote}
+    onChange={(e) => setrequestNote(e.target.value)}
+  />
+</div>
+
+<div className="fixed bottom-0 left-0 right-0 px-4 pb-6"> {/* Request button container */}
+<button 
+    className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none" 
+    onClick={handleOpenConfirmRequestModal} // Call the function to open the Confirm Request Modal
+  >
+    <FontAwesomeIcon icon={faFileInvoice} className="mr-2 h-4 w-4 text-white" /> {/* File invoice icon */}
+    Request
+  </button>
+</div>
+    </div>
+  </div>
+)}
+
+
+
+
+{/* Request Confirm Modal */}
+{showConfirmRequestModal && (
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 outside-click" onClick={handleOutsideClickRequest}>
+    <div className="bg-black opacity-50 w-full h-full outside-click"></div>
+    <div className={`bg-white w-full rounded-t-2xl absolute ${animateRequestModal ? '-bottom-full motion-reduce:transition-all duration-700 ease-in-out' : 'bottom-0'}`}>
+      <div className="bg-gray-300 w-18 h-1 mx-auto mt-4 rounded-full cursor-pointer"
+           onTouchStart={handleTouchStartRequest} onTouchEnd={handleTouchEndRequest}
+           onClick={handleCloseAnimationRequest}></div> {/* Clickable drag bar */}
+      <div className="p-4">
+        <div className="flex items-center text-2xl text-black font-bold">
+          <FontAwesomeIcon icon={faEthereum} className="mr-2 text-black h-5 w-5" />
+          {counter || '0'} 
+        </div>
+        <div className="mt-4">
+          <div className="bg-gray-200 rounded-3xl w-34 h-12 flex items-center justify-center"> 
+            <span className="text-black font-medium text-lg">Request To</span> 
+          </div>
+        </div>
+        <div className="mt-4 ml-1 text-black font-medium text-2xl">
+          {toAddress.length === 42
+            ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6)
+            : toAddress}
+        </div>
+        <div className="mt-2 ml-1 text-gray-600 font-medium text-lg">
+          {requestNote || "No note added"}
+        </div>
+        <button
+            className="bg-base-blue text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none mt-4 mb-2"
+            onClick={handleConfirmRequest} 
+          >
+            Confirm
+          </button>
+      </div>
+    </div>
+  </div>
+)}
+
+
+
+
+
+{showRequestTransactionModal && (
+  <div className="fixed top-0 left-0 w-full h-full z-40 flex items-center justify-center">
+    <div className="bg-black opacity-50 w-full h-full absolute"></div>
+    <div className="bg-white p-6 rounded-xl absolute top-1/6 inset-x-4 shadow-xl drop-shadow">
+      <button className="p-4 cursor-pointer absolute top-2 left-1" onClick={() => {
+          document.body.style.overflowY = "scroll"; // Remove scroll lock
+          document.body.style.minHeight = "0px";
+          window.scrollBy(0, -1);
+          setShowRequestTransactionModal(false); // Close the request transaction modal
+        }}> 
+        <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
+      </button>
+
+      {requestTransactionStatus === 'pending' && (
+        <div className="mt-14 ml-0">
+          <div className="flex justify-center items-center mb-10 relative"> 
+            <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> 
+            <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
+          </div>
+          <div className="text-center mb-4"> 
+            <div className="text-black font-bold text-2xl">{counter || '0'} ETH</div>
+          </div>
+          {/* Removed the "View on Basescan" link as it's not relevant for the request */}
+          <div className="flex items-center justify-start mb-6"> 
+            <FontAwesomeIcon icon={faSpinner} className="text-base-blue h-7 w-7 animate-spin" />
+            <span className="ml-4 mt-0.5 text-black font-semibold">Request in Progress...</span>
+          </div>
+          <div className="mb-4"> 
+            <div className="text-black font-semibold">Request to {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress} on Goerli Base Chain is processing.</div>
+          </div>
+          <div className="ml-0">
+            <div className="text-gray-600 font-medium text-lg"> {requestNote || "No note added"}</div>
+          </div>
+          <button className="bg-gray-300 text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" >
+            Continue
+          </button>
+        </div>
+      )}
+
+      {requestTransactionStatus === 'success' && (
+        <div className="mt-14 ml-0">
+          <div className="flex justify-center items-center mb-10 relative"> 
+            <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> 
+            <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
+          </div>
+          <div className="text-center mb-4"> 
+            <div className="text-black font-bold text-2xl">{counter || '0'} ETH</div>
+          </div>
+          {/* You can customize the link as needed */}
+          <div className="flex items-center justify-start mb-6"> 
+            <FontAwesomeIcon icon={faCircleCheck} className="text-base-blue h-7 w-7" /> 
+            <span className="ml-4 mt-0.5 text-black font-semibold">Request Successful!</span>
+          </div>
+          <div className="mb-4"> 
+            <div className="text-black font-semibold">Request sent successfully to {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress} on Goerli Base Chain using BasePay!</div>
+          </div>
+          <div className="ml-0">
+            <div className="text-gray-600 font-medium text-lg"> {requestNote || "No note added"}</div>
+          </div>
+          <button className="bg-base-blue shadow-sm drop-shadow text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" onClick={() => {
+              document.body.style.overflowY = "scroll"; // Remove scroll lock
+              document.body.style.minHeight = "0px";
+              window.scrollBy(0, -1);
+              setShowRequestTransactionModal(false);
+              setshowRequestSelectionModal(false);
+              setShowRequestModal(false); // Close the success modal
+              setCounter('0');
+            }}>
+            Continue
+          </button>
+        </div>
+      )}
+    </div>
+  </div>
+)}
+
+
 
 
 

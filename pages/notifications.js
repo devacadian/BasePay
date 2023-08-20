@@ -1,9 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faListCheck, faArrowUpRightFromSquare } from '@fortawesome/pro-solid-svg-icons';
 import Head from 'next/head';
+import { useAccount } from "wagmi";
 
 const Notifications = () => {
+  const { address } = useAccount();
+  const [paymentRequests, setPaymentRequests] = useState([]);
+
+
+
+  useEffect(() => {
+    // Function to fetch payment requests
+    const fetchPaymentRequests = async () => {
+      try {
+        // Use the address from useAccount as the connected wallet
+        const response = await fetch(`https://basepay-api.onrender.com/get-payment-request/${address}`);
+        const data = await response.json();
+        setPaymentRequests(data);
+      } catch (error) {
+        console.error('Error fetching payment requests:', error);
+      }
+    };
+
+    fetchPaymentRequests();
+  }, [address]);
+
+
+
+
+  
+
   return (
     <main className="flex flex-col min-h-screen bg-white">
       <Head>
@@ -20,29 +47,35 @@ const Notifications = () => {
       </div>
       <div className="bg-white w-full -mb-2"></div>
       <div className="px-4">
-        {['5d ago', '12d ago'].map((time, index) => (
-          <div key={time} className="flex items-center h-25 rounded-4xl border-2 border-gray-100 w-full shadow-sm mt-4">
-            <div className="relative h-12 w-12 border-2 border-gray-300 bg-blue-600 rounded-3xl ml-5">
-              <div className="bg-green-400 h-2 w-2 rounded-full absolute bottom-0 right-0"></div>
-            </div>
-            <div className="ml-4 flex-grow">
-              <div className="flex justify-between items-center">
-                <span className="text-black font-semibold">{index === 0 ? 'Payment Request' : 'Payment Received'}</span>
-                <span className="text-gray-500 mr-4 font-medium">{time}</span>
+        {paymentRequests.map((request, index) => {
+          // Convert the request time to a readable format
+          const requestDate = new Date(request.request_time.seconds * 1000);
+          const requestTimeString = requestDate.toLocaleDateString('en-US');
+
+          return (
+            <div key={index} className="flex items-center h-25 rounded-4xl border-2 border-gray-100 w-full shadow-sm mt-4">
+              <div className="relative h-12 w-12 border-2 border-gray-300 bg-blue-600 rounded-3xl ml-5">
+                <div className="bg-green-400 h-2 w-2 rounded-full absolute bottom-0 right-0"></div>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-black font-semibold">{index === 0 ? '0.0001 ETH' : '0.001 ETH'}</span>
-                <div className="flex items-center text-gray-500 font-medium mr-4">
-                  <span>From 0x0000...</span>
-                  {index === 1 && <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="ml-2 text-gray-500 h-4 w-4" />}
+              <div className="ml-4 flex-grow">
+                <div className="flex justify-between items-center">
+                  <span className="text-black font-semibold">Payment Request</span>
+                  <span className="text-gray-500 mr-4 font-medium">{requestTimeString}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-black font-semibold">{request.ether_amount} ETH</span>
+                  <div className="flex items-center text-gray-500 font-medium mr-4">
+                    <span>From {request.payment_requester}</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </main>
   );
 };
+
 
 export default Notifications;

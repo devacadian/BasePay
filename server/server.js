@@ -1,13 +1,17 @@
 const express = require('express')
 const cors = require('cors')
-const firebase = require('firebase');
 const app = express()
 const router = express.Router()
 const PORT = process.env.port || 4000
+// import firestore instance
 const {db} = require("./firebase");
-const PaymentRequestRef = db.collection("PaymentRequests")
+// Returns back a CollectionReference of PaymentRequests & PrivateChatRooms
+const { collection, addDoc, serverTimestamp, where, getDocs, query, doc, getDoc, updateDoc } = require("firebase/firestore");
+const PaymentRequestRef = collection(db,"PaymentRequests")
+const PrivateChatRoomsRef = collection(db,"PrivateChatRooms")
 
 // Middlewares
+const currentDateAndTime = new Date().toLocaleString('en-US', { timeZone: 'America/Toronto' });
 app.use(cors())
 app.use(express.json())
 
@@ -27,11 +31,13 @@ router.post('/create-payment-request', async (req,res) => {
         const {payment_requester, request_recipient, ether_amount, transaction_message} = req.body
 
         if (ether_amount <= 0){
-            res.status(400).send("Invalid transaction amount")
+            console.log(`${currentDateAndTime}: Invalid transaction amount`)
+            return res.status(400).send("Invalid transaction amount")
         }
 
         if (payment_requester == request_recipient) {
-            res.status(400).send("Invalid receipient: You are no allowed to send funds to your own address")
+            console.log(`${currentDateAndTime}: Invalid receipient: You are no allowed to send funds to your own address`)
+            return res.status(400).send("Invalid receipient: You are no allowed to send funds to your own address")
         }
 
         const data = {
@@ -40,40 +46,43 @@ router.post('/create-payment-request', async (req,res) => {
             ether_amount : ether_amount,
             transaction_message : transaction_message,
             transaction_state : "Pending",
-            request_time: firebase.firestore.FieldValue.serverTimestamp(),
-            transaction_completion_time: false
+            request_time: serverTimestamp(),
+            transaction_completion_time: false,
+            transaction_hash: false 
         }
         
         // Add a new payment request document with an auto-generated ID.
-        const newDocumentRef = await PaymentRequestRef.add(data)
-        console.log(`Added new payment request document with id: ${newDocumentRef.id}`)
-        res.status(200).json(newDocumentRef.id)
+        const newDocumentRef = await addDoc(PaymentRequestRef, data)
+        console.log(`${currentDateAndTime}: Added new payment request document with id: ${newDocumentRef.id}`)
+        return res.status(200).json(newDocumentRef.id)
 
     } 
     catch(error) {
-        res.status(500).send(error.message)
+        console.log(`${currentDateAndTime}: ${error.message}`)
+        return res.status(500).send(error.message)
     }
 })
 
-//GET Request: Query payment by request recipient
+// GET Request: Query payment request by request recipient
 // Returns back an array of payment request document
 router.get('/get-payment-request/:requestRecipient', async (req,res) => {
     try {
         const queryResult = []
         const queryResultId = []
         const request_recipient = req.params.requestRecipient
-        const query = PaymentRequestRef.where('request_recipient', '==', request_recipient)
-        const querySnapshot = await query.get()
+        const q = query(PaymentRequestRef,where('request_recipient', '==', request_recipient))
+        const querySnapshot = await getDocs(q)
         querySnapshot.forEach(documentSnapshot => {
             const documentData = documentSnapshot.data()
             queryResultId.push(documentSnapshot.id)
             queryResult.push(documentData)
         })
-        console.log(`These document matchs the query: ${queryResultId}`)
-        res.status(200).json(queryResult)
+        console.log(`${currentDateAndTime}: There are ${queryResultId.length} documents matchs the query: ${queryResultId}`)
+        return res.status(200).json(queryResult)
     } 
     catch(error) {
-        res.status(500).send(error.message)
+        console.log(`${currentDateAndTime}: ${error.message}`)
+        return res.status(500).send(error.message)
     }
 })
 
@@ -89,30 +98,43 @@ router.patch('/update-transaction-state/:paymentRequestId', async (req,res) => {
         const { decision } = req.body
 
         // query the target payment request documnet
-        const targetDocument = PaymentRequestRef.doc(payment_request_id)
+        const targetDocumentRef = doc(db, 'PaymentRequests', payment_request_id)
+        const targetDocumentSnap = await getDoc(targetDocumentRef)
+
+        // edge case handling: If the provided paymentRequestId do no exist in db
+        if (!targetDocumentSnap.exists()) {
+            console.log(`${currentDateAndTime}: Bad request: No such payment request document`)
+            return res.status(400).send("No such payment request document") 
+        }
 
         // update the payment request document
         if (decision) {
             const updatedData = {
                 transaction_state : "Processed",
-                transaction_completion_time : firebase.firestore.FieldValue.serverTimestamp()
+                transaction_completion_time : serverTimestamp()
             }
-            await targetDocument.update(updatedData) // returning void
+            // update the transaction state
+            await updateDoc(targetDocumentRef,updatedData) // returning void
+            
         } else{
             const updatedData = {
                 transaction_state : "Rejected",
-                transaction_completion_time : firebase.firestore.FieldValue.serverTimestamp()
+                transaction_completion_time : serverTimestamp()
             }
-            await targetDocument.update(updatedData) // returning void
+            // update the transaction state
+            await updateDoc(targetDocumentRef,updatedData) // returning void
         }
+        
         // return the updated payment document data
-        const updatedTargetDocument = await PaymentRequestRef.doc(payment_request_id).get()
-        const updatedTargetDocumentData = await updatedTargetDocument.data()
-        console.log(`Here is the updated document: `,updatedTargetDocumentData)
-        res.status(200).json(updatedTargetDocumentData)
+        const updatedTargetDocumentRef = doc(db, 'PaymentRequests', payment_request_id)
+        const updatedTargetDocumentSnap = await getDoc(updatedTargetDocumentRef)
+        const updatedTargetDocumentData = updatedTargetDocumentSnap.data()
+    
+        console.log(`${currentDateAndTime}: Here is the updated document: `,updatedTargetDocumentData)
+        return res.status(200).json(updatedTargetDocumentData)
     } 
     catch(error) {
-        res.status(500).send(error.message)
+        return res.status(500).send(error.message)
     }
 })
 
@@ -125,16 +147,25 @@ router.patch('/update-transaction-hash/:paymentRequestId/:transactionHash', asyn
         const transaction_hash = req.params.transactionHash
 
         // get target payment request document
-        const targetDocument = PaymentRequestRef.doc(payment_request_id)
+        const targetDocumentRef = doc(db, 'PaymentRequests', payment_request_id)
+        const targetDocumentSnap = await getDoc(targetDocumentRef)
+
+        // edge case handling: If the provided paymentRequestId do no exist in db
+        if (!targetDocumentSnap.exists()) {
+            console.log(`${currentDateAndTime}: Bad request: No such payment request document`)
+            return res.status(400).send("No such payment request document") 
+        }
 
         // upate target payment request document
-        await targetDocument.update({transaction_hash : transaction_hash}) // returning void
+        await updateDoc(targetDocumentRef,{transaction_hash : transaction_hash}) // returning void
 
         // return the updated payment document data
-        const updatedTargetDocument = await PaymentRequestRef.doc(payment_request_id).get()
-        const updatedTargetDocumentData = await updatedTargetDocument.data()
-        console.log(`Here is the updated document: `,updatedTargetDocumentData)
-        res.status(200).json(updatedTargetDocumentData)
+        const updatedTargetDocumentRef = doc(db, 'PaymentRequests', payment_request_id)
+        const updatedTargetDocumentSnap = await getDoc(updatedTargetDocumentRef)
+        const updatedTargetDocumentData = updatedTargetDocumentSnap.data()
+    
+        console.log(`${currentDateAndTime}: Here is the updated document: `,updatedTargetDocumentData)
+        return res.status(200).json(updatedTargetDocumentData)
     } 
     catch(error) {
         res.status(500).send(error.message)

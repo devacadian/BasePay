@@ -858,7 +858,10 @@ const handleCloseAnimationRequest = () => {
               document.body.style.overflowY = "scroll"; // Remove scroll lock
               document.body.style.minHeight = "0px";
               window.scrollBy(0, -1);
-              setShowRequestTransactionModal(false); // Close the success modal
+              setShowRequestTransactionModal(false);
+              setshowRequestSelectionModal(false);
+              setShowRequestModal(false); // Close the success modal
+              setCounter('0');
             }}>
             Continue
           </button>

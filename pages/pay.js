@@ -49,10 +49,29 @@ const Pay = () => {
 
 
 
-  const handleNumberClick = (number) => {
-    if (number === '.' && counter.includes('.')) return; // Prevent more than one decimal point
-    setCounter(counter + number);
-  };
+const handleNumberClick = (number) => {
+  if (number === '.' && counter.includes('.')) return; // Prevent more than one decimal point
+
+  let newCounter = counter + number;
+
+  // If the counter starts with '00', replace with '0'
+  if (newCounter.startsWith('00')) {
+    newCounter = '0' + newCounter.substring(2);
+  }
+
+  // If the counter starts with '.', prepend with '0'
+  if (newCounter.startsWith('.')) {
+    newCounter = '0' + newCounter;
+  }
+
+  // Ensure that there are no more than 4 digits after the decimal point
+  const parts = newCounter.split('.');
+  if (parts.length > 1 && parts[1].length > 4) {
+    newCounter = parts[0] + '.' + parts[1].substring(0, 4);
+  }
+
+  setCounter(newCounter);
+};
 
   const handleBackspace = () => {
     setCounter(counter.slice(0, -1));

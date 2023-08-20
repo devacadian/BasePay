@@ -12,7 +12,7 @@ import { useChainModal } from '@rainbow-me/rainbowkit';
 
 
 const Pay = () => {
-  const [counter, setCounter] = useState('');
+  const [counter, setCounter] = useState('0');
   const [formattedBalance, setFormattedBalance] = useState('0.0000'); // State for formatted balance
   const { chain } = useNetwork();
   const { address } = useAccount();
@@ -155,14 +155,25 @@ const Pay = () => {
 
  // Function to handle opening the Request Modal
  const handleOpenRequestModal = () => {
+
+  if (counter && counter !== '0') {
+    // Set the request counter to be the same value
+    setCounter(counter);
+  } else {
+    // If not, set the request counter to '0.00'
+    setCounter('0.00');
+  }
+
+
   setShowRequestModal(true);
 };
 
 // Function to handle closing the Request Modal
 const handleCloseRequestModal = () => {
+  // Reset the counter value back to '0' when closing the request modal
+  setCounter('0');
   setShowRequestModal(false);
 };
-
 
 const handlePasteClick = () => {
   navigator.clipboard.readText().then((text) => {
@@ -175,12 +186,20 @@ const handleCounterChange = (e) => {
   // Get the value from the event
   let value = e.target.value.trim();
 
-  // Allow only numbers and a single decimal point
-  if (/^(\d+\.?\d{0,2}|\.\d{0,2})$/.test(value) || value === '') {
+  if (value.startsWith('.')) {
+    value = '0' + value;
+  }
+
+  // Replace leading '00' with a single '0'
+  if (value.startsWith('00')) {
+    value = '0' + value.substring(2);
+  }
+
+  // Allow only numbers and up to 4 decimal points
+  if (/^(\d+\.?\d{0,4}|\.\d{0,4})$/.test(value) || value === '') {
     setCounter(value);
   }
 };
-
 
   return (
 <main className="min-h-screen flex flex-col bg-white pb-20">

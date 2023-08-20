@@ -507,7 +507,7 @@ const handleCloseRequestModal = () => {
       {/* Add your user selection content here */}
       
       <div className="fixed bottom-0 left-0 right-0 px-4 pb-6"> {/* Button container */}
-        <button onClick={handleOpenRequestModal} className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-10 w-full rounded-3xl focus:outline-none">
+        <button onClick={handleOpenRequestModal} className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none">
           Next
         </button>
       </div> {/* End of Button container */}
@@ -515,30 +515,36 @@ const handleCloseRequestModal = () => {
   </div>
 )}
 
-    {/* Request Modal */}
-    {showRequestModal && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-20">
-          <div className="bg-white w-full h-full relative pt-2">
-            <div className="px-4 pt-0 grid grid-cols-3 items-center">
-              <button className="p-4 -ml-4 cursor-pointer" onClick={handleCloseRequestModal}> 
-                <FontAwesomeIcon icon={faArrowLeft} className="h-7 w-7 text-black" />
-              </button>
-              <div className="text-black text-2xl font-bold flex items-center justify-center"> 
-                Request
-              </div>
-              <div className="flex justify-end"></div> {/* Empty div to keep the grid layout */}
-            </div>
-            {/* Add your content for the Request Modal here */}
-          </div>
+
+{/* Request Modal */}
+{showRequestModal && (
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-20">
+    <div className="bg-white w-full h-full relative pt-2">
+      <div className="px-4 pt-0 grid grid-cols-3 items-center">
+        <button className="p-4 -ml-4 cursor-pointer" onClick={handleCloseRequestModal}> 
+          <FontAwesomeIcon icon={faArrowLeft} className="h-7 w-7 text-black" />
+        </button>
+        <div className="text-black text-2xl font-bold flex items-center justify-center">
+          Request
         </div>
-      )}
+        <div className="flex justify-end"></div> {/* Empty div to keep the grid layout */}
+      </div>
+      <div className="flex justify-center"> {/* Gray circle */}
+        <div className="bg-gray-300 rounded-full h-20 w-20 mt-6"></div>
+      </div>
+      <div className="text-center text-black text-lg font-medium mt-6"> {/* Displaying the truncated toAddress */}
+        {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress}
+      </div>
+      {/* Add your content for the Request Modal here */}
 
-
-
-
-
-
-
+      <div className="fixed bottom-0 left-0 right-0 px-4 pb-6"> {/* Request button container */}
+        <button className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none">
+          Request
+        </button>
+      </div> {/* End of Request button container */}
+    </div>
+  </div>
+)}
 
 
     </main>

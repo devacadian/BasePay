@@ -5,10 +5,7 @@ const router = express.Router()
 const PORT = process.env.port || 4000
 // import firestore instance
 const {db} = require("./firebase");
-// Returns back a CollectionReference of PaymentRequests & PrivateChatRooms
-const { collection, addDoc, serverTimestamp, where, getDocs, query, doc, getDoc, updateDoc } = require("firebase/firestore");
-const PaymentRequestRef = collection(db,"PaymentRequests")
-const PrivateChatRoomsRef = collection(db,"PrivateChatRooms")
+const { collection, addDoc, serverTimestamp, where, getDocs, query, doc, getDoc, updateDoc, orderBy, limit } = require("firebase/firestore");
 
 // Middlewares
 const currentDateAndTime = new Date().toLocaleString('en-US', { timeZone: 'America/Toronto' });
@@ -23,6 +20,7 @@ router.get("/", (req,res) => {
 })
 
 /* ------------------------- Payment Request Related Endpoints ------------------------- */
+const PaymentRequestRef = collection(db,"PaymentRequests")
 
 // POST Request: Create a "payment request document" to the "payment request collection" 
 // returns back the newly created document id 
@@ -172,6 +170,75 @@ router.patch('/update-transaction-hash/:paymentRequestId/:transactionHash', asyn
     }
 })
 
+/* ------------------------- Private Chatroom Related Endpoints ------------------------- */
+const PrivateChatRoomsRef = collection(db,"PrivateChatRooms")
+
+// GET Request: Query PrivateChatRooms by user UID
+// Returns back an array custom chatroom object for front-end display
+router.get('/get-private-chatroom/:userId', async (req, res) => {
+    try {
+        // destructure request params
+        const userId = req.params.userId;
+
+        // empty array for returning response
+        const response = [];
+        const queryResultId = [];
+        // create an array of promises for subcollection queries
+        const subCollectionPromises = [];
+
+        // start to query PrivateChatRooms document that's a user participated in
+        const q = query(PrivateChatRoomsRef, where("participants", "array-contains", userId));
+        const querySnapshot = await getDocs(q);
+
+        querySnapshot.forEach(documentSnapshot => {
+            
+            // push chatroom id to the queryResultId 
+            queryResultId.push(documentSnapshot.id);
+            
+            const { participants } = documentSnapshot.data();
+
+            // start to query the sub-collection "Messages" within a PrivateChatRoom
+            const subCollectionQuery = query(collection(db, "PrivateChatRooms", documentSnapshot.id, "Messages"), orderBy("timestamp", "desc"), limit(1));
+            subCollectionPromises.push(getDocs(subCollectionQuery).then(subCollectionQuerySnapshot => {
+                const latestMessage = subCollectionQuerySnapshot.docs[0];
+
+                if (latestMessage) {
+                    const { from, message, timestamp } = latestMessage.data();
+                    const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
+                    const formattedDate = date.toLocaleString('en-US', { timeZone: 'America/Toronto' });
+
+                    const chatWithResponse = {
+                        chatWith: findChatWith(participants, userId),
+                        lastestMessageFrom: from,
+                        lastestMessage: message,
+                        lastestMessageTimeStamp: formattedDate
+                    };
+
+                    response.push(chatWithResponse);
+                }
+            }));
+        });
+
+        // Wait for all subcollection queries to complete
+        await Promise.all(subCollectionPromises);
+
+        console.log(`${currentDateAndTime}: There are ${queryResultId.length} ongoing chats for user ${userId}: ${queryResultId}`);
+        console.log(`User ${userId} is participated in below chats: ${JSON.stringify(response)}`);
+        return res.status(200).json(response);
+    } catch (error) {
+        console.log(`${currentDateAndTime}: ${error.message}`);
+        return res.status(500).send(error.message);
+    }
+});
+
+/* ------------------------- Helper Functions ------------------------- */
+const findChatWith = (userList, userId) => {
+    for (const user of userList) {
+        if (user !== userId) {
+            return user
+        }
+    }
+}
 /* ----- Start Server ----- */
 app.use('/', router)
 

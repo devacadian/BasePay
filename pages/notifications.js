@@ -50,11 +50,23 @@ const Notifications = () => {
         {paymentRequests.map((request, index) => {
           // Convert the request time to a readable format
           const requestDate = new Date(request.request_time.seconds * 1000);
-          const requestTimeString = requestDate.toLocaleDateString('en-US');
+          const now = new Date();
+          const timeDifferenceMinutes = Math.floor((now - requestDate) / (60 * 1000));
+  
+          let requestTimeString;
+          if (timeDifferenceMinutes < 60) {
+            requestTimeString = `${timeDifferenceMinutes} mins ago`;
+          } else if (timeDifferenceMinutes < 24 * 60) {
+            requestTimeString = `${Math.floor(timeDifferenceMinutes / 60)} hrs ago`;
+          } else {
+            requestTimeString = requestDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+          }
+  
+          const paymentRequester = request.payment_requester.substring(0, 5) + '...';
 
           return (
             <div key={index} className="flex items-center h-25 rounded-4xl border-2 border-gray-100 w-full shadow-sm mt-4">
-              <div className="relative h-12 w-12 border-2 border-gray-300 bg-blue-600 rounded-3xl ml-5">
+              <div className="relative h-12 w-12 border-2 border-gray-300 bg-gray-300 rounded-3xl ml-5">
                 <div className="bg-green-400 h-2 w-2 rounded-full absolute bottom-0 right-0"></div>
               </div>
               <div className="ml-4 flex-grow">
@@ -65,7 +77,7 @@ const Notifications = () => {
                 <div className="flex justify-between items-center">
                   <span className="text-black font-semibold">{request.ether_amount} ETH</span>
                   <div className="flex items-center text-gray-500 font-medium mr-4">
-                    <span>From {request.payment_requester}</span>
+                    <span>From {paymentRequester}</span>
                   </div>
                 </div>
               </div>

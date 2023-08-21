@@ -6,13 +6,10 @@ import Head from 'next/head';
 import { useAccount } from "wagmi";
 import createIcon from 'blockies';
 
-
-
-
 const Notifications = () => {
   const { address } = useAccount();
   const [paymentRequests, setPaymentRequests] = useState([]);
-
+  const [openDropdownIndex, setOpenDropdownIndex] = useState(null);
   const sortedPaymentRequests = paymentRequests.sort((a, b) => b.request_time.seconds - a.request_time.seconds);
 
   useEffect(() => {
@@ -31,16 +28,13 @@ const Notifications = () => {
     fetchPaymentRequests();
   }, [address]);
 
-
-  
-
   const AvatarIcon = ({ seed }) => {
     const avatarRef = useRef(null);
   
     useEffect(() => {
       const icon = createIcon({
         seed: seed,
-        color: '#A9A9A9', // Foreground color
+        color: '#000000', // Foreground color
  
         bgcolor: '#ffffff',
         size: 11, // Width/height of the icon in blocks
@@ -54,6 +48,23 @@ const Notifications = () => {
     }, [seed]);
     return <div ref={avatarRef} className="ml-0"></div>;
   };
+
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpenDropdownIndex(null);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
   
   return (
     <main className="flex flex-col min-h-screen bg-white">
@@ -95,6 +106,7 @@ const Notifications = () => {
   
           const paymentRequester = request.payment_requester.substring(0, 5) + '...';
 
+       
 
           return (
             <div key={index} className="rounded-4xl border-2 border-gray-100 w-full shadow-sm mt-4">
@@ -130,17 +142,29 @@ const Notifications = () => {
     ) : (
       <span className="text-gray-500 italic">No message sent with request</span>
     )}
-  </span>
-  <FontAwesomeIcon icon={faEllipsis} className="h-5 w-5 text-gray-400" /> {/* Ellipsis icon */}
-</div>
+       </span>
+       <div className="relative cursor-pointer" onClick={(e) => {
+            e.stopPropagation(); // Stop propagation to the document
+            setOpenDropdownIndex(openDropdownIndex === index ? null : index);
+          }}>
+                  <FontAwesomeIcon icon={faEllipsis} className="h-5 w-5 text-gray-400" />
+                  {openDropdownIndex === index && (
+                    <div ref={dropdownRef} className="absolute right-0 top-full mt-2 bg-white border rounded-3xl p-4 shadow text-gray-700 w-44 text-sm z-10">
+                      <div className="p-2 cursor-pointer hover:bg-gray-200">Pay</div>
+                      <div className="p-2 cursor-pointer hover:bg-gray-200">Decline</div>
+                      <div className="p-2 cursor-pointer hover:bg-gray-200">Mark as Read</div>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           );
-                
+
+
         })}
       </div>
     </main>
   );
 };
-
 
 export default Notifications;

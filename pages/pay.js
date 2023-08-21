@@ -420,20 +420,21 @@ const handleVideoRef = (video) => {
       .then((stream) => {
         video.srcObject = stream;
         video.play(); // Ensure the video is playing
-
-        // Start the scanning process
-        decodeOnceFromVideoElement(videoRef.current, undefined)
+        
+        // ZXing code reader
+        const codeReader = new BrowserMultiFormatReader();
+        codeReader.decodeFromVideoElement(video)
           .then((result) => {
-            if (result) {
-              setForValue(result.getText());
-              setShowScanner(false);
-            }
+            setForValue(result.getText());
+            setShowScanner(false);
+            codeReader.reset(); // Reset the reader to stop scanning
           })
-          .catch(console.error);
+          .catch((error) => console.error(error));
       })
       .catch(console.error);
   }
 };
+
 
 
 

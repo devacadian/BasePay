@@ -43,6 +43,7 @@ const Pay = () => {
   const [requestTxHashState, setRequestTxHashState] = useState(''); // State to store the transaction hash for the request
   const [showScanner, setShowScanner] = useState(false);
   const videoRef = useRef(null);
+  const [showQRChoiceModal, setShowQRChoiceModal] = useState(false);
 
 
   useEffect(() => {
@@ -443,6 +444,12 @@ const handleVideoRef = (video) => {
   }
 };
 
+const handleScanClick = (actionType) => {
+  setShowQRChoiceModal(false);
+  setShowScanner(true);
+  actionType(); // Call either handlePayClick or handleRequestClick
+};
+
   return (
 <main className="min-h-screen flex flex-col bg-white pb-20">
       <div style={{ background: 'linear-gradient(to bottom, #0e76fd, #ffffff)' }} className="flex-grow flex flex-col">
@@ -472,9 +479,9 @@ const handleVideoRef = (video) => {
   </div>
 </div>
 <div className="flex items-center relative">
-          <div className=" bg-gray-100 absolute h-6 w-7 rounded-md"  />
-          <FontAwesomeIcon icon={faBarcodeRead} className="h-7 w-7 text-base-blue z-10" />
-        </div>
+<div className="bg-gray-100 absolute h-6 w-7 rounded-md" onClick={() => setShowQRChoiceModal(true)} />
+      <FontAwesomeIcon icon={faBarcodeRead} className="h-7 w-7 text-base-blue z-10" onClick={() => setShowQRChoiceModal(true)} />
+    </div>
       </div>
       <div className="text-6xl font-semibold mb-4 text-black flex justify-center items-baseline -ml-10 mt-10">
             <FontAwesomeIcon icon={faEthereum} className="mr-0 text-black h-10 w-10" /> 
@@ -508,6 +515,27 @@ const handleVideoRef = (video) => {
         </button>
       </div>
 
+      {showQRChoiceModal && (
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
+    <div className="bg-white p-6 rounded-xl absolute top-1/6 inset-x-4 shadow-xl drop-shadow">
+      <button onClick={() => setShowQRChoiceModal(false)} className="z-40 absolute top-6 left-4">
+        <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
+      </button>
+      <div className="flex flex-col items-center justify-center mt-6">
+        <div className="text-black text-2xl font-bold mb-4">Scan QR Code</div>
+    
+<button onClick={() => handleScanClick(handlePayClick)} className="w-full bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 rounded-3xl focus:outline-none mb-4">
+  <FontAwesomeIcon icon={faPaperPlane} className="mr-2 h-4 w-4 text-white" />
+  Scan & Pay
+</button>
+<button onClick={() => handleScanClick(handleRequestClick)} className="w-full bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 rounded-3xl focus:outline-none mb-2">
+  <FontAwesomeIcon icon={faFileInvoice} className="mr-2 h-4 w-4 text-white" />
+  Scan & Request
+</button>
+      </div>
+    </div>
+  </div>
+)}
 
       
 {/* Pay User Selection Modal */}
@@ -736,7 +764,8 @@ const handleVideoRef = (video) => {
         document.body.style.overflowY = "scroll"; // Remove scroll lock
         document.body.style.minHeight = "0px";
         window.scrollBy(0, -1);
-        setShowtransactionModal(false); // Close the success modal
+        setShowtransactionModal(false);
+        setToAddress(''); // Close the success modal
       }}>
       Continue
     </button>
@@ -864,8 +893,6 @@ const handleVideoRef = (video) => {
     </div>
   </div>
 )}
-
-
 
       {/* Add your user selection content here */}
       
@@ -1045,6 +1072,7 @@ const handleVideoRef = (video) => {
               setshowRequestSelectionModal(false);
               setShowRequestModal(false); // Close the success modal
               setCounter('0');
+              setToAddress('');
             }}>
             Continue
           </button>

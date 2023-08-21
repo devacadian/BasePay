@@ -173,17 +173,16 @@ router.patch('/update-transaction-hash/:paymentRequestId/:transactionHash', asyn
 /* ------------------------- BASE & DB Query Endpoints ------------------------- */
 
 // GET Request: Query Activities (Payment Sent, Payment Reveived, Request Sent, Request Received)
-// returns back an array of Activity
+// returns back an array of Activity (Sorted By timestamp)
 /*
-Activity Object Structure (Sorted By timestamp)
-
+Activity Object Structure 
 {
-    "activityId" : "01hlEmQYIz6Dpr8ACpOa" <-- doc ID for DB query, txn hash for ether query
-    "activityType" : "Payment Send", <--- enum type (Payment Sent, Payment Reveived, Request Sent, Request Received)
+    "activityId" : "01hlEmQYIz6Dpr8ACpOa" <-- doc ID for DB query, txn hash for ethereum query
+    "activityType" : "Payment Sent", <--- enum type (Payment Sent, Payment Reveived, Request Sent, Request Received)
     "activityState" : "Processed", <--- enmu type (Processed , Rejected, Pending)
-    "counterParty" : "0x9dD82EE27cc23B343f186756771904E0386973f1" <--- For "Payment Sent" and "Request Sent" it will be the Payment / Request Receipant. For "Payment Received" and "Request Received", its will be the Payment / Request Sender
+    "counterParty" : "0x9dD82EE27cc23B343f186756771904E0386973f1" <--- For "Payment Sent" and "Request Sent" it will be the Payment / Request Recipient. For "Payment Received" and "Request Received", its will be the Payment / Request Sender
     "amount" : "0.001",
-    "timestamp" : "8/20/2023, 11:01:00 PM" <--- will be request time for request type 
+    "timestamp" : "8/20/2023, 11:01:00 PM" <--- will be request time instead of completion time for "request type". will be txn completion time for "payment type"
 }
 
 */
@@ -193,7 +192,7 @@ router.get('/activties/:userAddress', async (req,res) => {
         const userAddress = req.params.userAddress
         const activities = []
 
-        const requestSendActivities = await queryPaymentRequestSend(userAddress)
+        const requestSendActivities = await queryPaymentRequestSent(userAddress)
 
         activities.push(...requestSendActivities);
 
@@ -210,7 +209,39 @@ router.get('/activties/:userAddress', async (req,res) => {
 /* ------------------------- Helper Functions ------------------------- */
 // query all PaymentRequest that payment_requester matchs userId
 // returns a array of Activity Object: "Request Send"
-const queryPaymentRequestSend = async(userAddress) => {
+const queryPaymentRequestSent = async(userAddress) => {
+    try {
+        const result = []
+        const request_requester = userAddress
+        const q = query(PaymentRequestRef,where('payment_requester', '==', request_requester))
+        const querySnapshot = await getDocs(q)
+        querySnapshot.forEach(documentSnapshot => {
+            const documentData = documentSnapshot.data()
+
+            const { transaction_state, request_recipient, ether_amount, request_time } = documentData
+            
+            result.push({
+                activityId : documentSnapshot.id,
+                activityType : "Request Sent",
+                activityState : transaction_state,
+                counterParty : request_recipient,
+                amount : ether_amount,
+                timestamp : request_time
+            })
+
+            
+        })
+        return result
+    } 
+    catch(error) {
+        return error.message
+    }
+}
+
+
+// query all PaymentRequest that payment_requester matchs userId
+// returns a array of Activity Object: "Request Received"
+const queryPaymentRequestReceived = async(userAddress) => {
     try {
         const result = []
         const request_requester = userAddress
@@ -227,7 +258,7 @@ const queryPaymentRequestSend = async(userAddress) => {
                 activityState : transaction_state,
                 counterParty : request_recipient,
                 amount : ether_amount,
-                timestamp : new Date(request_time.seconds * 1000 + request_time.nanoseconds / 1000000).toLocaleString('en-US', { timeZone: 'America/Toronto' })
+                timestamp : request_time
             })
 
             
@@ -238,7 +269,6 @@ const queryPaymentRequestSend = async(userAddress) => {
         return error.message
     }
 }
-
 
 
 

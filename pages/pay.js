@@ -1,4 +1,4 @@
-import React, { useState, useEffect  } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
@@ -10,7 +10,7 @@ import { useAccount } from "wagmi";
 import { useBalance } from 'wagmi';
 import { useNetwork } from 'wagmi';
 import { useChainModal } from '@rainbow-me/rainbowkit'; 
-
+import createIcon from 'blockies';
 
 const Pay = () => {
   const [counter, setCounter] = useState('0');
@@ -360,6 +360,27 @@ const handleCloseAnimationRequest = () => {
     setAnimateRequestModal(false);
   }, 300);
 };
+
+const AvatarIcon = ({ seed }) => {
+  const avatarRef = useRef(null);
+
+  useEffect(() => {
+    const icon = createIcon({
+      seed: seed,
+      color: '#7D7D7D', // Slightly darker gray foreground color
+      bgcolor: '#ffffff',
+      size: 11, // Width/height of the icon in blocks
+      scale: 7  // Width/height of each block in pixels
+    });
+
+    if (avatarRef.current) {
+      avatarRef.current.innerHTML = ''; // Clear previous children
+      avatarRef.current.appendChild(icon);
+    }
+  }, [seed]);
+  return <div ref={avatarRef} className="ml-0"></div>;
+};
+
 
 
 
@@ -732,7 +753,7 @@ const handleCloseAnimationRequest = () => {
         <div className="flex justify-end"></div> {/* Empty div to keep the grid layout */}
       </div>
       <div className="flex justify-center"> {/* Gray circle */}
-        <div className="bg-gray-300 rounded-full h-20 w-20 mt-6"></div>
+        <div className="bg-gray-300 border-2 border-gray-300 rounded-full h-20 w-20 mt-6 flex items-center justify-center overflow-hidden">   <AvatarIcon seed={toAddress} /> </div>
       </div>
       <div className="text-center text-black text-lg font-medium mt-6"> {/* Displaying the truncated toAddress */}
         {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress}

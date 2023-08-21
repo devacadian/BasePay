@@ -40,7 +40,7 @@ const Notifications = () => {
     useEffect(() => {
       const icon = createIcon({
         seed: seed,
-        color: '#000000', // Foreground color
+        color: '#A9A9A9', // Foreground color
  
         bgcolor: '#ffffff',
         size: 11, // Width/height of the icon in blocks
@@ -70,7 +70,7 @@ const Notifications = () => {
         </div>
       </div>
       <div className="bg-white w-full -mb-2"></div>
-      <div className="px-4">
+      <div className="px-4 mb-30">
       {sortedPaymentRequests.map((request, index) => {
           // Convert the request time to a readable format
           const requestDate = new Date(request.request_time.seconds * 1000);

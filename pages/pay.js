@@ -561,7 +561,6 @@ const handleVideoRef = (video) => {
     />
       </div>
 
-
       {showScanner && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
     <div className="bg-white p-6 rounded-xl absolute top-1/6 inset-x-4 shadow-xl drop-shadow">
@@ -818,7 +817,9 @@ const handleVideoRef = (video) => {
          <button onClick={handlePasteClick} className="ml-1 mr-2"> {/* Add button wrapper */}
     <FontAwesomeIcon icon={faPaste} className="h-5.5 w-5.5 text-black" /> {/* Paste icon */}
   </button>
-  <FontAwesomeIcon icon={faBarcodeRead} className="h-6 w-6 text-black ml-2" /> {/* Scan icon */}
+  <button onClick={() => setShowScanner(true)}> {/* Trigger Scanner */}
+  <FontAwesomeIcon icon={faBarcodeRead} className="h-6 w-6 text-black ml-2" />
+</button>
 </div>
       <div className="bg-gray-100 h-10 flex items-center">
         <span className="text-gray-500 text-base font-bold ml-4">Suggested</span>
@@ -827,6 +828,45 @@ const handleVideoRef = (video) => {
       <div className="text-center text-black text-sm font-medium my-10">
         Start using BasePay to find suggested contacts!
       </div>
+
+      {showScanner && (
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
+    <div className="bg-white p-6 rounded-xl absolute top-1/6 inset-x-4 shadow-xl drop-shadow">
+      <button
+        onClick={() => {
+          setShowScanner(false);
+          const video = videoRef.current;
+          if (video && video.srcObject) {
+            const tracks = video.srcObject.getTracks();
+            tracks.forEach((track) => track.stop());
+            video.srcObject = null;
+          }
+        }}
+        className="z-40 absolute top-6 left-4"
+      >
+        <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
+      </button>
+      <div className="flex flex-col items-center justify-center mt-4">
+        <div className="text-black text-2xl font-bold mb-4">Request to Address</div> {/* "Pay" text */}
+        <div className="relative">
+          <video ref={handleVideoRef} className="z-40 rounded-lg" autoPlay /> {/* Scanner Display with rounded corners */}
+          
+          {/* Scan Overlay */}
+          <div className="absolute top-20 left-10 border-t-3 border-l-3 border-base-blue h-7 w-7 rounded-tl "></div>
+          <div className="absolute top-20 right-10 border-t-3 border-r-3 border-base-blue h-7 w-7 rounded-tr"></div>
+          <div className="absolute bottom-20 left-10 border-b-3 border-l-3 border-base-blue h-7 w-7 rounded-bl"></div>
+          <div className="absolute bottom-20 right-10 border-b-3 border-r-3 border-base-blue h-7 w-7 rounded-br"></div>
+        </div>
+        <div className="text-black text-lg font-bold mt-6 mb-2">
+          <span className="text-base-blue">Scanning</span> for addresses...
+        </div> 
+      </div>
+    </div>
+  </div>
+)}
+
+
+
       {/* Add your user selection content here */}
       
       <div className="fixed bottom-0 left-0 right-0 px-4 pb-6"> {/* Button container */}

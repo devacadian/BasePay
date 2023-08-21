@@ -8,7 +8,7 @@ const Notifications = () => {
   const { address } = useAccount();
   const [paymentRequests, setPaymentRequests] = useState([]);
 
-
+  const sortedPaymentRequests = paymentRequests.sort((a, b) => b.request_time.seconds - a.request_time.seconds);
 
   useEffect(() => {
     // Function to fetch payment requests
@@ -47,25 +47,32 @@ const Notifications = () => {
       </div>
       <div className="bg-white w-full -mb-2"></div>
       <div className="px-4">
-        {paymentRequests.map((request, index) => {
+      {sortedPaymentRequests.map((request, index) => {
           // Convert the request time to a readable format
           const requestDate = new Date(request.request_time.seconds * 1000);
           const now = new Date();
           const timeDifferenceMinutes = Math.floor((now - requestDate) / (60 * 1000));
-  
+
           let requestTimeString;
-          if (timeDifferenceMinutes < 60) {
+          if (timeDifferenceMinutes === 1) {
+            requestTimeString = `${timeDifferenceMinutes} min ago`;
+          } else if (timeDifferenceMinutes < 60) {
             requestTimeString = `${timeDifferenceMinutes} mins ago`;
-          } else if (timeDifferenceMinutes < 24 * 60) {
-            requestTimeString = `${Math.floor(timeDifferenceMinutes / 60)} hrs ago`;
           } else {
-            requestTimeString = requestDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            const timeDifferenceHours = Math.floor(timeDifferenceMinutes / 60);
+            requestTimeString = timeDifferenceHours === 1
+              ? `${timeDifferenceHours} hr ago`
+              : `${timeDifferenceHours} hrs ago`;
+        
+            if (timeDifferenceMinutes >= 24 * 60) {
+              requestTimeString = requestDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            }
           }
   
           const paymentRequester = request.payment_requester.substring(0, 5) + '...';
 
           return (
-            <div key={index} className="flex items-center h-25 rounded-4xl border-2 border-gray-100 w-full shadow-sm mt-4">
+            <div key={index} className="flex items-center h-25 rounded-4xl border-2 border-gray-100 w-full shadow-sm mt-3">
               <div className="relative h-12 w-12 border-2 border-gray-300 bg-gray-300 rounded-3xl ml-5">
                 <div className="bg-green-400 h-2 w-2 rounded-full absolute bottom-0 right-0"></div>
               </div>

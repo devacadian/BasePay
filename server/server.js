@@ -233,6 +233,7 @@ router.get('/get-private-chatroom/:userId', async (req, res) => {
 
 // POST Request: Create a PrivateChatRoom document
 // returns back the newly created document id 
+// @dev add validation logic to make sure same pair of participants only exist once in the DB
 router.post('/create-private-chatroom', async (req,res) => {
     try {
         const {currentUserId, secondUserId} = req.body

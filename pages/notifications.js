@@ -74,16 +74,16 @@ const Notifications = () => {
 
           return (
             <div key={index} className="rounded-4xl border-2 border-gray-100 w-full shadow-sm mt-3">
-              <div className={"flex items-center" + (!request.transaction_message ? " pb-2 " : "")}>
-              <div className={"relative h-12 w-12 border-2 border-gray-300 bg-gray-300 rounded-3xl ml-5" + (!request.transaction_message ? " -mb-2.5" : " -mb-5")}>
+              <div className={"flex items-center" + (!request.transaction_message ? " pb-3 mt-1 " : " mt-0.5 mb-0")}>
+              <div className={"relative h-12 w-12 border-2 border-gray-300 bg-gray-300 rounded-3xl ml-4" + (!request.transaction_message ? " -mb-2" : " -mb-3.5")}>
                   <div className="bg-green-400 h-2 w-2 rounded-full absolute bottom-0 right-0"></div>
                 </div>
-                <div className="ml-4 flex-grow mt-5">
+                <div className="ml-4 flex-grow mt-4">
                   <div className={"flex justify-between items-center" + (!request.transaction_message ? " pb-2" : "")}>
                     <span className="text-black font-semibold">Payment Request</span>
                     <span className="text-gray-500 mr-4 font-medium">{requestTimeString}</span>
                   </div>
-                  <div className={"flex justify-between items-center " + (!request.transaction_message ? " pb-3" : "mt-1")}>
+                  <div className={"flex justify-between items-center " + (!request.transaction_message ? " pb-1" : "mt-1")}>
                     <div className="flex items-center text-black font-semibold">
                       <FontAwesomeIcon icon={faEthereum} className="h-3.5 w-3.5 text-black mr-1 mb-0.5" />
                       <span>{request.ether_amount}</span>
@@ -95,7 +95,7 @@ const Notifications = () => {
                 </div>
               </div>
               {request.transaction_message && (
-  <div className="text-gray-500 text-sm ml-5 mt-3 mb-5 font-semibold">
+  <div className="text-gray-500 text-sm ml-4.5 mt-3 mb-4 font-semibold">
     <span className="text-gray-500">Note:</span> {request.transaction_message}
   </div>
 )}

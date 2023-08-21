@@ -43,8 +43,7 @@ const Pay = () => {
   const [requestTxHashState, setRequestTxHashState] = useState(''); // State to store the transaction hash for the request
   const [showScanner, setShowScanner] = useState(false);
   const videoRef = useRef(null);
-  const [videoElement, setVideoElement] = useState(null);
-  
+
 
   useEffect(() => {
     setContainerWidth(chain?.name === 'Base Goerli' ? 'w-24' : 'w-20');
@@ -389,24 +388,6 @@ const navigateToProfile = () => {
   router.push('/profile');
 };
 
-const { decodeOnceFromVideoElement } = useZxing({
-  onDecodeResult(result) {
-    setForValue(result.getText());
-    setShowScanner(false);
-  },
-});
-
-
-const handleScan = () => {
-  if (videoElement) {
-    decodeOnceFromVideoElement(videoElement, undefined, (result, error) => {
-      if (result) {
-        setForValue(result.getText());
-      }
-      setShowScanner(false);
-    });
-  }
-};
 
 const handleVideoRef = (video) => {
   videoRef.current = video;

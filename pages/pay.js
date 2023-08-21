@@ -11,7 +11,6 @@ import { useBalance } from 'wagmi';
 import { useNetwork } from 'wagmi';
 import { useChainModal } from '@rainbow-me/rainbowkit'; 
 import createIcon from 'blockies';
-import { useZxing } from 'react-zxing';
 import { BrowserMultiFormatReader } from '@zxing/library';
 
 const Pay = () => {
@@ -523,7 +522,7 @@ const handleScanClick = (actionType) => {
       </button>
       <div className="flex flex-col items-center justify-center mt-6">
       <div className="text-black text-2xl font-bold mb-4">
-          <span className="inline-flex items-center">Scan QR Code <FontAwesomeIcon icon={faQrcode} className="text-black h-5 w-5 ml-2 mt-1" /></span> {/* Wrapped in a span */}
+          <span className="inline-flex items-center">Scan QR Code <FontAwesomeIcon icon={faQrcode} className="text-black h-6 w-6 ml-2 -mt-0" /></span> {/* Wrapped in a span */}
         </div>
         <button onClick={() => handleScanClick(handlePayClick)} className="w-full bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 rounded-3xl focus:outline-none mb-4">
           <FontAwesomeIcon icon={faPaperPlane} className="mr-2 h-4 w-4 text-white" />

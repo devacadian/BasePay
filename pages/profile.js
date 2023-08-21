@@ -4,9 +4,9 @@ import { useAccount } from "wagmi";
 import { useBalance } from 'wagmi';
 import createIcon from 'blockies';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCopy } from '@fortawesome/free-solid-svg-icons';
-import { faQrcode } from '@fortawesome/free-solid-svg-icons'; 
+import { faCopy, faPaperPlane, faQrcode, faXmark } from '@fortawesome/pro-solid-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
+import QRCode from 'qrcode.react'; 
 
 
 const Profile = () => {
@@ -14,7 +14,7 @@ const Profile = () => {
   const [isClient, setIsClient] = useState(false);
   const { data } = useBalance({ address });
   const [formattedBalance, setFormattedBalance] = useState('0.0000');
-
+  const [showQRCodeModal, setShowQRCodeModal] = useState(false);
 
   useEffect(() => {
     const balanceValue = parseFloat(data?.formatted || '0.0000');
@@ -62,9 +62,9 @@ const Profile = () => {
             <div className="bg-gray-300 rounded-full h-20 w-20 mb-6 mx-auto overflow-hidden border-2 border-gray-300">
               <AvatarIcon />
             </div>
-            <div className="bg-base-blue rounded-full h-8 w-8 absolute bottom-5.5 -right-1 flex items-center justify-center">
-              <FontAwesomeIcon icon={faQrcode} className="h-5 w-5 text-white" /> {/* QR code icon */}
-            </div>
+            <div className="bg-base-blue rounded-full h-8 w-8 absolute bottom-5.5 -right-1 flex items-center justify-center" onClick={() => setShowQRCodeModal(true)}>
+                <FontAwesomeIcon icon={faQrcode} className="h-5 w-5 text-white" /> {/* QR code icon */}
+              </div>
           </div>
           <div className="flex items-center justify-center text-gray-600 font-bold text-lg ml-11">
             {/* Truncated wallet address */}
@@ -92,6 +92,35 @@ const Profile = () => {
       )}
 
       </div>
+
+{/* QR Code Modal */}
+{showQRCodeModal && (
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
+    <div className="bg-white p-6 rounded-xl absolute shadow-xl drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}> {/* Manual control of width and padding */}
+      <button onClick={() => setShowQRCodeModal(false)} className="absolute top-6 left-4">
+        <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
+      </button>
+      <div className="text-black text-2xl font-bold text-center mt-10 mb-4">Receive on <span className='text-base-blue'> BasePay</span></div>
+      <div className="flex flex-col items-center justify-center mt-6">
+        <QRCode value={address} size={128} /> {/* Display the QR code */}
+        <div className="text-black text-lg font-bold mt-4">Scan to get address</div>
+        <div className="flex items-center justify-center text-gray-600 font-bold text-lg mt-4">
+          {/* Truncated wallet address */}
+          {address ? address.substring(0, 6) + '...' + address.substring(address.length - 6) : null}
+          <button onClick={copyToClipboard} className="ml-2 focus:outline-none text-gray-500">
+            <FontAwesomeIcon icon={faCopy} className="h-4 w-4" />
+          </button>
+        </div>
+        <button className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none mt-6 mb-2">
+          <FontAwesomeIcon icon={faPaperPlane} className="mr-2 h-4 w-4 text-white" />
+          Request Payment
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+
     </main>
   );
 };

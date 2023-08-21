@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
-import { faBarcodeRead, faPaperPlane, faFileInvoice, faXmark, faSpinner, faCircleCheck, faTimesCircle, faUpRightFromSquare, faArrowLeft, faPaste } from '@fortawesome/pro-solid-svg-icons';
+import { faBarcodeRead, faPaperPlane, faFileInvoice, faXmark, faSpinner, faCircleCheck, faTimesCircle, faUpRightFromSquare, faArrowLeft, faPaste, faQrcode } from '@fortawesome/pro-solid-svg-icons';
 import { faClockNine } from '@fortawesome/pro-regular-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import { initiatePayment } from "../controller/contract-control"
@@ -522,16 +522,17 @@ const handleScanClick = (actionType) => {
         <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
       </button>
       <div className="flex flex-col items-center justify-center mt-6">
-        <div className="text-black text-2xl font-bold mb-4">Scan QR Code</div>
-    
-<button onClick={() => handleScanClick(handlePayClick)} className="w-full bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 rounded-3xl focus:outline-none mb-4">
-  <FontAwesomeIcon icon={faPaperPlane} className="mr-2 h-4 w-4 text-white" />
-  Scan & Pay
-</button>
-<button onClick={() => handleScanClick(handleRequestClick)} className="w-full bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 rounded-3xl focus:outline-none mb-2">
-  <FontAwesomeIcon icon={faFileInvoice} className="mr-2 h-4 w-4 text-white" />
-  Scan & Request
-</button>
+      <div className="text-black text-2xl font-bold mb-4">
+          <span className="inline-flex items-center">Scan QR Code <FontAwesomeIcon icon={faQrcode} className="text-black h-5 w-5 ml-2 mt-1" /></span> {/* Wrapped in a span */}
+        </div>
+        <button onClick={() => handleScanClick(handlePayClick)} className="w-full bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 rounded-3xl focus:outline-none mb-4">
+          <FontAwesomeIcon icon={faPaperPlane} className="mr-2 h-4 w-4 text-white" />
+          Scan & Pay
+        </button>
+        <button onClick={() => handleScanClick(handleRequestClick)} className="w-full bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 rounded-3xl focus:outline-none mb-2">
+          <FontAwesomeIcon icon={faFileInvoice} className="mr-2 h-4 w-4 text-white" />
+          Scan & Request
+        </button>
       </div>
     </div>
   </div>

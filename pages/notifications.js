@@ -4,6 +4,10 @@ import { faBell, faListCheck, faArrowUpRightFromSquare, faEllipsis } from '@fort
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import Head from 'next/head';
 import { useAccount } from "wagmi";
+import { Avatar } from 'blockatars';
+
+
+
 
 const Notifications = () => {
   const { address } = useAccount();
@@ -28,10 +32,7 @@ const Notifications = () => {
   }, [address]);
 
 
-
-
   
-
   return (
     <main className="flex flex-col min-h-screen bg-white">
       <Head>
@@ -74,8 +75,12 @@ const Notifications = () => {
 
           return (
             <div key={index} className="rounded-4xl border-2 border-gray-100 w-full shadow-sm mt-4">
-              <div className={"flex items-center" + (!request.transaction_message ? " pb-3 mt-1 " : " mt-0.5 mb-0")}>
-                <div className={"relative h-12 w-12 border-2 border-gray-300 bg-gray-300 rounded-3xl ml-4" + (!request.transaction_message ? " -mb-2" : " -mb-3.5")}>
+              <div className={"flex items-center" + (!request.transaction_message ? " pb-0 mt-1 " : " mt-0.5 mb-0")}>
+              <div className={"relative h-12 w-12 border-2 border-gray-300 rounded-3xl ml-4 overflow-hidden" + (!request.transaction_message ? " -mb-2" : " -mb-3.5")}>
+                <Avatar
+                  seed={request.payment_requester} // Use the requester's address as the seed
+                  size={48} // Adjust the size according to your design
+                />
                   <div className="bg-green-400 h-2 w-2 rounded-full absolute bottom-0 right-0"></div>
                 </div>
                 <div className="ml-4 flex-grow mt-4">

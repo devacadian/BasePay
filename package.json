@@ -20,6 +20,7 @@
     "@sentry/nextjs": "^7.64.0",
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
+    "blockatars": "^0.4.0",
     "eslint": "8.47.0",
     "eslint-config-next": "13.4.13",
     "ethers": "5.7.2",

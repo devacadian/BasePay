@@ -382,6 +382,9 @@ const AvatarIcon = ({ seed }) => {
 };
 
 
+const navigateToProfile = () => {
+  router.push('/profile');
+};
 
 
 
@@ -394,9 +397,12 @@ const AvatarIcon = ({ seed }) => {
         </Head>
         <div className="px-4 pb-0 pt-8 flex items-center w-full justify-between">
         <div className="flex items-center">
-  <div className="bg-gray-100 rounded-full h-7 w-7 flex items-center justify-center"> 
-    <FontAwesomeIcon icon={faClockNine} className="h-7 w-7 text-base-blue" />
-  </div>
+          <div
+            className="bg-gray-100 rounded-full h-7 w-7 flex items-center justify-center"
+            onClick={navigateToProfile} // Add onClick event here
+          >
+            <FontAwesomeIcon icon={faClockNine} className="h-7 w-7 text-base-blue" />
+          </div>
   <div className={`${containerWidth} h-8 rounded-4xl bg-gray-100 border-base-blue border-2 flex items-center justify-center text-xs text-black font-semibold ml-4`}
        onClick={openChainModal}>
     {isClient && isBaseGoerli ? (

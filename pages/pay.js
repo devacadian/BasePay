@@ -397,11 +397,18 @@ const handleVideoRef = (video) => {
         facingMode: 'environment', // Request the back camera
       },
     };
+
+    const stopVideoStream = () => {
+      const tracks = video.srcObject?.getTracks();
+      tracks?.forEach((track) => track.stop());
+      video.srcObject = null;
+    };
+
     navigator.mediaDevices.getUserMedia(constraints)
       .then((stream) => {
         video.srcObject = stream;
         video.play(); // Ensure the video is playing
-        
+
         // ZXing code reader
         const codeReader = new BrowserMultiFormatReader();
         codeReader.decodeFromVideoElement(video)
@@ -420,8 +427,11 @@ const handleVideoRef = (video) => {
 
             // Verify that the extracted address is valid
             if (address.length === 42 && address.startsWith('0x')) {
-              setForValue(address);
+              setToAddress(address); // Update the "to" value
               setShowScanner(false);
+
+              stopVideoStream(); // Stop the video stream
+
               codeReader.reset(); // Reset the reader to stop scanning
             } else {
               console.error('Invalid Ethereum address scanned:', address);
@@ -432,8 +442,6 @@ const handleVideoRef = (video) => {
       .catch(console.error);
   }
 };
-
-
 
   return (
 <main className="min-h-screen flex flex-col bg-white pb-20">
@@ -556,7 +564,15 @@ const handleVideoRef = (video) => {
       {showScanner && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
     <video ref={handleVideoRef} className="z-40" autoPlay /> {/* Scanner Display */}
-    <button onClick={() => setShowScanner(false)} className="z-40">Close Scanner</button>
+    <button onClick={() => {
+  setShowScanner(false);
+  const video = videoRef.current;
+  if (video && video.srcObject) {
+    const tracks = video.srcObject.getTracks();
+    tracks.forEach((track) => track.stop());
+    video.srcObject = null;
+  }
+}} className="z-40">Close Scanner</button>
   </div>
 )}
       <div className="bg-gray-100 h-10 flex items-center">

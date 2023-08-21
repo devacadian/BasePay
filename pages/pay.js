@@ -406,16 +406,32 @@ const handleVideoRef = (video) => {
         const codeReader = new BrowserMultiFormatReader();
         codeReader.decodeFromVideoElement(video)
           .then((result) => {
-            setForValue(result.getText());
-            setShowScanner(false);
-            codeReader.reset(); // Reset the reader to stop scanning
+            let address = result.getText();
+
+            // Check for known prefixes and extract the address
+            if (address.startsWith('eth:')) {
+              address = address.substring(4);
+            } else if (address.startsWith('ethereum:')) {
+              address = address.substring(9);
+            }
+
+            // Split at "@" symbol to remove network information, if present
+            address = address.split('@')[0];
+
+            // Verify that the extracted address is valid
+            if (address.length === 42 && address.startsWith('0x')) {
+              setForValue(address);
+              setShowScanner(false);
+              codeReader.reset(); // Reset the reader to stop scanning
+            } else {
+              console.error('Invalid Ethereum address scanned:', address);
+            }
           })
           .catch((error) => console.error(error));
       })
       .catch(console.error);
   }
 };
-
 
 
 

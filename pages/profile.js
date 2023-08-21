@@ -77,16 +77,17 @@ const Profile = () => {
             </a>
           </div>
           <div className="px-4 mt-8">
-          <div className="w-full bg-gray-100 h-20 rounded-3xl flex items-center justify-start shadow-sm drop-shadow-sm p-4">
-            <div className="flex justify-center items-center relative w-10 h-10 rounded-full bg-gray-300 shadow drop-shadow-sm ml-4">
-              <FontAwesomeIcon icon={faEthereum} className="text-black h-6 w-6 z-10" />
-            </div>
-            <div className="text-left text-black font-semibold ml-4 flex flex-col">
-              <div>{formattedBalance} ETH</div> {/* Display formatted balance */}
-              <div className="text-sm text-black font-semibold">Goerli Basechain Balance</div> {/* Label */}
+            <div className="w-full bg-gray-100 h-20 rounded-3xl flex items-center justify-start shadow-sm drop-shadow-sm p-4">
+              <div className="flex justify-center items-center relative w-10 h-10 rounded-full bg-gray-300 shadow drop-shadow-sm ml-4">
+                <FontAwesomeIcon icon={faEthereum} className="text-black h-6 w-6 z-10" />
+              </div>
+              <div className="text-left text-black font-semibold ml-4 flex flex-col">
+                <div>{formattedBalance} ETH</div> {/* Display formatted balance */}
+                <div className="text-sm text-black font-semibold">Goerli Basechain Balance</div> {/* Label */}
+              </div>
             </div>
           </div>
-          </div>
+          <div className="text-left text-black font-semibold text-2xl mt-8 px-4">Activity</div> {/* Activity text */}
         </div>
       )}
 

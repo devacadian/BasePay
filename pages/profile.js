@@ -4,6 +4,8 @@ import { useAccount } from "wagmi";
 import createIcon from 'blockies';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
+import { faQrcode } from '@fortawesome/free-solid-svg-icons'; 
+
 
 const Profile = () => {
   const { address } = useAccount();
@@ -45,11 +47,16 @@ const Profile = () => {
       </Head>
       <div className="flex-grow flex items-start justify-center mt-16">
         {isClient && (
-          <div className="text-center">
-            <div className="bg-gray-300 rounded-full h-20 w-20 mb-6 mx-auto overflow-hidden border-2 border-gray-300">
-              <AvatarIcon />
-            </div> {/* Gray circle */}
-            <div className="flex items-center justify-center text-gray-600 font-bold text-lg ml-10">
+       <div className="text-center relative">
+       <div className="relative inline-block"> {/* Wrapper for avatar and blue circle */}
+         <div className="bg-gray-300 rounded-full h-20 w-20 mb-6 mx-auto overflow-hidden border-2 border-gray-300">
+           <AvatarIcon />
+         </div>
+         <div className="bg-base-blue rounded-full h-8 w-8 absolute bottom-5.5 -right-1 flex items-center justify-center">
+              <FontAwesomeIcon icon={faQrcode} className="h-5 w-5 text-white" /> {/* QR code icon */}
+            </div>
+          </div>
+            <div className="flex items-center justify-center text-gray-600 font-bold text-lg ml-11">
               {/* Truncated wallet address */}
               {address ? address.substring(0, 6) + '...' + address.substring(address.length - 6) : null}
               <button onClick={copyToClipboard} className="ml-2 focus:outline-none text-gray-500">

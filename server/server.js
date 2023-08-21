@@ -170,6 +170,76 @@ router.patch('/update-transaction-hash/:paymentRequestId/:transactionHash', asyn
     }
 })
 
+/* ------------------------- BASE & DB Query Endpoints ------------------------- */
+
+// GET Request: Query Activities (Payment Sent, Payment Reveived, Request Sent, Request Received)
+// returns back an array of Activity
+/*
+Activity Object Structure (Sorted By timestamp)
+
+{
+    "activityType" : "Payment Send", <--- enum type (Payment Sent, Payment Reveived, Request Sent, Request Received)
+    "activityState" : "Processed", <--- enmu type (Processed , Rejected, Pending)
+    "counterParty" : "0x9dD82EE27cc23B343f186756771904E0386973f1" <--- For "Payment Sent" and "Request Sent" it will be the Payment / Request Receipant. For "Payment Received" and "Request Received", its will be the Payment / Request Sender
+    "amount" : "0.001",
+    "timestamp" : "8/20/2023, 11:01:00 PM" <--- will be request time for request type 
+}
+
+*/
+
+router.get('/activties/:userAddress', async (req,res) => {
+    try {
+        const userAddress = req.params.userAddress
+        const activities = []
+
+        const requestSendActivities = await queryPaymentRequest(userAddress)
+
+        activities.push(...requestSendActivities);
+
+        //console.log(`${currentDateAndTime}: User ${userAddress} have below activities in our applcation: ${JSON.stringify(activities)}`)
+        console.log(`${currentDateAndTime}: User ${userAddress} have ${activities.length} activities in our application`)
+        return res.status(200).json(activities)
+    } 
+    catch(error) {
+        console.log(`${currentDateAndTime}: ${error.message}`)
+        return res.status(500).send(error.message)
+    }
+})
+
+/* ------------------------- Helper Functions ------------------------- */
+// query all PaymentRequest that payment_requester matchs userId
+// returns a array of Activity Object: "Request Send"
+const queryPaymentRequest = async(userAddress) => {
+    try {
+        const result = []
+        const request_requester = userAddress
+        const q = query(PaymentRequestRef,where('payment_requester', '==', request_requester))
+        const querySnapshot = await getDocs(q)
+        querySnapshot.forEach(documentSnapshot => {
+            const documentData = documentSnapshot.data()
+
+            const { transaction_state, request_recipient, ether_amount, request_time } = documentData
+            
+            result.push({
+                activityType : "Request Send",
+                activityState : transaction_state,
+                counterParty : request_recipient,
+                amount : ether_amount,
+                timestamp : new Date(request_time.seconds * 1000 + request_time.nanoseconds / 1000000).toLocaleString('en-US', { timeZone: 'America/Toronto' })
+            })
+
+            
+        })
+        return result
+    } 
+    catch(error) {
+        return error.message
+    }
+}
+
+
+
+
 /* ------------------------- Private Chatroom Related Endpoints ------------------------- */
 const PrivateChatRoomsRef = collection(db,"PrivateChatRooms")
 

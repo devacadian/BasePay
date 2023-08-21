@@ -12,6 +12,7 @@ import { useNetwork } from 'wagmi';
 import { useChainModal } from '@rainbow-me/rainbowkit'; 
 import createIcon from 'blockies';
 import { useZxing } from 'react-zxing';
+import { BrowserMultiFormatReader } from '@zxing/library';
 
 const Pay = () => {
   const [counter, setCounter] = useState('0');
@@ -410,8 +411,23 @@ const handleScan = () => {
 const handleVideoRef = (video) => {
   videoRef.current = video;
   if (video) {
-    navigator.mediaDevices.getUserMedia({ video: true })
-      .then((stream) => video.srcObject = stream)
+    const constraints = {
+      video: {
+        facingMode: 'environment', // Request the back camera
+      },
+    };
+    navigator.mediaDevices.getUserMedia(constraints)
+      .then((stream) => {
+        video.srcObject = stream;
+        const codeReader = new BrowserMultiFormatReader();
+        codeReader.decodeFromVideoElement(video)
+          .then((result) => {
+            setForValue(result.getText());
+            setShowScanner(false);
+          })
+          .catch((error) => console.error(error))
+          .finally(() => codeReader.reset());
+      })
       .catch(console.error);
   }
 };

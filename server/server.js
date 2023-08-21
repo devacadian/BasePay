@@ -192,11 +192,19 @@ router.get('/activties/:userAddress', async (req,res) => {
         const userAddress = req.params.userAddress
         const activities = []
 
+        // query activties
         const requestSendActivities = await queryPaymentRequestSent(userAddress)
+        const requestReceivedActivities = await queryPaymentRequestReceived(userAddress)
 
-        activities.push(...requestSendActivities);
+        activities.push(...requestSendActivities, ...requestReceivedActivities);
 
-        //console.log(`${currentDateAndTime}: User ${userAddress} have below activities in our applcation: ${JSON.stringify(activities)}`)
+        // sort the activities array by timestamp in descending order (latest appears as first)
+        activities.sort((a, b) => {
+            const timestampA = a.timestamp.seconds * 1000 + a.timestamp.nanoseconds / 1000000;
+            const timestampB = b.timestamp.seconds * 1000 + b.timestamp.nanoseconds / 1000000;
+            return timestampB - timestampA;
+          });
+
         console.log(`${currentDateAndTime}: User ${userAddress} have ${activities.length} activities in our application`)
         return res.status(200).json(activities)
     } 
@@ -207,8 +215,8 @@ router.get('/activties/:userAddress', async (req,res) => {
 })
 
 /* ------------------------- Helper Functions ------------------------- */
-// query all PaymentRequest that payment_requester matchs userId
-// returns a array of Activity Object: "Request Send"
+// query all PaymentRequest that payment_requester matches userId
+// returns a array of Activity Object: "Request Sent"
 const queryPaymentRequestSent = async(userAddress) => {
     try {
         const result = []
@@ -239,29 +247,27 @@ const queryPaymentRequestSent = async(userAddress) => {
 }
 
 
-// query all PaymentRequest that payment_requester matchs userId
+// query all PaymentRequest that request_recipient matchs userId
 // returns a array of Activity Object: "Request Received"
 const queryPaymentRequestReceived = async(userAddress) => {
     try {
         const result = []
-        const request_requester = userAddress
-        const q = query(PaymentRequestRef,where('payment_requester', '==', request_requester))
+        const request_recipient = userAddress
+        const q = query(PaymentRequestRef,where('request_recipient', '==', request_recipient))
         const querySnapshot = await getDocs(q)
         querySnapshot.forEach(documentSnapshot => {
             const documentData = documentSnapshot.data()
 
-            const { transaction_state, request_recipient, ether_amount, request_time } = documentData
+            const { transaction_state, payment_requester, ether_amount, request_time } = documentData
             
             result.push({
                 activityId : documentSnapshot.id,
-                activityType : "Request Send",
+                activityType : "Request Received",
                 activityState : transaction_state,
-                counterParty : request_recipient,
+                counterParty : payment_requester,
                 amount : ether_amount,
                 timestamp : request_time
             })
-
-            
         })
         return result
     } 

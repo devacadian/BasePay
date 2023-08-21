@@ -11,6 +11,7 @@ import { useBalance } from 'wagmi';
 import { useNetwork } from 'wagmi';
 import { useChainModal } from '@rainbow-me/rainbowkit'; 
 import createIcon from 'blockies';
+import { useZxing } from 'react-zxing';
 
 const Pay = () => {
   const [counter, setCounter] = useState('0');
@@ -39,9 +40,10 @@ const Pay = () => {
   const [showRequestTransactionModal, setShowRequestTransactionModal] = useState(false); // State for the request transaction modal
   const [requestTransactionStatus, setRequestTransactionStatus] = useState(null); // State to track request transaction status
   const [requestTxHashState, setRequestTxHashState] = useState(''); // State to store the transaction hash for the request
-
-
-
+  const [showScanner, setShowScanner] = useState(false);
+  const videoRef = useRef(null);
+  const [videoElement, setVideoElement] = useState(null);
+  const { decodeOnceFromVideoElement } = useZxing();
 
   useEffect(() => {
     setContainerWidth(chain?.name === 'Base Goerli' ? 'w-24' : 'w-20');
@@ -386,7 +388,33 @@ const navigateToProfile = () => {
   router.push('/profile');
 };
 
+const { ref } = useZxing({
+  onDecodeResult(result) {
+    setForValue(result.getText());
+    setShowScanner(false);
+  },
+});
 
+
+const handleScan = () => {
+  if (videoElement) {
+    decodeOnceFromVideoElement(videoElement, undefined, (result, error) => {
+      if (result) {
+        setForValue(result.getText());
+      }
+      setShowScanner(false);
+    });
+  }
+};
+
+const handleVideoRef = (video) => {
+  videoRef.current = video;
+  if (video) {
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then((stream) => video.srcObject = stream)
+      .catch(console.error);
+  }
+};
 
   return (
 <main className="min-h-screen flex flex-col bg-white pb-20">
@@ -489,7 +517,9 @@ const navigateToProfile = () => {
 <button onClick={handlePasteClick} className="mr-2"> {/* Paste Button */}
     <FontAwesomeIcon icon={faPaste} className="h-5.5 w-5.5 text-black" />
   </button>
-        <FontAwesomeIcon icon={faBarcodeRead} className="h-6 w-6 text-black ml-2" /> 
+  <button onClick={() => setShowScanner(true)}> {/* Trigger Scanner */}
+  <FontAwesomeIcon icon={faBarcodeRead} className="h-6 w-6 text-black ml-2" />
+</button>
       </div>
       <div className="border-t border-gray-300"></div> 
       <div className="px-4 py-2 flex items-center">
@@ -504,7 +534,12 @@ const navigateToProfile = () => {
     />
       </div>
 
-
+      {showScanner && (
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
+    <video ref={handleVideoRef} className="z-40" autoPlay /> {/* Scanner Display */}
+    <button onClick={() => setShowScanner(false)} className="z-40">Close Scanner</button>
+  </div>
+)}
       <div className="bg-gray-100 h-10 flex items-center">
         <span className="text-gray-500 text-base font-bold ml-4">Suggested</span>
       </div>

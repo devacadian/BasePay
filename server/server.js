@@ -178,6 +178,7 @@ router.patch('/update-transaction-hash/:paymentRequestId/:transactionHash', asyn
 Activity Object Structure (Sorted By timestamp)
 
 {
+    "activityId" : "01hlEmQYIz6Dpr8ACpOa" <-- doc ID for DB query, txn hash for ether query
     "activityType" : "Payment Send", <--- enum type (Payment Sent, Payment Reveived, Request Sent, Request Received)
     "activityState" : "Processed", <--- enmu type (Processed , Rejected, Pending)
     "counterParty" : "0x9dD82EE27cc23B343f186756771904E0386973f1" <--- For "Payment Sent" and "Request Sent" it will be the Payment / Request Receipant. For "Payment Received" and "Request Received", its will be the Payment / Request Sender
@@ -192,7 +193,7 @@ router.get('/activties/:userAddress', async (req,res) => {
         const userAddress = req.params.userAddress
         const activities = []
 
-        const requestSendActivities = await queryPaymentRequest(userAddress)
+        const requestSendActivities = await queryPaymentRequestSend(userAddress)
 
         activities.push(...requestSendActivities);
 
@@ -209,7 +210,7 @@ router.get('/activties/:userAddress', async (req,res) => {
 /* ------------------------- Helper Functions ------------------------- */
 // query all PaymentRequest that payment_requester matchs userId
 // returns a array of Activity Object: "Request Send"
-const queryPaymentRequest = async(userAddress) => {
+const queryPaymentRequestSend = async(userAddress) => {
     try {
         const result = []
         const request_requester = userAddress
@@ -221,6 +222,7 @@ const queryPaymentRequest = async(userAddress) => {
             const { transaction_state, request_recipient, ether_amount, request_time } = documentData
             
             result.push({
+                activityId : documentSnapshot.id,
                 activityType : "Request Send",
                 activityState : transaction_state,
                 counterParty : request_recipient,

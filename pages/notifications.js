@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faListCheck, faArrowUpRightFromSquare, faEllipsis } from '@fortawesome/pro-solid-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import Head from 'next/head';
 import { useAccount } from "wagmi";
-import { Avatar } from 'blockatars';
+import createIcon from 'blockies';
 
 
 
@@ -32,6 +32,28 @@ const Notifications = () => {
   }, [address]);
 
 
+  
+
+  const AvatarIcon = ({ seed }) => {
+    const avatarRef = useRef(null);
+  
+    useEffect(() => {
+      const icon = createIcon({
+        seed: seed,
+        color: '#000000', // Foreground color
+ 
+        bgcolor: '#ffffff',
+        size: 11, // Width/height of the icon in blocks
+        scale: 4  // Width/height of each block in pixels
+      });
+  
+      if (avatarRef.current) {
+        avatarRef.current.innerHTML = ''; // Clear previous children
+        avatarRef.current.appendChild(icon);
+      }
+    }, [seed]);
+    return <div ref={avatarRef} className="ml-0"></div>;
+  };
   
   return (
     <main className="flex flex-col min-h-screen bg-white">
@@ -73,16 +95,16 @@ const Notifications = () => {
   
           const paymentRequester = request.payment_requester.substring(0, 5) + '...';
 
+
           return (
             <div key={index} className="rounded-4xl border-2 border-gray-100 w-full shadow-sm mt-4">
               <div className={"flex items-center" + (!request.transaction_message ? " pb-0 mt-1 " : " mt-0.5 mb-0")}>
-              <div className={"relative h-12 w-12 border-2 border-gray-300 rounded-3xl ml-4 overflow-hidden" + (!request.transaction_message ? " -mb-2" : " -mb-3.5")}>
-                <Avatar
-                  seed={request.payment_requester} // Use the requester's address as the seed
-                  size={48} // Adjust the size according to your design
-                />
-                  <div className="bg-green-400 h-2 w-2 rounded-full absolute bottom-0 right-0"></div>
-                </div>
+              <div className={"relative h-12 w-12 border-2 border-gray-300 rounded-3xl ml-4" + (!request.transaction_message ? " -mb-2" : " -mb-3.5")}>
+        <div className="relative w-full h-full overflow-hidden rounded-3xl">
+          <AvatarIcon seed={request.payment_requester} />
+        </div>
+        <div className="bg-green-400 h-2 w-2 rounded-full absolute bottom-0 right-0 mb-0 mr-0"></div>
+      </div>
                 <div className="ml-4 flex-grow mt-4">
                   <div className={"flex justify-between items-center" + (!request.transaction_message ? " pb-2" : "")}>
                     <span className="text-black font-semibold">Payment Request</span>

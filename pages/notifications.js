@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell, faListCheck, faArrowUpRightFromSquare } from '@fortawesome/pro-solid-svg-icons';
+import { faBell, faListCheck, faArrowUpRightFromSquare, faEllipsis } from '@fortawesome/pro-solid-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import Head from 'next/head';
 import { useAccount } from "wagmi";
@@ -75,7 +75,7 @@ const Notifications = () => {
           return (
             <div key={index} className="rounded-4xl border-2 border-gray-100 w-full shadow-sm mt-3">
               <div className={"flex items-center" + (!request.transaction_message ? " pb-3 mt-1 " : " mt-0.5 mb-0")}>
-              <div className={"relative h-12 w-12 border-2 border-gray-300 bg-gray-300 rounded-3xl ml-4" + (!request.transaction_message ? " -mb-2" : " -mb-3.5")}>
+                <div className={"relative h-12 w-12 border-2 border-gray-300 bg-gray-300 rounded-3xl ml-4" + (!request.transaction_message ? " -mb-2" : " -mb-3.5")}>
                   <div className="bg-green-400 h-2 w-2 rounded-full absolute bottom-0 right-0"></div>
                 </div>
                 <div className="ml-4 flex-grow mt-4">
@@ -94,13 +94,21 @@ const Notifications = () => {
                   </div>
                 </div>
               </div>
-              {request.transaction_message && (
-  <div className="text-gray-500 text-sm ml-4.5 mt-3 mb-4 font-semibold">
-    <span className="text-gray-500">Note:</span> {request.transaction_message}
-  </div>
-)}
+              <div className={"flex justify-between text-gray-500 text-sm ml-4.5 mt-3 mb-3 font-semibold mr-4" + (!request.transaction_message ? " -mt-1 mb-3" : "")}>
+  <span>
+    {request.transaction_message ? (
+      <span>
+        <span className="text-gray-500">Message:</span> {request.transaction_message}
+      </span>
+    ) : (
+      <span className="text-gray-500 italic">No message sent with request</span>
+    )}
+  </span>
+  <FontAwesomeIcon icon={faEllipsis} className="h-5 w-5 text-gray-400" /> {/* Ellipsis icon */}
+</div>
             </div>
           );
+                
         })}
       </div>
     </main>

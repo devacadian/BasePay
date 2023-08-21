@@ -73,7 +73,7 @@ const Notifications = () => {
           const paymentRequester = request.payment_requester.substring(0, 5) + '...';
 
           return (
-            <div key={index} className="rounded-4xl border-2 border-gray-100 w-full shadow-sm mt-3">
+            <div key={index} className="rounded-4xl border-2 border-gray-100 w-full shadow-sm mt-4">
               <div className={"flex items-center" + (!request.transaction_message ? " pb-3 mt-1 " : " mt-0.5 mb-0")}>
                 <div className={"relative h-12 w-12 border-2 border-gray-300 bg-gray-300 rounded-3xl ml-4" + (!request.transaction_message ? " -mb-2" : " -mb-3.5")}>
                   <div className="bg-green-400 h-2 w-2 rounded-full absolute bottom-0 right-0"></div>
@@ -94,7 +94,7 @@ const Notifications = () => {
                   </div>
                 </div>
               </div>
-              <div className={"flex justify-between text-gray-500 text-sm ml-4.5 mt-3 mb-3 font-semibold mr-4" + (!request.transaction_message ? " -mt-1 mb-3" : "")}>
+              <div className={"flex justify-between text-gray-500 text-sm ml-4.5 mt-3 mb-4 font-semibold mr-4" + (!request.transaction_message ? " -mt-1 mb-4" : "")}>
   <span>
     {request.transaction_message ? (
       <span>

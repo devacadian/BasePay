@@ -561,6 +561,7 @@ const handleVideoRef = (video) => {
     />
       </div>
 
+
       {showScanner && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
     <div className="bg-white p-6 rounded-xl absolute top-1/6 inset-x-4 shadow-xl drop-shadow">
@@ -579,13 +580,22 @@ const handleVideoRef = (video) => {
         <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
       </button>
       <div className="flex flex-col items-center justify-center mt-4">
-        <div className="text-black text-2xl font-bold mb-4">Pay</div> {/* "Pay" text */}
-        <video ref={handleVideoRef} className="z-40 rounded-lg" autoPlay /> {/* Scanner Display with rounded corners */}
+        <div className="text-black text-2xl font-bold mb-4">Pay Address</div> {/* "Pay" text */}
+        <div className="relative">
+          <video ref={handleVideoRef} className="z-40 rounded-lg" autoPlay /> {/* Scanner Display with rounded corners */}
+          
+          {/* Scan Overlay */}
+          <div className="absolute top-4 left-4 border-t-3 border-l-3 border-white h-7 w-7 rounded-tl "></div>
+          <div className="absolute top-4 right-4 border-t-3 border-r-3 border-white h-7 w-7 rounded-tr"></div>
+          <div className="absolute bottom-4 left-4 border-b-3 border-l-3 border-white h-7 w-7 rounded-bl"></div>
+          <div className="absolute bottom-4 right-4 border-b-3 border-r-3 border-white h-7 w-7 rounded-br"></div>
+        </div>
         <div className="text-black text-lg font-bold mt-6 mb-2">Scanning for addresses...</div> {/* Scanning text */}
       </div>
     </div>
   </div>
 )}
+
 
       <div className="bg-gray-100 h-10 flex items-center">
         <span className="text-gray-500 text-base font-bold ml-4">Suggested</span>

@@ -44,7 +44,7 @@ const Pay = () => {
   const [showScanner, setShowScanner] = useState(false);
   const videoRef = useRef(null);
   const [videoElement, setVideoElement] = useState(null);
-  const { decodeOnceFromVideoElement } = useZxing();
+  
 
   useEffect(() => {
     setContainerWidth(chain?.name === 'Base Goerli' ? 'w-24' : 'w-20');
@@ -389,7 +389,7 @@ const navigateToProfile = () => {
   router.push('/profile');
 };
 
-const { ref } = useZxing({
+const { decodeOnceFromVideoElement } = useZxing({
   onDecodeResult(result) {
     setForValue(result.getText());
     setShowScanner(false);
@@ -419,18 +419,23 @@ const handleVideoRef = (video) => {
     navigator.mediaDevices.getUserMedia(constraints)
       .then((stream) => {
         video.srcObject = stream;
-        const codeReader = new BrowserMultiFormatReader();
-        codeReader.decodeFromVideoElement(video)
+        video.play(); // Ensure the video is playing
+
+        // Start the scanning process
+        decodeOnceFromVideoElement(videoRef.current, undefined)
           .then((result) => {
-            setForValue(result.getText());
-            setShowScanner(false);
+            if (result) {
+              setForValue(result.getText());
+              setShowScanner(false);
+            }
           })
-          .catch((error) => console.error(error))
-          .finally(() => codeReader.reset());
+          .catch(console.error);
       })
       .catch(console.error);
   }
 };
+
+
 
   return (
 <main className="min-h-screen flex flex-col bg-white pb-20">

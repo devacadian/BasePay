@@ -231,6 +231,23 @@ router.get('/get-private-chatroom/:userId', async (req, res) => {
     }
 });
 
+// POST Request: Create a PrivateChatRoom document
+// returns back the newly created document id 
+router.post('/create-private-chatroom', async (req,res) => {
+    try {
+        const {currentUserId, secondUserId} = req.body
+        const data = { participants : [currentUserId, secondUserId] }
+
+        const newDocRef = await addDoc(PrivateChatRoomsRef, data)
+        console.log(`${currentDateAndTime}: Created new PrivateChatRoom with ID: ${newDocRef.id}`)
+        return res.status(200).json(newDocRef.id)    
+
+    } catch(error){
+        console.log(`${currentDateAndTime}: ${error.message}`);
+        return res.status(500).send(error.message);
+    }
+})
+
 /* ------------------------- Helper Functions ------------------------- */
 const findChatWith = (userList, userId) => {
     for (const user of userList) {

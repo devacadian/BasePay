@@ -585,10 +585,10 @@ const handleVideoRef = (video) => {
           <video ref={handleVideoRef} className="z-40 rounded-lg" autoPlay /> {/* Scanner Display with rounded corners */}
           
           {/* Scan Overlay */}
-          <div className="absolute top-4 left-4 border-t-3 border-l-3 border-white h-7 w-7 rounded-tl "></div>
-          <div className="absolute top-4 right-4 border-t-3 border-r-3 border-white h-7 w-7 rounded-tr"></div>
-          <div className="absolute bottom-4 left-4 border-b-3 border-l-3 border-white h-7 w-7 rounded-bl"></div>
-          <div className="absolute bottom-4 right-4 border-b-3 border-r-3 border-white h-7 w-7 rounded-br"></div>
+          <div className="absolute top-10 left-10 border-t-3 border-l-3 border-base-blue h-7 w-7 rounded-tl "></div>
+          <div className="absolute top-10 right-10 border-t-3 border-r-3 border-base-blue h-7 w-7 rounded-tr"></div>
+          <div className="absolute bottom-10 left-10 border-b-3 border-l-3 border-base-blue h-7 w-7 rounded-bl"></div>
+          <div className="absolute bottom-10 right-10 border-b-3 border-r-3 border-base-blue h-7 w-7 rounded-br"></div>
         </div>
         <div className="text-black text-lg font-bold mt-6 mb-2">Scanning for addresses...</div> {/* Scanning text */}
       </div>

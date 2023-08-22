@@ -149,19 +149,17 @@ const Notifications = () => {
           }}>
                   <FontAwesomeIcon icon={faEllipsis} className="h-5 w-5 text-gray-400" />
                   {openDropdownIndex === index && (
-  <div ref={dropdownRef} className="absolute right-0 top-full mt-2 bg-white border rounded-3xl py-4 shadow text-gray-700 w-48 text-sm z-10">
-    <div className="p-4 -mt-2 cursor-pointer flex items-center relative">
-      <FontAwesomeIcon icon={faPaperPlane} className="mr-3 h-4 w-4 text-base-blue" />
-      Pay
-      <div className="absolute left-0 bottom-0 w-full h-px bg-gray-300"></div>
+  <div ref={dropdownRef} className="absolute right-0 top-full mt-2 bg-white border-gray-200 border-2 rounded-3xl py-4 shadow text-gray-700 w-56 text-sm z-10">
+    <div className="p-4 -mt-2 cursor-pointer flex items-center relative border-b-2 border-gray-200 text-black text-base">
+      <FontAwesomeIcon icon={faPaperPlane} className="mr-3 h-5 w-5 text-base-blue" />
+      Pay Request
     </div>
-    <div className="p-4 cursor-pointer flex items-center relative">
-      <FontAwesomeIcon icon={faHand} className="mr-3 h-4 w-4 text-base-blue" />
-      Decline
-      <div className="absolute left-0 bottom-0 w-full h-px bg-gray-300"></div>
+    <div className="p-4 cursor-pointer flex items-center relative border-b-2 border-gray-200 text-black text-base">
+      <FontAwesomeIcon icon={faHandshakeSlash} className="mr-3 h-5 w-5 text-base-blue" /> {/* Make sure to use the correct icon */}
+      Decline Request
     </div>
-    <div className="p-4 cursor-pointer flex items-center -mb-3">
-      <FontAwesomeIcon icon={faEye} className="mr-3 h-4 w-4 text-base-blue" />
+    <div className="p-4 cursor-pointer flex items-center text-black text-base -mb-3">
+      <FontAwesomeIcon icon={faEye} className="mr-3 h-5 w-5 text-base-blue" />
       Mark as Read
     </div>
   </div>

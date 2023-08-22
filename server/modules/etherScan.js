@@ -1,9 +1,12 @@
+require('dotenv').config()
 const axios = require('axios');
 const { ethers } = require("ethers") 
 const { Timestamp } = require("firebase/firestore");
 
 const apiKey = '5BYP8B43Q9TU9ESS1GYCA2QRU6BG57Y7RH';
 const contractAddress = '0x255A1891359A67A50a459e64445E6429f652a23f';
+//const apiKey = process.env.ETHERSCAN_API_KEY;
+//const contractAddress = process.env.CONTRACT_ADDRESS;
 const etherscanDomain = 'https://api-goerli.basescan.org/'
 
 // query all transaction within the contract
@@ -157,10 +160,9 @@ module.exports = {
     queryPaymentReceived
 }
 
+//queryPaymentReceived(etherscanDomain, '0x6724A71f5689c51138F2f213E3Bbb00Ffe320A28')
+//    .then(console.log)
+//queryPaymentSent(etherscanDomain, '0x6724A71f5689c51138F2f213E3Bbb00Ffe320A28')
+//    .then(console.log)
 
-/*queryPaymentReceived(etherscanDomain, '0x6724A71f5689c51138F2f213E3Bbb00Ffe320A28')
-    .then(console.log)
-queryPaymentSent(etherscanDomain, '0x6724A71f5689c51138F2f213E3Bbb00Ffe320A28')
-    .then(console.log)
-*/
 //queryAllTxn(etherscanDomain,'0x6724A71f5689c51138F2f213E3Bbb00Ffe320A28').then(console.log)

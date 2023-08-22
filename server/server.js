@@ -74,6 +74,7 @@ router.get('/get-payment-request/:requestRecipient', async (req,res) => {
         const querySnapshot = await getDocs(q)
         querySnapshot.forEach(documentSnapshot => {
             const documentData = documentSnapshot.data()
+            documentData.paymentRequestId = documentSnapshot.id
             queryResultId.push(documentSnapshot.id)
             queryResult.push(documentData)
         })

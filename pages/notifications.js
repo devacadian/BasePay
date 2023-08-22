@@ -220,7 +220,9 @@ const [touchStartY, setTouchStartY] = useState(0); // State to track the touch s
         <div className="relative w-full h-full overflow-hidden rounded-3xl">
           <AvatarIcon seed={request.payment_requester} />
         </div>
-        <div className="bg-green-400 h-2 w-2 rounded-full absolute bottom-0 right-0 mb-0 mr-0"></div>
+        {request.transaction_state === "Pending" && (
+          <div className="bg-green-400 h-2 w-2 rounded-full absolute bottom-0 right-0 mb-0 mr-0"></div>
+        )}
       </div>
                 <div className="ml-4 flex-grow mt-4">
                   <div className={"flex justify-between items-center" + (!request.transaction_message ? " pb-2" : "")}>

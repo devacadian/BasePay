@@ -153,7 +153,7 @@ Activity Object Structure
 {
     "activityId" : "01hlEmQYIz6Dpr8ACpOa" <-- doc ID for DB query, txn hash for ethereum query
     "activityType" : "Payment Sent", <--- enum type (Payment Sent, Payment Reveived, Request Sent, Request Received)
-    "activityState" : "Processed", <--- enmu type (Processed , Rejected, Pending)
+    "activityState" : "Processed", <--- enmu type (Processed , Rejected, Pending, Failed)
     "counterParty" : "0x9dD82EE27cc23B343f186756771904E0386973f1" <--- For "Payment Sent" and "Request Sent" it will be the Payment / Request Recipient. For "Payment Received" and "Request Received", its will be the Payment / Request Sender
     "amount" : "0.001",
     "timestamp" : "8/20/2023, 11:01:00 PM" <--- will be request time instead of completion time for "request type". will be txn completion time for "payment type"

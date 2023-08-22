@@ -21,7 +21,7 @@ const Test = () => {
   }
 
   async function returnAll() {
-    const activities = await fetchAllAct(etherscanDomain, '0x6724A71f5689c51138F2f213E3Bbb00Ffe320A28')
+    const activities = await fetchAllAct(etherscanDomain, '0x7bF925893F7713e00493A67Ef0f0127855AD36be')
     console.log(activities)
   }
   

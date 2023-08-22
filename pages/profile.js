@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { useAccount } from "wagmi";
 import { useBalance } from 'wagmi';
@@ -15,6 +16,7 @@ const Profile = () => {
   const { data } = useBalance({ address });
   const [formattedBalance, setFormattedBalance] = useState('0.0000');
   const [showQRCodeModal, setShowQRCodeModal] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const balanceValue = parseFloat(data?.formatted || '0.0000');
@@ -47,6 +49,11 @@ const Profile = () => {
       }
     }, [seed]);
     return <div ref={avatarRef} className="-ml-1"></div>;
+  };
+
+  const handleRequestPayment = () => {
+    router.push('/pay?request=true');
+    // You can also send any state or parameters needed to handle the modal on the /pay page
   };
 
   return (
@@ -111,10 +118,10 @@ const Profile = () => {
             <FontAwesomeIcon icon={faCopy} className="h-4 w-4" />
           </button>
         </div>
-        <button className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none mt-6 mb-2">
-          <FontAwesomeIcon icon={faPaperPlane} className="mr-2 h-4 w-4 text-white" />
-          Request Payment
-        </button>
+        <button onClick={handleRequestPayment} className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none mt-6 mb-2">
+  <FontAwesomeIcon icon={faPaperPlane} className="mr-2 h-4 w-4 text-white" />
+  Request Payment
+</button>
       </div>
     </div>
   </div>

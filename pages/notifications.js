@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell, faListCheck, faArrowUpRightFromSquare, faEllipsis, faHandshakeSlash, faEye, faPaperPlane, faHand, faXmark, faFileInvoice, faBells, faCircleCheck, faSpinner } from '@fortawesome/pro-solid-svg-icons';
+import { faBell, faListCheck, faArrowUpRightFromSquare, faEllipsis, faHandshakeSlash, faEye, faPaperPlane, faHand, faXmark, faFileInvoice, faBells, faCircleCheck, faSpinner, faUpRightFromSquare } from '@fortawesome/pro-solid-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import Head from 'next/head';
 import { useAccount } from "wagmi";
 import createIcon from 'blockies';
 import { useRouter } from 'next/router';
+import { initiatePayment } from "../controller/contract-control"
 
 const Notifications = () => {
   const { address } = useAccount();
@@ -15,6 +16,7 @@ const Notifications = () => {
   const [showDeclineModal, setShowDeclineModal] = useState(false);
 const [selectedRequest, setSelectedRequest] = useState(null);
 const [showConfirmDeclineModal, setShowConfirmDeclineModal] = useState(false);
+const [showConfirmPayModal, setShowConfirmPayModal] = useState(false);
 const [animateModal, setAnimateModal] = useState(false);
 const [touchStartY, setTouchStartY] = useState(0); // State to track the touch start position
 const [showPayRequestModal, setShowPayRequestModal] = useState(false);
@@ -22,7 +24,9 @@ const [selectedRequestToPay, setSelectedRequestToPay] = useState(null);
 const router = useRouter();
 const [showDeclineRequestTransactionModal, setShowDeclineRequestTransactionModal] = useState(false); // State for the request transaction modal
 const [requestTransactionStatus, setRequestTransactionStatus] = useState(null); // State to track request transaction status
-
+const [txHashState, setTxHashState] = useState('');
+const [transactionStatus, setTransactionStatus] = useState(null);
+const [showConfirmRequestTransactionModal, setShowConfirmRequestTransactionModal] = useState(false); 
 
   useEffect(() => {
     // Function to fetch payment requests
@@ -97,7 +101,8 @@ const [requestTransactionStatus, setRequestTransactionStatus] = useState(null); 
       document.body.style.minHeight = "0px";
       window.scrollBy(0, -1);
       setTimeout(() => {
-        setShowConfirmDeclineModal(false); // Close the modal after animation completes
+        setShowConfirmDeclineModal(false);
+        setShowConfirmPayModal(false); // Close the modal after animation completes
         setAnimateModal(false); // Reset the animation state
       }, 150); // 150 milliseconds
     }
@@ -122,7 +127,8 @@ const [requestTransactionStatus, setRequestTransactionStatus] = useState(null); 
     document.body.style.minHeight = "0px";
     window.scrollBy(0, -1);
     setTimeout(() => {
-      setShowConfirmDeclineModal(false); // Close the modal after animation completes
+      setShowConfirmDeclineModal(false);
+      setShowConfirmPayModal(false); // Close the modal after animation completes
       setAnimateModal(false); // Reset the animation state
     }, 300); // 300 milliseconds
   };
@@ -209,6 +215,38 @@ const handlePayButttonClick = () => {
   router.push('/pay');
 };  
 
+
+const handleOpenPayConfirmModal = () => {
+  document.body.style.overflowY = "hidden";
+  document.body.style.minHeight = "calc(100vh + 1px)";
+  window.scrollBy(0, 1);
+  setShowConfirmPayModal(true); // Open the confirm request modal
+};
+
+const handleConfirmPayment = async () => {
+  setTransactionStatus('pending'); // Set the status to pending before initiating payment
+
+  // Assuming 'initiatePayment' is a function that takes the required parameters to process the payment
+  const txHash = await initiatePayment(window.ethereum, selectedRequestToPay.payment_requester, selectedRequestToPay.ether_amount, (receipt) => {
+    if (receipt.status === 1) {
+      setTransactionStatus('success'); // Update the status to success if the transaction succeeded
+    } else {
+      setTransactionStatus('fail'); // Update the status to fail if the transaction failed
+    }
+  });
+
+  if (txHash) {
+    setTxHashState(txHash);
+    setShowConfirmPayModal(false);
+    setShowConfirmRequestTransactionModal(true);
+    setShowPayRequestModal(false);
+  } else {
+    // Handle failed payment logic here
+  }
+};
+
+
+
   return (
     <main className="flex flex-col min-h-screen bg-white">
       <Head>
@@ -286,8 +324,9 @@ const handlePayButttonClick = () => {
                 <div className="ml-4 flex-grow mt-4">
                   <div className={"flex justify-between items-center" + (!request.transaction_message ? " pb-2" : "")}>
                   <span className="text-black font-semibold">
-  {request.transaction_state === "Processed" ? "Paid Request" : "Payment Request"}
+  {request.transaction_state === "Processed" ? "Paid Request" : request.transaction_state === "Rejected" ? "Declined Request" : "Payment Request"}
 </span>
+
                     <span className="text-gray-500 mr-4 font-medium">{requestTimeString}</span>
                   </div>
                   <div className={"flex justify-between items-center " + (!request.transaction_message ? " pb-1" : "mt-1")}>
@@ -365,6 +404,9 @@ const handlePayButttonClick = () => {
   </div>
 )}
 
+
+
+
    {/* Confirm Decline Request Modal */}
    {showConfirmDeclineModal && selectedRequest && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 outside-click" onClick={handleOutsideClick}>
@@ -392,27 +434,6 @@ const handlePayButttonClick = () => {
           </div>
         </div>
       )}
-
-
-{showPayRequestModal && selectedRequestToPay && (
-  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
-    <div className="bg-white p-6 rounded-xl absolute shadow-xl drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}>
-      <button onClick={closePayModal} className="absolute top-6 left-4">
-        <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
-      </button>
-      <div className="text-black text-lg font-bold mt-14 text-center">Payment Details:</div>
-      <div className="text-black text-base mt-2 text-center">Amount: {selectedRequestToPay.ether_amount} ETH</div>
-      <div className="text-black text-base mt-2 text-center">From: {selectedRequestToPay.payment_requester.substring(0, 6)}...{selectedRequestToPay.payment_requester.slice(-6)}</div>
-      <div className="text-black text-base mt-2 text-center">Request Sent on {new Date(selectedRequestToPay.request_time.seconds * 1000).toLocaleDateString()}</div>
-      <div className="text-black text-base mt-2 text-center">Message: {selectedRequestToPay.transaction_message || 'No message sent with request'}</div>
-      <button className="bg-base-blue text-white text-lg font-medium w-full h-12 rounded-3xl focus:outline-none mt-6" >
-        Pay Request
-      </button>
-    </div>
-  </div>
-)}
-
-
 
 
 
@@ -491,6 +512,198 @@ const handlePayButttonClick = () => {
     </div>
   </div>
 )}
+
+
+
+
+
+
+{showPayRequestModal && selectedRequestToPay && (
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
+    <div className="bg-white p-6 rounded-xl absolute shadow-xl drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}>
+      <button onClick={closePayModal} className="absolute top-6 left-4">
+        <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
+      </button>
+      <div className="text-black text-lg font-bold mt-14 text-center">Payment Details:</div>
+      <div className="text-black text-base mt-2 text-center">Amount: {selectedRequestToPay.ether_amount} ETH</div>
+      <div className="text-black text-base mt-2 text-center">From: {selectedRequestToPay.payment_requester.substring(0, 6)}...{selectedRequestToPay.payment_requester.slice(-6)}</div>
+      <div className="text-black text-base mt-2 text-center">Request Sent on {new Date(selectedRequestToPay.request_time.seconds * 1000).toLocaleDateString()}</div>
+      <div className="text-black text-base mt-2 text-center">Message: {selectedRequestToPay.transaction_message || 'No message sent with request'}</div>
+      <button className="bg-base-blue text-white text-lg font-medium w-full h-12 rounded-3xl focus:outline-none mt-6" onClick={handleOpenPayConfirmModal}>
+        Pay Request
+      </button>
+    </div>
+  </div>
+)}
+
+
+
+
+
+{/* Confirm Pay Request Modal */}
+{showConfirmPayModal && selectedRequestToPay && (
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 outside-click" onClick={handleOutsideClick}>
+    <div className="bg-black opacity-50 w-full h-full outside-click"></div>
+    <div className={`bg-white w-full rounded-t-2xl absolute ${animateModal ? '-bottom-full motion-reduce:transition-all duration-700 ease-in-out' : 'bottom-0'}`}>
+      <div className="bg-gray-300 w-18 h-1 mx-auto mt-4 rounded-full cursor-pointer"
+           onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} 
+           onClick={handleCloseAnimation}></div>
+      <div className="p-4">
+        {/* Display details */}
+        <div className="text-2xl text-black font-bold">
+          Confirm Payment
+        </div>
+        <div className="text-black text-base mt-2 text-center">Amount: {selectedRequestToPay.ether_amount} ETH</div>
+        <div className="text-black text-base mt-2 text-center">From: {selectedRequestToPay.payment_requester.substring(0, 6)}...{selectedRequestToPay.payment_requester.slice(-6)}</div>
+        <div className="text-black text-base mt-2 text-center">Request Sent on {new Date(selectedRequestToPay.request_time.seconds * 1000).toLocaleDateString()}</div>
+        <div className="text-black text-base mt-2 text-center">Message: {selectedRequestToPay.transaction_message || 'No message sent with request'}</div>
+        <button className="bg-base-blue text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none mt-4 mb-2" onClick={handleConfirmPayment}>
+  Confirm Payment
+</button>
+      </div>
+    </div>
+  </div>
+)}
+
+{/* Transaction Modal */}
+
+{showConfirmRequestTransactionModal  && selectedRequestToPay && (
+  <div className="fixed top-0 left-0 w-full h-full z-40 flex items-center justify-center">
+    <div className="bg-black opacity-50 w-full h-full absolute"></div>
+    <div className="bg-white p-6 rounded-xl absolute top-1/6 inset-x-4 shadow-xl drop-shadow"> 
+      <button className="p-4 cursor-pointer absolute top-2 left-1" onClick={() => {
+          document.body.style.overflowY = "scroll"; // Remove scroll lock
+          document.body.style.minHeight = "0px";
+          window.scrollBy(0, -1);
+          setshowConfirmRequestTransactionModal(false); // Close the transaction modal
+        }}> 
+          <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
+      </button>
+
+
+{transactionStatus === 'pending' && (
+  <div className="mt-14 ml-0">
+    <div className="flex justify-center items-center mb-10 relative"> 
+      <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> 
+      <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
+    </div>
+    <div className="text-center mb-4"> 
+      <div className="text-black font-bold text-2xl">{selectedRequestToPay.ether_amount} ETH</div>
+    </div>
+
+
+    <div className="mb-10 text-center text-gray-600 font-medium"> {/* Added a "View on Basescan" link */}
+  <a href={`https://goerli.basescan.org/tx/${txHashState}`} target="_blank" rel="noopener noreferrer" className="flex justify-center items-center">
+    View on <span className="text-gray-600 ml-1 font-semibold">BaseScan</span> <FontAwesomeIcon icon={faUpRightFromSquare} className="h-4.5 w-4.5 ml-2 text-gray-500" />
+  </a>
+</div>
+
+
+    <div className="flex items-center justify-start mb-6"> 
+    <FontAwesomeIcon icon={faSpinner} className="text-base-blue h-7 w-7 animate-spin" />
+          <span className="ml-4 mt-0.5 text-black font-semibold">Transaction in Progress...</span>
+        </div>
+
+    <div className=" mb-4"> 
+      <div className="text-black font-semibold">Transaction to {selectedRequestToPay.payment_requester.substring(0, 6)}...{selectedRequestToPay.payment_requester.slice(-6)} on Goerli Base Chain is processing.</div>
+    </div>
+    <div className="ml-0">
+      <div className="text-gray-600 font-medium text-lg"> {selectedRequestToPay.transaction_message || 'No message sent with request'}</div>
+    </div>
+    <button className="bg-gray-300 text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" >
+      Continue
+    </button>
+  </div>
+)}
+
+
+
+{transactionStatus === 'success' && (
+  <div className="mt-14 ml-0">
+    <div className="flex justify-center items-center mb-10 relative"> 
+      <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> 
+      <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
+    </div>
+    <div className="text-center mb-4"> 
+      <div className="text-black font-bold text-2xl">{selectedRequestToPay.ether_amount} ETH</div>
+    </div>
+
+    <div className="mb-10 text-center text-gray-600 font-medium"> {/* Added a "View on Basescan" link */}
+  <a href={`https://goerli.basescan.org/tx/${txHashState}`} target="_blank" rel="noopener noreferrer" className="flex justify-center items-center">
+    View on <span className="text-gray-600 ml-1 font-semibold">BaseScan</span> <FontAwesomeIcon icon={faUpRightFromSquare} className="h-4.5 w-4.5 ml-2 text-gray-500" />
+  </a>
+</div>
+
+    <div className="flex items-center justify-start mb-6"> 
+      <FontAwesomeIcon icon={faCircleCheck} className="text-base-blue h-7 w-7" /> 
+      <span className="ml-4 mt-0.5 text-black font-semibold">Transaction Successful!</span>
+    </div>
+
+    <div className=" mb-4"> 
+      <div className="text-black font-semibold">Sent successfully to {selectedRequestToPay.payment_requester.substring(0, 6)}...{selectedRequestToPay.payment_requester.slice(-6)} on Goerli Base Chain using BasePay!</div>
+    </div>
+    <div className="ml-0">
+      <div className="text-gray-600 font-medium text-lg">  {selectedRequestToPay.transaction_message || 'No message sent with request'}</div>
+    </div>
+    <button className="bg-base-blue shadow-sm drop-shadow text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" onClick={() => {
+        document.body.style.overflowY = "scroll"; // Remove scroll lock
+        document.body.style.minHeight = "0px";
+        window.scrollBy(0, -1);
+        setShowtransactionModal(false);
+        setToAddress(''); // Close the success modal
+      }}>
+      Continue
+    </button>
+  </div>
+)}
+
+
+
+{transactionStatus === 'fail' && (
+  <div className="mt-14 ml-0">
+    <div className="flex justify-center items-center mb-10 relative">
+      <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div>
+      <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
+    </div>
+    <div className="text-center mb-4"> 
+      <div className="text-black font-bold text-2xl">{counter || '0'} ETH</div>
+    </div>
+
+    <div className="mb-10 text-center text-gray-600 font-medium"> {/* Added a "View on Basescan" link */}
+  <a href={`https://goerli.basescan.org/tx/${txHashState}`} target="_blank" rel="noopener noreferrer" className="flex justify-center items-center">
+    View on <span className="text-gray-600 ml-1 font-semibold">BaseScan</span> <FontAwesomeIcon icon={faUpRightFromSquare} className="h-4.5 w-4.5 ml-2 text-gray-500" />
+  </a>
+</div>
+
+    <div className="flex items-center justify-start mb-6"> 
+    <FontAwesomeIcon icon={faTimesCircle} className="text-red-600 h-7 w-7" /> 
+          <span className="ml-4 mt-0.5 text-black font-semibold">Transaction Failed!</span>
+        </div>
+
+    <div className=" mb-4">
+      <div className="text-black font-semibold">Transaction to {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress} on Goerli Base Chain failed!</div>
+    </div>
+    <div className="ml-0">
+      <div className="text-gray-700 font-medium text-lg"> {forValue || "No note added"}</div>
+    </div>
+    <button className="bg-base-blue shadow-sm drop-shadow text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" onClick={() => {
+        document.body.style.overflowY = "scroll"; // Remove scroll lock
+        document.body.style.minHeight = "0px";
+        window.scrollBy(0, -1);
+        setShowtransactionModal(false); // Close the success modal
+      }}>
+      Retry
+    </button>
+  </div>
+)}
+
+    </div>
+  </div>
+)}
+
+
+
+
 
 
 

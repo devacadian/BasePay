@@ -175,8 +175,8 @@ router.patch('/update-transaction-hash/:paymentRequestId/:transactionHash', asyn
 
 /* ------------------------- BASE & DB Query Endpoints ------------------------- */
 
-// GET Request: Query Activities (Payment Sent, Payment Reveived, Request Sent, Request Received)
-// returns back an array of Activity (Sorted By timestamp)
+// GET Request: Query Request Activities (Request Sent, Request Received)
+// returns back an array of Request Activity (Sorted By timestamp)
 /*
 Activity Object Structure 
 {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell, faListCheck, faArrowUpRightFromSquare, faEllipsis, faHandshakeSlash, faEye, faPaperPlane, faHand, faXmark, faFileInvoice } from '@fortawesome/pro-solid-svg-icons';
+import { faBell, faListCheck, faArrowUpRightFromSquare, faEllipsis, faHandshakeSlash, faEye, faPaperPlane, faHand, faXmark, faFileInvoice, faBells } from '@fortawesome/pro-solid-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import Head from 'next/head';
 import { useAccount } from "wagmi";
@@ -205,7 +205,7 @@ const handlePayButttonClick = () => {
       <div className="p-4 flex items-center justify-between">
         <div className="flex items-center">
         <h1 className="text-black text-3xl font-semibold pt-2 mr-1">Notifications</h1>
-          <FontAwesomeIcon icon={faBell} className="h-6 w-6 text-black align-middle mt-2 ml-2" />
+          <FontAwesomeIcon icon={faBells} className="h-7 w-7 text-black align-middle mt-2 ml-2" />
         </div>
         <div className="bg-base-blue rounded-full h-8 w-8 flex items-center justify-center mt-2">
           <FontAwesomeIcon icon={faListCheck} className="text-white h-4 w-4" />
@@ -214,8 +214,9 @@ const handlePayButttonClick = () => {
       <div className="bg-white w-full -mb-2"></div>
       <div className="px-4 mb-30">
       {sortedPaymentRequests.length === 0 ? (
-        <div className="flex flex-col items-center justify-center text-center mt-10">
-  <span className="text-black font-semibold text-xl">No notifications received yet!</span>
+        <div className="flex flex-col items-center justify-center h-screen text-center">
+  <div className="text-3xl -mt-80">🤝</div>
+  <span className="text-black font-semibold text-xl mt-4">No notifications received yet!</span>
   <div className="flex w-full mt-14">
     <button className="bg-base-blue text-white font-medium rounded-full w-full py-2 mx-1 flex items-center justify-center" onClick={handlePayButttonClick}>
       <FontAwesomeIcon icon={faPaperPlane} className="h-4 w-4 text-white mr-2" />

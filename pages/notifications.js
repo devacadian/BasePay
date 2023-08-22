@@ -340,9 +340,10 @@ const handleConfirmPayment = async () => {
             <div key={index} className="rounded-4xl border-2 border-gray-100 w-full shadow-sm mt-4">
               <div className={"flex items-center" + (!request.transaction_message ? " pb-0 mt-1 " : " mt-0.5 mb-0")}>
               <div className={"relative h-12 w-12 border-2 border-gray-300 rounded-3xl ml-4" + (!request.transaction_message ? " -mb-2" : " -mb-3.5")}>
-        <div className="relative w-full h-full overflow-hidden rounded-3xl">
-          <AvatarIcon seed={request.payment_requester} />
-        </div>
+              <div className="relative w-full h-full overflow-hidden rounded-3xl" 
+     style={{ maskImage: 'radial-gradient(circle, white, black)' }}>
+  <AvatarIcon seed={request.payment_requester} />
+</div>
         {request.transaction_state === "Pending" && (
           <div className="bg-green-400 h-2 w-2 rounded-full absolute bottom-0 right-0 mb-0 mr-0"></div>
         )}

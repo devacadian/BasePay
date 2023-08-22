@@ -934,8 +934,11 @@ const handleCloseQRChoiceModal = () => {
         <div className="flex justify-end"></div> {/* Empty div to keep the grid layout */}
       </div>
       <div className="flex justify-center"> {/* Gray circle */}
-        <div className="bg-gray-300 border-3 border-gray-300 rounded-full h-20 w-20 mt-6 flex items-center justify-center overflow-hidden">   <AvatarIcon seed={toAddress} /> </div>
-      </div>
+      <div className="bg-gray-300 border-3 border-gray-300 rounded-full h-20 w-20 mt-6 flex items-center justify-center overflow-hidden"
+       style={{ maskImage: 'radial-gradient(circle, white, black)' }}>
+    <AvatarIcon seed={toAddress} />
+  </div>
+</div>
       <div className="text-center text-black text-lg font-medium mt-6"> {/* Displaying the truncated toAddress */}
         {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress}
       </div>

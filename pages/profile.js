@@ -136,9 +136,10 @@ const activitiesByDate = activities.reduce((acc, activity) => {
       {isClient && (
         <div className="text-center relative w-full">
           <div className="relative inline-block"> {/* Wrapper for avatar and blue circle */}
-            <div className="bg-gray-300 rounded-full h-20 w-20 mb-6 mx-auto overflow-hidden border-2 border-gray-300">
-              <AvatarIcon />
-            </div>
+          <div className="bg-gray-300 rounded-full h-20 w-20 mb-6 mx-auto overflow-hidden border-2 border-gray-300"
+     style={{ maskImage: 'radial-gradient(circle, white, black)' }}>
+  <AvatarIcon />
+</div>
             <div className="bg-base-blue rounded-full h-8 w-8 absolute bottom-5.5 -right-1 flex items-center justify-center" onClick={handleQRCodeClick}>
                 <FontAwesomeIcon icon={faQrcode} className="h-5 w-5 text-white" /> {/* QR code icon */}
               </div>

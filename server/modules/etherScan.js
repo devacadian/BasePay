@@ -1,5 +1,7 @@
 const axios = require('axios');
 const { ethers } = require("ethers") 
+const { Timestamp } = require("firebase/firestore");
+
 const apiKey = '5BYP8B43Q9TU9ESS1GYCA2QRU6BG57Y7RH';
 const contractAddress = '0x255A1891359A67A50a459e64445E6429f652a23f';
 const etherscanDomain = 'https://api-goerli.basescan.org/'
@@ -41,6 +43,8 @@ async function queryPaymentSent(etherscanDomain, userAddress) {
             
             const { hash, isError, value, timeStamp } = txn
 
+            const firestoreTimestamp = Timestamp.fromMillis(timeStamp * 1000)
+
             const transaction_state = isError == 0 ? "Processed" : "Failed"
 
             const to = getToAddressByHash(internalResponseByContractAddress, hash)
@@ -55,7 +59,7 @@ async function queryPaymentSent(etherscanDomain, userAddress) {
                 activityState : transaction_state,
                 counterParty : to,
                 amount : ethers.utils.formatEther(value),
-                timestamp : timeStamp // timestamp in Unix format
+                timestamp : firestoreTimestamp 
             }
 
             activities.push(activity)
@@ -92,6 +96,8 @@ async function queryPaymentReceived(etherscanDomain, userAddress) {
             
             const { hash, isError, value, timeStamp } = txn
 
+            const firestoreTimestamp = Timestamp.fromMillis(timeStamp * 1000)
+
             const transaction_state = isError == 0 ? "Processed" : "Failed"
 
             const from = getFromAddressByHash(normalResponseByUserId.data.result, hash)
@@ -106,7 +112,7 @@ async function queryPaymentReceived(etherscanDomain, userAddress) {
                 activityState : transaction_state,
                 counterParty : from,
                 amount : ethers.utils.formatEther(value),
-                timestamp : timeStamp // timestamp in Unix format
+                timestamp : firestoreTimestamp
             }
 
             activities.push(activity)

@@ -6,6 +6,8 @@ const PORT = process.env.port || 4000
 // import firestore instance
 const {db} = require("./firebase");
 const { collection, addDoc, serverTimestamp, where, getDocs, query, doc, getDoc, updateDoc, orderBy, limit } = require("firebase/firestore");
+const { queryPaymentRequestSent, queryPaymentRequestReceived, queryPaymentSent } = require('./modules/etherScan')
+
 
 // Middlewares
 const currentDateAndTime = new Date().toLocaleString('en-US', { timeZone: 'America/Toronto' });
@@ -187,16 +189,19 @@ Activity Object Structure
 
 */
 
-router.get('/activties/:userAddress', async (req,res) => {
+router.post('/activties/:userAddress', async (req,res) => {
     try {
         const userAddress = req.params.userAddress
+        const { etherscanDomain } = req.body
         const activities = []
 
         // query activties
         const requestSendActivities = await queryPaymentRequestSent(userAddress)
         const requestReceivedActivities = await queryPaymentRequestReceived(userAddress)
+        const paymentSendActivities = await queryPaymentSent(etherscanDomain,userAddress)
+        const paymentReceivedActivities = await queryPaymentRequestReceived(etherscanDomain,userAddress)
 
-        activities.push(...requestSendActivities, ...requestReceivedActivities);
+        activities.push(...requestSendActivities, ...requestReceivedActivities, ...paymentSendActivities, ...paymentReceivedActivities);
 
         // sort the activities array by timestamp in descending order (latest appears as first)
         activities.sort((a, b) => {

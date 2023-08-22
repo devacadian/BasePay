@@ -146,8 +146,8 @@ const router = useRouter();
         decision: "false" // String to indicate a decline
       };
   
-      // Constructing the URL by appending the selected request ID
-      const url = `https://basepay-api.onrender.com/update-transaction-state/${selectedRequest.id}`;
+      // Constructing the URL by appending the selected payment request ID
+      const url = `https://basepay-api.onrender.com/update-transaction-state/${selectedRequest.paymentRequestId}`;
   
       // Make a PATCH request to the correct endpoint
       const response = await fetch(url, {
@@ -160,7 +160,7 @@ const router = useRouter();
   
       // Check if the request was successful
       if (response.ok) {
-        console.log(`Declined the request with ID: ${selectedRequest.id}`);
+        console.log(`Declined the request with ID: ${selectedRequest.paymentRequestId}`);
         // You can close the decline modal and refresh the request list or do any other UI updates here
         handleCloseConfirmRequestModal();
       } else {
@@ -172,7 +172,6 @@ const router = useRouter();
       // Handle the error appropriately
     }
   };
-
 
   // Function to open the pay modal
   const openPayModal = (request) => {

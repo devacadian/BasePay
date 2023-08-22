@@ -13,6 +13,9 @@ const Notifications = () => {
   const sortedPaymentRequests = paymentRequests.sort((a, b) => b.request_time.seconds - a.request_time.seconds);
   const [showDeclineModal, setShowDeclineModal] = useState(false);
 const [selectedRequest, setSelectedRequest] = useState(null);
+const [showConfirmDeclineModal, setShowConfirmDeclineModal] = useState(false);
+const [animateModal, setAnimateModal] = useState(false);
+
 
   useEffect(() => {
     // Function to fetch payment requests
@@ -76,6 +79,45 @@ const [selectedRequest, setSelectedRequest] = useState(null);
     setShowDeclineModal(false);
     setSelectedRequest(null);
   };
+
+
+  const handleOutsideClick = (e) => {
+    if (e.target.className.includes('outside-click')) {
+      setAnimateModal(true); // Start the animation
+      document.body.style.overflowY = "scroll"; // Remove scroll lock
+      document.body.style.minHeight = "0px";
+      window.scrollBy(0, -1);
+      setTimeout(() => {
+        setShowconfirmpayModal(false); // Close the modal after animation completes
+        setAnimateModal(false); // Reset the animation state
+      }, 150); // 150 milliseconds
+    }
+  };
+
+
+  const handleTouchStart = (e) => {
+    setTouchStartY(e.touches[0].clientY);
+  };
+
+  const handleTouchEnd = (e) => {
+    const touchEndY = e.changedTouches[0].clientY;
+    if (touchEndY > touchStartY + 50) { // 50px threshold for swipe-down
+      handleCloseconfirmpayModal(); 
+    }
+  };
+
+
+  const handleCloseAnimation = () => {
+    setAnimateModal(true); // Start the animation
+    document.body.style.overflowY = "scroll"; // Remove scroll lock
+    document.body.style.minHeight = "0px";
+    window.scrollBy(0, -1);
+    setTimeout(() => {
+      setShowconfirmpayModal(false); // Close the modal after animation completes
+      setAnimateModal(false); // Reset the animation state
+    }, 300); // 300 milliseconds
+  };
+
   
   return (
     <main className="flex flex-col min-h-screen bg-white">
@@ -195,13 +237,41 @@ const [selectedRequest, setSelectedRequest] = useState(null);
       <div className="text-black text-base mt-2 text-center">Request Sent on {new Date(selectedRequest.request_time.seconds * 1000).toLocaleDateString()}</div>
       <div className="text-black text-base mt-2 text-center">Message: {selectedRequest.transaction_message || 'No message sent with request'}</div>
       <button className="bg-base-blue text-white text-lg font-medium w-full h-12 rounded-3xl focus:outline-none mt-6" onClick={() => {
-        // Handle the decline action here
-      }}>
+          setShowConfirmDeclineModal(true);
+        }}>
         Decline Request
       </button>
     </div>
   </div>
 )}
+
+   {/* Confirm Decline Request Modal */}
+   {showConfirmDeclineModal && selectedRequest && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 outside-click" onClick={handleOutsideClick}>
+          <div className="bg-black opacity-50 w-full h-full outside-click"></div>
+          <div className={`bg-white w-full rounded-t-2xl absolute ${animateModal ? '-bottom-full motion-reduce:transition-all duration-700 ease-in-out' : 'bottom-0'}`}>
+            <div className="bg-gray-300 w-18 h-1 mx-auto mt-4 rounded-full cursor-pointer"
+                 onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} 
+                 onClick={handleCloseAnimation}></div>
+            <div className="p-4">
+              {/* Display details */}
+              <div className="text-2xl text-black font-bold">
+                Decline Request
+              </div>
+              <div className="text-black text-base mt-2 text-center">Amount: {selectedRequest.ether_amount} ETH</div>
+              <div className="text-black text-base mt-2 text-center">From: {selectedRequest.payment_requester.substring(0, 6)}...{selectedRequest.payment_requester.slice(-6)}</div>
+              <div className="text-black text-base mt-2 text-center">Request Sent on {new Date(selectedRequest.request_time.seconds * 1000).toLocaleDateString()}</div>
+              <div className="text-black text-base mt-2 text-center">Message: {selectedRequest.transaction_message || 'No message sent with request'}</div>
+              <button
+                className="bg-base-blue text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none mt-4 mb-2"
+               
+              >
+                Confirm Decline
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
 
 

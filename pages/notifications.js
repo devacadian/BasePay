@@ -16,6 +16,8 @@ const [selectedRequest, setSelectedRequest] = useState(null);
 const [showConfirmDeclineModal, setShowConfirmDeclineModal] = useState(false);
 const [animateModal, setAnimateModal] = useState(false);
 const [touchStartY, setTouchStartY] = useState(0); // State to track the touch start position
+const [showPayRequestModal, setShowPayRequestModal] = useState(false);
+const [selectedRequestToPay, setSelectedRequestToPay] = useState(null);
 
 
   useEffect(() => {
@@ -169,6 +171,18 @@ const [touchStartY, setTouchStartY] = useState(0); // State to track the touch s
   };
 
 
+  // Function to open the pay modal
+const openPayModal = (request) => {
+  setSelectedRequestToPay(request);
+  setShowPayRequestModal(true);
+};
+
+// Function to close the pay modal
+const closePayModal = () => {
+  setSelectedRequestToPay(null);
+  setShowPayRequestModal(false);
+};
+
 
   
   return (
@@ -226,7 +240,9 @@ const [touchStartY, setTouchStartY] = useState(0); // State to track the touch s
       </div>
                 <div className="ml-4 flex-grow mt-4">
                   <div className={"flex justify-between items-center" + (!request.transaction_message ? " pb-2" : "")}>
-                    <span className="text-black font-semibold">Payment Request</span>
+                  <span className="text-black font-semibold">
+  {request.transaction_state === "Processed" ? "Paid Request" : "Payment Request"}
+</span>
                     <span className="text-gray-500 mr-4 font-medium">{requestTimeString}</span>
                   </div>
                   <div className={"flex justify-between items-center " + (!request.transaction_message ? " pb-1" : "mt-1")}>
@@ -254,30 +270,37 @@ const [touchStartY, setTouchStartY] = useState(0); // State to track the touch s
             e.stopPropagation(); // Stop propagation to the document
             setOpenDropdownIndex(openDropdownIndex === index ? null : index);
           }}>
-                  <FontAwesomeIcon icon={faEllipsis} className="h-5 w-5 text-gray-400" />
-                  {openDropdownIndex === index && (
-  <div ref={dropdownRef} className="absolute right-0 top-full mt-2 bg-white border-gray-200 border-2 rounded-3xl py-4 shadow text-gray-700 w-56 text-sm z-10">
-    <div className="p-4 -mt-2 cursor-pointer flex items-center relative border-b-2 border-gray-200 text-black text-base">
-      <FontAwesomeIcon icon={faPaperPlane} className="mr-3 h-5 w-5 text-base-blue" />
-      Pay Request
-    </div>
-    <div className="p-4 cursor-pointer flex items-center relative border-b-2 border-gray-200 text-black text-base" onClick={() => openDeclineModal(request)}>
-  <FontAwesomeIcon icon={faHandshakeSlash} className="mr-3 h-5 w-5 text-base-blue" />
-  Decline Request
-</div>
-    <div className="p-4 cursor-pointer flex items-center text-black text-base -mb-3">
-      <FontAwesomeIcon icon={faEye} className="mr-3 h-5 w-5 text-base-blue" />
-      Mark as Read
-    </div>
+         {request.transaction_state === "Pending" && (
+  <div className="relative cursor-pointer" onClick={(e) => {
+    e.stopPropagation(); // Stop propagation to the document
+    setOpenDropdownIndex(openDropdownIndex === index ? null : index);
+  }}>
+    <FontAwesomeIcon icon={faEllipsis} className="h-5 w-5 text-gray-400" />
+    {openDropdownIndex === index && (
+      <div ref={dropdownRef} className="absolute right-0 top-full mt-2 bg-white border-gray-200 border-2 rounded-3xl py-4 shadow text-gray-700 w-56 text-sm z-10">
+        <div className="p-4 -mt-2 cursor-pointer flex items-center relative border-b-2 border-gray-200 text-black text-base" onClick={() => openPayModal(request)}>
+          <FontAwesomeIcon icon={faPaperPlane} className="mr-3 h-5 w-5 text-base-blue" />
+          Pay Request
+        </div>
+        <div className="p-4 cursor-pointer flex items-center relative border-b-2 border-gray-200 text-black text-base" onClick={() => openDeclineModal(request)}>
+          <FontAwesomeIcon icon={faHandshakeSlash} className="mr-3 h-5 w-5 text-base-blue" />
+          Decline Request
+        </div>
+        <div className="p-4 cursor-pointer flex items-center text-black text-base -mb-3">
+          <FontAwesomeIcon icon={faEye} className="mr-3 h-5 w-5 text-base-blue" />
+          Mark as Read
+        </div>
+      </div>
+    )}
   </div>
 )}
                 </div>
               </div>
             </div>
           );
-
-
         })}
+
+
 
 {showDeclineModal && selectedRequest && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
@@ -324,6 +347,25 @@ const [touchStartY, setTouchStartY] = useState(0); // State to track the touch s
           </div>
         </div>
       )}
+
+
+{showPayRequestModal && selectedRequestToPay && (
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
+    <div className="bg-white p-6 rounded-xl absolute shadow-xl drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}>
+      <button onClick={closePayModal} className="absolute top-6 left-4">
+        <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
+      </button>
+      <div className="text-black text-lg font-bold mt-14 text-center">Payment Details:</div>
+      <div className="text-black text-base mt-2 text-center">Amount: {selectedRequestToPay.ether_amount} ETH</div>
+      <div className="text-black text-base mt-2 text-center">From: {selectedRequestToPay.payment_requester.substring(0, 6)}...{selectedRequestToPay.payment_requester.slice(-6)}</div>
+      <div className="text-black text-base mt-2 text-center">Request Sent on {new Date(selectedRequestToPay.request_time.seconds * 1000).toLocaleDateString()}</div>
+      <div className="text-black text-base mt-2 text-center">Message: {selectedRequestToPay.transaction_message || 'No message sent with request'}</div>
+      <button className="bg-base-blue text-white text-lg font-medium w-full h-12 rounded-3xl focus:outline-none mt-6" >
+        Pay Request
+      </button>
+    </div>
+  </div>
+)}
 
 
 

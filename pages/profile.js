@@ -19,6 +19,7 @@ const Profile = () => {
   const [formattedBalance, setFormattedBalance] = useState('0.0000');
   const [showQRCodeModal, setShowQRCodeModal] = useState(false);
   const router = useRouter();
+  const [activities, setActivities] = useState([]);
 
   useEffect(() => {
     const balanceValue = parseFloat(data?.formatted || '0.0000');
@@ -32,6 +33,21 @@ const Profile = () => {
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  const hasFetchedRef = useRef(false);
+
+  useEffect(() => {
+    if (address && !hasFetchedRef.current) {
+      const returnAll = async () => {
+        const allActivities = await fetchAllAct(etherscanDomain, '0x6724A71f5689c51138F2f213E3Bbb00Ffe320A28');
+        setActivities(allActivities);
+      };
+
+      returnAll();
+
+      hasFetchedRef.current = true; // Mark as fetched
+    }
+  }, [address]);
 
   const AvatarIcon = ({ seed }) => {
     const avatarRef = useRef(null);
@@ -71,14 +87,7 @@ const handleCloseQRCodeModal = () => {
 };
 
 
-useEffect(() => {
-  const returnAll = async () => {
-    const activities = await fetchAllAct(etherscanDomain, '0x6724A71f5689c51138F2f213E3Bbb00Ffe320A28');
-    console.log(activities);
-  };
 
-  returnAll();
-}, []);
   return (
     <main className="flex flex-col min-h-screen bg-white">
       <Head>
@@ -118,6 +127,12 @@ useEffect(() => {
             </div>
           </div>
           <div className="text-left text-black font-semibold text-2xl mt-8 px-4">Activity</div> {/* Activity text */}
+
+          {activities.map((activity, index) => (
+              <div key={index} className="activity-item text-black">
+                <p>{activity.activityType}: {activity.amount} from {activity.counterParty}</p>
+              </div>
+            ))}
         </div>
       )}
 

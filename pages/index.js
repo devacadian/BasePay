@@ -16,6 +16,7 @@ export default function Home() {
   const [formattedBalance, setFormattedBalance] = useState('0.0000');
   const router = useRouter();
   const [showQRCodeModal, setShowQRCodeModal] = useState(false);
+  const [showInviteModal, setShowInviteModal] = useState(false);
 
   useEffect(() => {
     const balanceValue = parseFloat(data?.formatted || '0.0000');
@@ -57,6 +58,13 @@ export default function Home() {
     // You can also send any state or parameters needed to handle the modal on the /pay page
   };
 
+  const handleInviteClick = () => {
+    setShowInviteModal(true);
+  };
+
+  const handleInviteModalClose = () => {
+    setShowInviteModal(false);
+  };
 
 
   return (
@@ -102,10 +110,10 @@ export default function Home() {
   </div>
   <div className="font-semibold text-base">Pay</div>
 </div>
-      <div className="flex flex-col items-center"> {/* Request */}
+      <div className="flex flex-col items-center cursor-pointer" onClick={handleRequestClick}> {/* Request */}
       <div
       className="flex justify-center items-center relative w-12 h-12 mb-2 rounded-full bg-base-blue shadow drop-shadow-sm"
-      onClick={handleRequestClick} // Adding onClick handler
+       // Adding onClick handler
     >
           <FontAwesomeIcon icon={faFileInvoice} className="text-white h-5 w-5 z-10" />
         </div>
@@ -117,7 +125,7 @@ export default function Home() {
   </div>
   <div className="font-semibold text-base">Message</div>
 </div>
-      <div className="flex flex-col items-center"> {/* Test */}
+      <div className="flex flex-col items-center cursor-pointer" onClick={handleInviteClick}> {/* Test */}
         <div className="flex justify-center items-center relative w-12 h-12 mb-2 rounded-full bg-base-blue shadow drop-shadow-sm">
           <FontAwesomeIcon icon={faUserGroup} className="text-white h-5 w-5 z-10" />
         </div>
@@ -148,13 +156,13 @@ export default function Home() {
 <div className="px-4 mt-6 mb-0 text-xl font-semibold text-base-blue"> {/* Receive Assets */}
   Receive Assets
 </div>
-  <div className="px-4 flex justify-end -mt-0 mb-0" onClick={handleQRCodeClick}> {/* QR Code */}
-        <div className="text-right text-black flex items-center justify-center">
-          <div className="bg-base-blue rounded-full w-10 h-10 flex items-center justify-center"> {/* Blue circle */}
-            <FontAwesomeIcon icon={faQrcode} className="h-5 w-5 text-white" />
-          </div>
-        </div>
-      </div>
+<div className="px-4 flex justify-end -mt-0 mb-0"> {/* QR Code */}
+  <button onClick={handleQRCodeClick} className="text-right text-black flex items-center justify-center focus:outline-none">
+    <div className="bg-base-blue rounded-full w-10 h-10 flex items-center justify-center"> {/* Blue circle */}
+      <FontAwesomeIcon icon={faQrcode} className="h-5 w-5 text-white" />
+    </div>
+  </button>
+</div>
 <div className="px-4  -mt-6 text-black text-md mb-6 font-semibold"> {/* New text */}
   Send and receive assets on BasePay. <br /> Experience fast and low-cost transactions <br /> on Goerli Base Chain.
 </div>
@@ -210,6 +218,20 @@ export default function Home() {
   </div>
 )}
 
+   {/* Invite Modal */}
+   {showInviteModal && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
+          <div className="bg-white p-6 rounded-xl absolute shadow-xl drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}>
+            <button onClick={handleInviteModalClose} className="absolute top-6 left-4">
+              <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
+            </button>
+            <div className="flex flex-col items-center justify-center mt-6">
+              <QRCode value="https://www.basepay.app" size={128} /> {/* Display the QR code */}
+              <div className="text-black text-lg font-bold mt-4">Scan to visit BasePay</div>
+            </div>
+          </div>
+        </div>
+      )}
 
 
     </main>

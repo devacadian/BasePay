@@ -88,6 +88,31 @@ const handleCloseQRCodeModal = () => {
 };
 
 
+const formatTimestamp = (timestamp) => {
+  const requestDate = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
+  const timeDifferenceMinutes = Math.floor((Date.now() - requestDate) / 1000 / 60);
+  let requestTimeString = '';
+
+  if (timeDifferenceMinutes === 1) {
+    requestTimeString = `${timeDifferenceMinutes} min ago`;
+  } else if (timeDifferenceMinutes < 60) {
+    requestTimeString = `${timeDifferenceMinutes} mins ago`;
+  } else {
+    const timeDifferenceHours = Math.floor(timeDifferenceMinutes / 60);
+    requestTimeString = timeDifferenceHours === 1
+      ? `${timeDifferenceHours} hr ago`
+      : `${timeDifferenceHours} hrs ago`;
+
+    if (timeDifferenceMinutes >= 24 * 60) {
+      requestTimeString = requestDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+  }
+
+  return requestTimeString;
+};
+
+
+
 
   return (
     <main className="flex flex-col min-h-screen bg-white">
@@ -127,17 +152,23 @@ const handleCloseQRCodeModal = () => {
               </div>
             </div>
           </div>
-          <div className="text-left text-black font-semibold text-2xl mt-8 px-4">Activity</div> {/* Activity text */}
+          <div className="text-left text-black font-semibold text-2xl mt-6 px-4 mb-6">Activity</div> {/* Activity text */}
+         
+         
+          <div className="px-4"> {/* Container with horizontal padding */}
+  {activities.map((activity, index) => (
+    <div key={index} className="activity-item text-black bg-gray-100 rounded-3xl p-4 mb-3">
+      <p className="font-bold">{activity.activityType}</p>
+      <p>{activity.amount} ETH from {activity.counterParty.substring(0, 6) + '...' + activity.counterParty.substring(activity.counterParty.length - 6)}</p>
+      <div className="text-gray-500 text-sm">
+        <p className="inline-block">State: {activity.activityState}</p>
+        <p className="inline-block ml-2">{formatTimestamp(activity.timestamp)}</p>
+      </div>
+    </div>
+  ))}
+</div>
 
-          {activities.map((activity, index) => (
-  <div key={index} className="activity-item text-black">
-    <p>{activity.activityType}: {activity.amount} from {activity.counterParty}</p>
-    <p className="text-gray-500 text-sm">State: {activity.activityState}</p>
-    <p className="text-gray-500 text-sm">
-      {new Date(activity.timestamp.seconds * 1000 + activity.timestamp.nanoseconds / 1000000).toLocaleString()}
-    </p>
-  </div>
-))}
+
         </div>
       )}
 

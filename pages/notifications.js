@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell, faListCheck, faArrowUpRightFromSquare, faEllipsis, faHandshakeSlash, faEye, faPaperPlane, faHand, faXmark, faFileInvoice, faBells } from '@fortawesome/pro-solid-svg-icons';
+import { faBell, faListCheck, faArrowUpRightFromSquare, faEllipsis, faHandshakeSlash, faEye, faPaperPlane, faHand, faXmark, faFileInvoice, faBells, faCircleCheck, faSpinner } from '@fortawesome/pro-solid-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import Head from 'next/head';
 import { useAccount } from "wagmi";
@@ -20,6 +20,9 @@ const [touchStartY, setTouchStartY] = useState(0); // State to track the touch s
 const [showPayRequestModal, setShowPayRequestModal] = useState(false);
 const [selectedRequestToPay, setSelectedRequestToPay] = useState(null);
 const router = useRouter();
+const [showDeclineRequestTransactionModal, setShowDeclineRequestTransactionModal] = useState(false); // State for the request transaction modal
+const [requestTransactionStatus, setRequestTransactionStatus] = useState(null); // State to track request transaction status
+
 
   useEffect(() => {
     // Function to fetch payment requests
@@ -141,11 +144,13 @@ const router = useRouter();
   
  
   const handleConfirmDecline = async () => {
+
+    setShowDeclineRequestTransactionModal(true);
+    setRequestTransactionStatus('pending');
     try {
       const declineData = {
-        decision: "false" // String to indicate a decline
+        decision: false // Boolean to indicate a decline
       };
-  
       // Constructing the URL by appending the selected payment request ID
       const url = `https://basepay-api.onrender.com/update-transaction-state/${selectedRequest.paymentRequestId}`;
   
@@ -395,6 +400,86 @@ const handlePayButttonClick = () => {
       <button className="bg-base-blue text-white text-lg font-medium w-full h-12 rounded-3xl focus:outline-none mt-6" >
         Pay Request
       </button>
+    </div>
+  </div>
+)}
+
+
+
+
+
+
+{showDeclineRequestTransactionModal && (
+  <div className="fixed top-0 left-0 w-full h-full z-40 flex items-center justify-center">
+    <div className="bg-black opacity-50 w-full h-full absolute"></div>
+    <div className="bg-white p-6 rounded-xl absolute top-1/6 inset-x-4 shadow-xl drop-shadow">
+      <button className="p-4 cursor-pointer absolute top-2 left-1" onClick={() => {
+          document.body.style.overflowY = "scroll"; // Remove scroll lock
+          document.body.style.minHeight = "0px";
+          window.scrollBy(0, -1);
+          setShowRequestTransactionModal(false); // Close the request transaction modal
+        }}> 
+        <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
+      </button>
+
+      {requestTransactionStatus === 'pending' && (
+        <div className="mt-14 ml-0">
+          <div className="flex justify-center items-center mb-10 relative"> 
+            <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> 
+            <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
+          </div>
+          <div className="text-center mb-4"> 
+            <div className="text-black font-bold text-2xl">{selectedRequest.ether_amount} ETH</div>
+          </div>
+          {/* Removed the "View on Basescan" link as it's not relevant for the request */}
+          <div className="flex items-center justify-start mb-6"> 
+            <FontAwesomeIcon icon={faSpinner} className="text-base-blue h-7 w-7 animate-spin" />
+            <span className="ml-4 mt-0.5 text-black font-semibold">Declining Payment Request...</span>
+          </div>
+          <div className="mb-4"> 
+            <div className="text-black font-semibold">Declining payment request from {selectedRequest.payment_requester.substring(0, 6)}...{selectedRequest.payment_requester.slice(-6)} on Goerli Base Chain.</div>
+          </div>
+          <div className="ml-0">
+            <div className="text-gray-600 font-medium text-lg"> {selectedRequest.transaction_message || 'No message sent with request'}</div>
+          </div>
+          <button className="bg-gray-300 text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" >
+            Continue
+          </button>
+        </div>
+      )}
+
+      {requestTransactionStatus === 'success' && (
+        <div className="mt-14 ml-0">
+          <div className="flex justify-center items-center mb-10 relative"> 
+            <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> 
+            <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
+          </div>
+          <div className="text-center mb-4"> 
+            <div className="text-black font-bold text-2xl">{selectedRequest.ether_amount} ETH</div>
+          </div>
+          {/* You can customize the link as needed */}
+          <div className="flex items-center justify-start mb-6"> 
+            <FontAwesomeIcon icon={faCircleCheck} className="text-base-blue h-7 w-7" /> 
+            <span className="ml-4 mt-0.5 text-black font-semibold">Request Successful!</span>
+          </div>
+          <div className="mb-4"> 
+            <div className="text-black font-semibold">Request sent successfully to {selectedRequest.payment_requester.substring(0, 6)}...{selectedRequest.payment_requester.slice(-6)} on Goerli Base Chain using BasePay!</div>
+          </div>
+          <div className="ml-0">
+            <div className="text-gray-600 font-medium text-lg"> {selectedRequest.transaction_message || 'No message sent with request'}</div>
+          </div>
+          <button className="bg-base-blue shadow-sm drop-shadow text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" onClick={() => {
+              document.body.style.overflowY = "scroll"; // Remove scroll lock
+              document.body.style.minHeight = "0px";
+              window.scrollBy(0, -1);
+              setShowDeclineRequestTransactionModal(false);
+              setshowRequestSelectionModal(false);
+              setShowRequestModal(false); // Close the success modal
+            }}>
+            Continue
+          </button>
+        </div>
+      )}
     </div>
   </div>
 )}

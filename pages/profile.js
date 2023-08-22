@@ -40,7 +40,7 @@ const Profile = () => {
   useEffect(() => {
     if (address && !hasFetchedRef.current) {
       const returnAll = async () => {
-        const allActivities = await fetchAllAct(etherscanDomain, '0x6724A71f5689c51138F2f213E3Bbb00Ffe320A28');
+        const allActivities = await fetchAllAct(etherscanDomain, address);
         setActivities(allActivities);
       };
 

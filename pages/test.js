@@ -1,5 +1,5 @@
 import React from 'react';
-import { queryRequestActivities, queryPaymentReceived, queryPaymentSent, fetchAllactivities  } from '../controller/activitiesFetch'
+import { queryRequestActivities, queryPaymentReceived, queryPaymentSent, fetchAllAct  } from '../controller/activitiesFetch'
 const etherscanDomain = 'https://api-goerli.basescan.org/'
 
 const Test = () => {
@@ -21,7 +21,7 @@ const Test = () => {
   }
 
   async function returnAll() {
-    const activities = await fetchAllactivities(etherscanDomain, '0x6724A71f5689c51138F2f213E3Bbb00Ffe320A28')
+    const activities = await fetchAllAct(etherscanDomain, '0x6724A71f5689c51138F2f213E3Bbb00Ffe320A28')
     console.log(activities)
   }
   

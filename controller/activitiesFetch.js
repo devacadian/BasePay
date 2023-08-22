@@ -160,7 +160,7 @@ Activity Object Structure
 }
 
 */
-async function fetchAllactivities(etherscanDomain,userAddress) {
+async function fetchAllAct(etherscanDomain,userAddress) {
     const allAct = []
     const requestAct = await queryRequestActivities(userAddress)
     const paymentReceivedAct = await queryPaymentReceived(etherscanDomain, userAddress)
@@ -185,5 +185,5 @@ export {
     queryRequestActivities,
     queryPaymentReceived,
     queryPaymentSent,
-    fetchAllactivities
+    fetchAllAct
 }

@@ -203,7 +203,15 @@ const closePayModal = () => {
       </div>
       <div className="bg-white w-full -mb-2"></div>
       <div className="px-4 mb-30">
-      {sortedPaymentRequests.map((request, index) => {
+      {sortedPaymentRequests.length === 0 ? (
+        <div className="flex flex-col items-center justify-center text-center mt-10">
+          <span className="text-black font-semibold text-xl">No notifications received yet!</span>
+          <span className="text-gray-600 font-medium text-base mt-20">
+  Pay or Request on <span className="text-base-blue">BasePay</span> to receive notifications!
+</span>
+        </div>
+      ) : (
+        sortedPaymentRequests.map((request, index) => {
           // Convert the request time to a readable format
           const requestDate = new Date(request.request_time.seconds * 1000);
           const now = new Date();
@@ -300,7 +308,7 @@ const closePayModal = () => {
               </div>
             </div>
           );
-        })}
+        }))}
 
 
 

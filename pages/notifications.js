@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell, faListCheck, faArrowUpRightFromSquare, faEllipsis } from '@fortawesome/pro-solid-svg-icons';
+import { faBell, faListCheck, faArrowUpRightFromSquare, faEllipsis, faHandshakeSlash, faEye, faPaperPlane, faHand } from '@fortawesome/pro-solid-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import Head from 'next/head';
 import { useAccount } from "wagmi";
@@ -149,12 +149,23 @@ const Notifications = () => {
           }}>
                   <FontAwesomeIcon icon={faEllipsis} className="h-5 w-5 text-gray-400" />
                   {openDropdownIndex === index && (
-                    <div ref={dropdownRef} className="absolute right-0 top-full mt-2 bg-white border rounded-3xl p-4 shadow text-gray-700 w-44 text-sm z-10">
-                      <div className="p-2 cursor-pointer hover:bg-gray-200">Pay</div>
-                      <div className="p-2 cursor-pointer hover:bg-gray-200">Decline</div>
-                      <div className="p-2 cursor-pointer hover:bg-gray-200">Mark as Read</div>
-                    </div>
-                  )}
+  <div ref={dropdownRef} className="absolute right-0 top-full mt-2 bg-white border rounded-3xl py-4 shadow text-gray-700 w-48 text-sm z-10">
+    <div className="p-4 -mt-2 cursor-pointer flex items-center relative">
+      <FontAwesomeIcon icon={faPaperPlane} className="mr-3 h-4 w-4 text-base-blue" />
+      Pay
+      <div className="absolute left-0 bottom-0 w-full h-px bg-gray-300"></div>
+    </div>
+    <div className="p-4 cursor-pointer flex items-center relative">
+      <FontAwesomeIcon icon={faHand} className="mr-3 h-4 w-4 text-base-blue" />
+      Decline
+      <div className="absolute left-0 bottom-0 w-full h-px bg-gray-300"></div>
+    </div>
+    <div className="p-4 cursor-pointer flex items-center -mb-3">
+      <FontAwesomeIcon icon={faEye} className="mr-3 h-4 w-4 text-base-blue" />
+      Mark as Read
+    </div>
+  </div>
+)}
                 </div>
               </div>
             </div>

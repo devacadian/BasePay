@@ -243,9 +243,9 @@ export default function Home() {
           className="bg-base-blue text-white text-lg font-medium flex items-center justify-center w-full h-12 rounded-3xl focus:outline-none mt-2 mb-2"
           onClick={() => navigator.clipboard.writeText("https://www.basepay.app")}
         >
-      
+                <FontAwesomeIcon icon={faUpRightFromSquare} className="mr-2.5 h-4 w-4 text-white" />
           Copy Invite
-          <FontAwesomeIcon icon={faUpRightFromSquare} className="ml-2.5 h-4 w-4 text-white" />
+        
         </button>
       </div>
     </div>

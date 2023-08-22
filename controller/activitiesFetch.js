@@ -168,12 +168,12 @@ async function fetchAllAct(etherscanDomain,userAddress) {
 
     allAct.push(...requestAct, ...paymentReceivedAct, ...paymentSentAct)
 
-    // sort the activities array by timestamp in descending order (latest appears as first)
-    allAct.sort((a, b) => {
-        const timestampA = a.timestamp.seconds * 1000 + a.timestamp.nanoseconds / 1000000;
-        const timestampB = b.timestamp.seconds * 1000 + b.timestamp.nanoseconds / 1000000;
-        return timestampB - timestampA;
-        });
+  // sort the activities array by timestamp in descending order (latest appears as first)
+allAct.sort((a, b) => {
+    const timestampA = a.timestamp ? (a.timestamp.seconds * 1000 + a.timestamp.nanoseconds / 1000000) : 0;
+    const timestampB = b.timestamp ? (b.timestamp.seconds * 1000 + b.timestamp.nanoseconds / 1000000) : 0;
+    return timestampB - timestampA;
+  });
 
     console.log(allAct)
     

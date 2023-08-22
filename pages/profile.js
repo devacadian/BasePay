@@ -8,6 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy, faPaperPlane, faQrcode, faXmark } from '@fortawesome/pro-solid-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import QRCode from 'qrcode.react'; 
+import { fetchAllAct  } from '../controller/activitiesFetch'
+const etherscanDomain = 'https://api-goerli.basescan.org/'
 
 
 const Profile = () => {
@@ -68,6 +70,15 @@ const handleCloseQRCodeModal = () => {
   document.body.style.overflowY = "scroll"; // Remove scroll lock
 };
 
+
+useEffect(() => {
+  const returnAll = async () => {
+    const activities = await fetchAllAct(etherscanDomain, '0x6724A71f5689c51138F2f213E3Bbb00Ffe320A28');
+    console.log(activities);
+  };
+
+  returnAll();
+}, []);
   return (
     <main className="flex flex-col min-h-screen bg-white">
       <Head>

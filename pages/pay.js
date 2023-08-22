@@ -1087,6 +1087,7 @@ const handleCloseQRChoiceModal = () => {
               setShowRequestModal(false); // Close the success modal
               setCounter('0');
               setToAddress('');
+              setrequestNote('');
             }}>
             Continue
           </button>

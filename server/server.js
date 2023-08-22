@@ -364,6 +364,26 @@ router.post('/create-private-chatroom', async (req,res) => {
     }
 })
 
+// POST Request: Send Message
+// returns back the newly created Messages Document
+router.post('/send-message', async (req,res) => {
+    try {
+        const {currentUserId, secondUserId} = req.body
+        const data = { participants : [currentUserId, secondUserId] }
+
+        const newDocRef = await addDoc(PrivateChatRoomsRef, data)
+        console.log(`${currentDateAndTime}: Created new PrivateChatRoom with ID: ${newDocRef.id}`)
+        return res.status(200).json(newDocRef.id)    
+
+    } catch(error){
+        console.log(`${currentDateAndTime}: ${error.message}`);
+        return res.status(500).send(error.message);
+    }
+})
+
+
+
+
 /* ------------------------- PrivateChatRoom Helper Functions ------------------------- */
 const findChatWith = (userList, userId) => {
     for (const user of userList) {

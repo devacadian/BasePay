@@ -288,48 +288,43 @@ const queryPaymentRequestReceived = async(userAddress) => {
 /* ------------------------- Private Chatroom Related Endpoints ------------------------- */
 const PrivateChatRoomsRef = collection(db,"PrivateChatRooms")
 
-// GET Request: Query PrivateChatRooms by user UID
+// GET Request: Query PrivateChatRooms by user address
 // Returns back an array custom chatroom object for front-end display
-router.get('/get-private-chatroom/:userId', async (req, res) => {
+router.get('/get-private-chatroom/:userAddress', async (req, res) => {
     try {
         // destructure request params
-        const userId = req.params.userId;
+        const userAddress = req.params.userAddress;
 
-        // empty array for returning response
-        const response = [];
-        const queryResultId = [];
+        // empty array for returning response: Will returns an array custom chatroom object
+        const customChatrooms = [];
         // create an array of promises for subcollection queries
         const subCollectionPromises = [];
 
         // start to query PrivateChatRooms document that's a user participated in
-        const q = query(PrivateChatRoomsRef, where("participants", "array-contains", userId));
+        const q = query(PrivateChatRoomsRef, where("participants", "array-contains", userAddress));
         const querySnapshot = await getDocs(q);
 
         querySnapshot.forEach(documentSnapshot => {
             
-            // push chatroom id to the queryResultId 
-            queryResultId.push(documentSnapshot.id);
-            
             const { participants } = documentSnapshot.data();
 
-            // start to query the sub-collection "Messages" within a PrivateChatRoom
+            // start to query the sub-collection "Messages" within a PrivateChatRoom: Only query the latest message
             const subCollectionQuery = query(collection(db, "PrivateChatRooms", documentSnapshot.id, "Messages"), orderBy("timestamp", "desc"), limit(1));
             subCollectionPromises.push(getDocs(subCollectionQuery).then(subCollectionQuerySnapshot => {
                 const latestMessage = subCollectionQuerySnapshot.docs[0];
 
                 if (latestMessage) {
-                    const { from, message, timestamp } = latestMessage.data();
-                    const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
-                    const formattedDate = date.toLocaleString('en-US', { timeZone: 'America/Toronto' });
+                    const { from, text_content, timestamp } = latestMessage.data();
 
-                    const chatWithResponse = {
-                        chatWith: findChatWith(participants, userId),
-                        lastestMessageFrom: from,
-                        lastestMessage: message,
-                        lastestMessageTimeStamp: formattedDate
+                    const customChatroom = {
+                        chatroomId : documentSnapshot.id,
+                        chatWith : findChatWith(participants, userAddress),
+                        lastestMessageFrom : from,
+                        lastestMessage : text_content,
+                        lastestMessageTimeStamp : timestamp
                     };
 
-                    response.push(chatWithResponse);
+                    customChatrooms.push(customChatroom);
                 }
             }));
         });
@@ -337,9 +332,10 @@ router.get('/get-private-chatroom/:userId', async (req, res) => {
         // Wait for all subcollection queries to complete
         await Promise.all(subCollectionPromises);
 
-        console.log(`${currentDateAndTime}: There are ${queryResultId.length} ongoing chats for user ${userId}: ${queryResultId}`);
-        console.log(`User ${userId} is participated in below chats: ${JSON.stringify(response)}`);
-        return res.status(200).json(response);
+        console.log(`${currentDateAndTime}: There are ${customChatrooms.length} ongoing chats for user ${userAddress}`);
+        
+        return res.status(200).json(customChatrooms);
+
     } catch (error) {
         console.log(`${currentDateAndTime}: ${error.message}`);
         return res.status(500).send(error.message);

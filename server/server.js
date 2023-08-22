@@ -2,7 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const app = express()
 const router = express.Router()
-const PORT = process.env.port || 4001
+const PORT = process.env.port || 4000
 // import firestore instance
 const {db} = require("./firebase");
 const { collection, addDoc, serverTimestamp, where, getDocs, query, doc, getDoc, updateDoc, orderBy, limit } = require("firebase/firestore");

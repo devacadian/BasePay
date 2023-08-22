@@ -190,7 +190,7 @@ Activity Object Structure
 
 */
 
-router.post('/activties/:userAddress', async (req,res) => {
+router.get('/activties/:userAddress', async (req,res) => {
     try {
         const userAddress = req.params.userAddress
         //const { etherscanDomain } = req.body

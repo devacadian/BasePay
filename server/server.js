@@ -6,7 +6,7 @@ const PORT = process.env.port || 4000
 // import firestore instance
 const {db} = require("./firebase");
 const { collection, addDoc, serverTimestamp, where, getDocs, query, doc, getDoc, updateDoc, orderBy, limit } = require("firebase/firestore");
-const { queryPaymentSent,queryPaymentReceived } = require('./modules/etherScan')
+//const { queryPaymentSent,queryPaymentReceived } = require('./modules/etherScan')
 
 
 // Middlewares
@@ -193,7 +193,7 @@ Activity Object Structure
 router.post('/activties/:userAddress', async (req,res) => {
     try {
         const userAddress = req.params.userAddress
-        const { etherscanDomain } = req.body
+        //const { etherscanDomain } = req.body
         const activities = []
 
         // query activties
@@ -201,8 +201,6 @@ router.post('/activties/:userAddress', async (req,res) => {
         const requestReceivedActivities = await queryPaymentRequestReceived(userAddress)
         //const paymentSendActivities = await queryPaymentSent(etherscanDomain,userAddress)
         //const paymentReceivedActivities = await queryPaymentReceived(etherscanDomain,userAddress)
-
-        //console.log(paymentSendActivities)
 
         //activities.push(...requestSendActivities, ...requestReceivedActivities, ...paymentSendActivities, ...paymentReceivedActivities);
         activities.push(...requestSendActivities, ...requestReceivedActivities);

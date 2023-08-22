@@ -69,16 +69,59 @@ async function queryPaymentSent(etherscanDomain, userAddress) {
     }
     
 }
-//queryAllTxn(etherscanDomain,'0x6724A71f5689c51138F2f213E3Bbb00Ffe320A28').then(console.log)
-queryPaymentSent(etherscanDomain, '0x6724A71f5689c51138F2f213E3Bbb00Ffe320A28')
-    .then(console.log)
+
+// query Payment Received Activity
+async function queryPaymentReceived(etherscanDomain, userAddress) {
+    
+    try {
+        const activities = []
+        //const { normalResponseByUserId, internalResponseByContractAddress } = await queryAllTxn(etherscanDomain, userAddress)
+
+        // get txn that userAddress is the receiver
+        const internalResponseUserAddress = await axios.get(`${etherscanDomain}api?module=account&action=txlistinternal&address=${userAddress}&startblock=0&endblock=99999999&apikey=${apiKey}`)
+        const filteredInternalResponseUserAddress = internalResponseUserAddress.data.result.filter(txn => txn.from.toLowerCase() == contractAddress.toLowerCase())
+
+        // get all normal txn in a contract
+        // normal "from" = fund origin
+        const normalResponseByUserId = await axios.get(`${etherscanDomain}api?module=account&action=txlist&address=${contractAddress}&startblock=0&endblock=99999999&&apikey=${apiKey}`)
+
+        //console.log(filteredInternalResponseUserAddress)
+        //console.log(internalResponseUserAddress.data.result)
+
+        for (const txn of filteredInternalResponseUserAddress) {
+            
+            const { hash, isError, value, timeStamp } = txn
+
+            const transaction_state = isError == 0 ? "Processed" : "Failed"
+
+            const from = getFromAddressByHash(normalResponseByUserId.data.result, hash)
+
+            if(from == null) {
+                continue
+            }
+
+            const activity = {
+                activityId : hash,
+                activityType : "Payment Received",
+                activityState : transaction_state,
+                counterParty : from,
+                amount : ethers.utils.formatEther(value),
+                timestamp : timeStamp // timestamp in Unix format
+            }
+
+            activities.push(activity)
+
+        }
+
+        return activities
+
+    } catch(error) {
+        return error.message
+    }
+    
+}
 
 /* ------------------------- Helper Functions ------------------------- */
-function filterByFromAddress(transactions, targetAddress) {
-    // Use the filter method to filter objects by the "from" field
-    return transactions.filter(transaction => transaction.from.toLowerCase() === targetAddress.toLowerCase());
-  }
-
 function getToAddressByHash(transactions, targetHash) {
     const transaction = transactions.find(tx => tx.hash === targetHash);
     if (transaction) {
@@ -88,6 +131,26 @@ function getToAddressByHash(transactions, targetHash) {
     }
 }
 
-module.exports = {
-    queryPaymentSent
+function getFromAddressByHash(transactions, targetHash) {
+    const transaction = transactions.find(tx => tx.hash === targetHash);
+    if (transaction) {
+        return transaction.from;
+    } else {
+        return null; // Return null if the hash is not found
+    }
 }
+
+
+module.exports = {
+    queryPaymentSent,
+    queryPaymentReceived
+}
+
+
+queryPaymentReceived(etherscanDomain, '0xAB60DdFE027D9D86C836e8e5f9133578E102F720')
+    .then(console.log)
+
+
+//queryAllTxn(etherscanDomain,'0x6724A71f5689c51138F2f213E3Bbb00Ffe320A28').then(console.log)
+//queryPaymentSent(etherscanDomain, '0x6724A71f5689c51138F2f213E3Bbb00Ffe320A28')
+//    .then(console.log)

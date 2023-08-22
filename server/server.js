@@ -344,11 +344,23 @@ router.get('/get-private-chatroom/:userAddress', async (req, res) => {
 
 // POST Request: Create a PrivateChatRoom document
 // returns back the newly created document id 
-// @dev add validation logic to make sure same pair of participants only exist once in the DB
 router.post('/create-private-chatroom', async (req,res) => {
     try {
-        const {currentUserId, secondUserId} = req.body
-        const data = { participants : [currentUserId, secondUserId] }
+        const {currentUserAddress, secondUserAddress} = req.body
+        
+        // validation: can't create private chatroom with yourself
+        if (currentUserAddress == secondUserAddress) {
+            return res.status(400).json('Bad request: can not create a private chatroom with two same address')
+        }
+
+        // validation: can't create private chatroom with a same set of participants
+        const q = query(PrivateChatRoomsRef, where("participants", "array-contains-any", [currentUserAddress, secondUserAddress]));
+        const querySnapshot = await getDocs(q);
+        if (querySnapshot.empty != true) {
+            return res.status(400).json(`Bad request: You aleardy engaged in a chat with ${secondUserAddress} `)
+        }
+
+        const data = { participants : [currentUserAddress, secondUserAddress] }
 
         const newDocRef = await addDoc(PrivateChatRoomsRef, data)
         console.log(`${currentDateAndTime}: Created new PrivateChatRoom with ID: ${newDocRef.id}`)

@@ -373,15 +373,29 @@ router.post('/create-private-chatroom', async (req,res) => {
 })
 
 // POST Request: Send Message
-// returns back the newly created Messages Document
+// returns back the newly created Messages Document ID
 router.post('/send-message', async (req,res) => {
     try {
-        const {currentUserId, secondUserId} = req.body
-        const data = { participants : [currentUserId, secondUserId] }
+        const {chatroomId, currentUserAddress, message_content} = req.body
 
-        const newDocRef = await addDoc(PrivateChatRoomsRef, data)
-        console.log(`${currentDateAndTime}: Created new PrivateChatRoom with ID: ${newDocRef.id}`)
-        return res.status(200).json(newDocRef.id)    
+        // find the second user address
+        const chatroomDocRef = doc(db, "PrivateChatRooms", chatroomId)
+        const chatroomSnap = await getDoc(chatroomDocRef)
+        const secondUserAddress = findChatWith(chatroomSnap.data().participants,currentUserAddress)
+
+        // create new Message Document
+        const MessagesRef = collection(db, "PrivateChatRooms", chatroomId, "Messages")
+
+        const data = {
+            from : currentUserAddress,
+            to : secondUserAddress,
+            text_content : message_content,
+            timestamp : serverTimestamp()
+        }
+
+        const newMessageRef = await addDoc(MessagesRef, data)
+        console.log(`${currentDateAndTime}: Message sent with id: ${newMessageRef.id}`)
+        return res.status(200).json(newMessageRef.id)
 
     } catch(error){
         console.log(`${currentDateAndTime}: ${error.message}`);

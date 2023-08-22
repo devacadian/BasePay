@@ -5,7 +5,7 @@ import { useAccount } from "wagmi";
 import { useBalance } from 'wagmi';
 import createIcon from 'blockies';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCopy, faPaperPlane, faQrcode, faXmark } from '@fortawesome/pro-solid-svg-icons';
+import { faCircleX, faCopy, faEnvelopeOpenDollar, faMoneyBill, faMoneyBillTransfer, faMoneyBillWave, faMoneyCheckDollarPen, faPaperPlane, faQrcode, faXmark } from '@fortawesome/pro-solid-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import QRCode from 'qrcode.react'; 
 import { fetchAllAct  } from '../controller/activitiesFetch'
@@ -112,6 +112,30 @@ const formatTimestamp = (timestamp) => {
 };
 
 
+const getIconForActivity = (activityType, activityState) => {
+  const displayText = getActivityDisplayText(activityType, activityState);
+  switch (displayText) {
+    case 'Rejected Request':
+      return <FontAwesomeIcon icon={faCircleX} className="h-7.5 w-7.5 text-gray-500" />;
+    case 'Pending Request':
+      return <FontAwesomeIcon icon={faMoneyBillTransfer} className="h-7.5 w-7.5 text-base-blue" />;
+    case 'Request Accepted':
+      return <FontAwesomeIcon icon={faEnvelopeOpenDollar} className="h-7.5 w-7.5 text-base-blue" />;
+    case 'Payment Sent':
+      return <FontAwesomeIcon icon={faMoneyBillWave} className="h-7.5 w-7.5 text-base-blue" />;
+    case 'Request Declined':
+      return <FontAwesomeIcon icon={faCircleX} className="h-7.5 w-7.5 text-gray-500" />;
+    case 'Request Sent':
+      return <FontAwesomeIcon icon={faMoneyCheckDollarPen} className="h-7.5 w-7.5 text-base-blue" />;
+    case 'Request Paid':
+      return <FontAwesomeIcon icon={faMoneyBill} className="h-7.5 w-7.5 text-base-blue" />;
+    default:
+      return <FontAwesomeIcon icon={faEthereum} className="h-7.5 w-7.5 text-base-blue" />; // Default fallback
+  }
+};
+
+
+
 // Function to format the date for grouping
 const formatDateForGrouping = (timestamp) => {
   const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
@@ -135,6 +159,14 @@ const getActivityDisplayText = (activityType, activityState) => {
   if (activityType === 'Request Received' && activityState === 'Pending') return 'Request Sent';
   if (activityType === 'Request Received' && activityState === 'Processed') return 'Request Paid';
   return activityType; // Default fallback
+};
+
+const getCounterPartyPrefix = (activityType, activityState) => {
+  const displayText = getActivityDisplayText(activityType, activityState);
+  if (['Payment Sent', 'Request Paid', 'Request Sent'].includes(displayText)) {
+    return 'To';
+  }
+  return 'From';
 };
 
 
@@ -173,7 +205,7 @@ const getActivityDisplayText = (activityType, activityState) => {
               </div>
               <div className="text-left text-black font-semibold ml-4 flex flex-col">
                 <div>{formattedBalance} ETH</div> {/* Display formatted balance */}
-                <div className="text-sm text-black font-semibold">Goerli Basechain Balance</div> {/* Label */}
+                <div className="text-sm text-gray-500 font-semibold">Goerli Basechain Balance</div> {/* Label */}
               </div>
             </div>
           </div>
@@ -191,17 +223,17 @@ const getActivityDisplayText = (activityType, activityState) => {
         <div className="text-left text-black text-base font-semibold mb-6 mt-6">{displayDate}</div>
         {activitiesForDate.map((activity, index) => (
           <div key={index} className="activity-item text-black bg-gray-100 rounded-3xl p-4 mb-5 flex">
-            <div className="flex justify-center items-center relative w-10 h-10 rounded-full bg-gray-300 shadow drop-shadow-sm">
-              <FontAwesomeIcon icon={faEthereum} className="text-black h-6 w-6 z-10" />
+            <div className="flex justify-center items-center relative w-12 h-12 rounded-full bg-white drop-shadow-sm mt-1.5 -ml-0.5">
+            {getIconForActivity(activity.activityType, activity.activityState)}
             </div>
-            <div className="ml-4 flex flex-col text-left flex-grow"> {/* Added flex-grow here */}
+            <div className="ml-4 flex flex-col text-left flex-grow mt-1.5 mb-0.5"> {/* Added flex-grow here */}
               <div className="flex justify-between"> {/* Added flex and justify-between here */}
                 <p className="font-bold inline-block">{getActivityDisplayText(activity.activityType, activity.activityState)}</p>
-                <p className="font-semibold inline-block ml-2">{formatTimestamp(activity.timestamp)}</p> {/* Moved to the right */}
+                <p className="font-semibold inline-block ml-2 text-gray-500">{formatTimestamp(activity.timestamp)}</p> {/* Moved to the right */}
               </div>
-              <div className="flex justify-between"> {/* Added flex and justify-between here */}
+              <div className="flex justify-between mt-1"> {/* Added flex and justify-between here */}
                 <p className="font-semibold inline-block">{activity.amount} ETH</p>
-                <p className="font-semibold inline-block ml-2">from {activity.counterParty.substring(0, 6)}</p> {/* Moved to the right */}
+                <p className="font-semibold inline-block ml-2">{getCounterPartyPrefix(activity.activityType, activity.activityState)} {activity.counterParty.substring(0, 6)}</p>
               </div>
               <div className="text-gray-500 font-semibold text-sm">
               </div>

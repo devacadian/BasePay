@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse, faMessages, faDollarSign, faBell, faUser } from '@fortawesome/pro-solid-svg-icons';
+import { faHouse, faMessages, faDollarSign, faBell, faUser, faMessagesDollar } from '@fortawesome/pro-solid-svg-icons';
 import { useRouter } from 'next/router'; 
 
 const Footer = () => {
@@ -38,7 +38,7 @@ const Footer = () => {
         </Link>
         <Link href="/messages">
           <div className="flex flex-col items-center font-semibold pt-2">
-            <FontAwesomeIcon icon={faMessages} className={` ${activeTab === 'messages' ? 'text-base-blue w-8 h-8' : 'text-gray-400 w-6 h-6'}`} />
+            <FontAwesomeIcon icon={faMessagesDollar} className={` ${activeTab === 'messages' ? 'text-base-blue w-8 h-8' : 'text-gray-400 w-6 h-6'}`} />
             <span className={` ${activeTab === 'messages' ? 'text-base-blue pb-2' : 'text-gray-400'}`}>Messages</span>
           </div>
         </Link>

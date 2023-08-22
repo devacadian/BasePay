@@ -112,6 +112,18 @@ const formatTimestamp = (timestamp) => {
 };
 
 
+// Function to format the date for grouping
+const formatDateForGrouping = (timestamp) => {
+  const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
+  return date.toISOString().split('T')[0]; // Returns YYYY-MM-DD
+};
+
+// Grouping activities by date
+const activitiesByDate = activities.reduce((acc, activity) => {
+  const date = formatDateForGrouping(activity.timestamp);
+  acc[date] = acc[date] ? [...acc[date], activity] : [activity];
+  return acc;
+}, {});
 
 
   return (
@@ -141,7 +153,7 @@ const formatTimestamp = (timestamp) => {
               <img src="/assets/etherscan-logo-circle.svg" alt="Basescan" className="h-4 w-4" />
             </a>
           </div>
-          <div className="px-4 mt-8">
+          <div className="px-4 mt-6">
             <div className="w-full bg-gray-100 h-20 rounded-3xl flex items-center justify-start shadow-sm drop-shadow-sm p-4">
               <div className="flex justify-center items-center relative w-10 h-10 rounded-full bg-gray-300 shadow drop-shadow-sm ml-4">
                 <FontAwesomeIcon icon={faEthereum} className="text-black h-6 w-6 z-10" />
@@ -152,22 +164,32 @@ const formatTimestamp = (timestamp) => {
               </div>
             </div>
           </div>
-          <div className="text-left text-black font-semibold text-2xl mt-6 px-4 mb-6">Activity</div> {/* Activity text */}
-         
-         
-          <div className="px-4"> {/* Container with horizontal padding */}
-  {activities.map((activity, index) => (
-    <div key={index} className="activity-item text-black bg-gray-100 rounded-3xl p-4 mb-3">
-      <p className="font-bold">{activity.activityType}</p>
-      <p>{activity.amount} ETH from {activity.counterParty.substring(0, 6) + '...' + activity.counterParty.substring(activity.counterParty.length - 6)}</p>
-      <div className="text-gray-500 text-sm">
-        <p className="inline-block">State: {activity.activityState}</p>
-        <p className="inline-block ml-2">{formatTimestamp(activity.timestamp)}</p>
-      </div>
-    </div>
-  ))}
-</div>
 
+          <div className="text-left text-black font-semibold text-2xl mt-6 px-4 mb-6">Activity</div>
+
+<div className="px-4">
+  {Object.keys(activitiesByDate).sort().reverse().map((date, index) => {
+    const activitiesForDate = activitiesByDate[date];
+    const today = new Date().toISOString().split('T')[0];
+    const displayDate = date === today ? "Today" : new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(date));
+
+    return (
+      <div key={index}>
+        <div className="text-left text-black text-base font-semibold mb-6 mt-6">{displayDate}</div>
+        {activitiesForDate.map((activity, index) => (
+          <div key={index} className="activity-item text-black bg-gray-100 rounded-3xl p-4 mb-5">
+            <p className="font-bold">{activity.activityType}</p>
+            <p className="font-semibold">{activity.amount} ETH from {activity.counterParty.substring(0, 6) + '...' + activity.counterParty.substring(activity.counterParty.length - 6)}</p>
+            <div className="text-gray-500 font-semibold text-sm">
+              <p className="inline-block ">State: {activity.activityState}</p>
+              <p className="inline-block  ml-2">{formatTimestamp(activity.timestamp)}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  })}
+</div>
 
         </div>
       )}

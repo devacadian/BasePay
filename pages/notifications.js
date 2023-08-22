@@ -15,6 +15,7 @@ const Notifications = () => {
 const [selectedRequest, setSelectedRequest] = useState(null);
 const [showConfirmDeclineModal, setShowConfirmDeclineModal] = useState(false);
 const [animateModal, setAnimateModal] = useState(false);
+const [touchStartY, setTouchStartY] = useState(0); // State to track the touch start position
 
 
   useEffect(() => {
@@ -88,7 +89,7 @@ const [animateModal, setAnimateModal] = useState(false);
       document.body.style.minHeight = "0px";
       window.scrollBy(0, -1);
       setTimeout(() => {
-        setShowconfirmpayModal(false); // Close the modal after animation completes
+        setShowConfirmDeclineModal(false); // Close the modal after animation completes
         setAnimateModal(false); // Reset the animation state
       }, 150); // 150 milliseconds
     }
@@ -102,7 +103,7 @@ const [animateModal, setAnimateModal] = useState(false);
   const handleTouchEnd = (e) => {
     const touchEndY = e.changedTouches[0].clientY;
     if (touchEndY > touchStartY + 50) { // 50px threshold for swipe-down
-      handleCloseconfirmpayModal(); 
+      handleCloseDeclineRequestModal(); 
     }
   };
 
@@ -113,10 +114,61 @@ const [animateModal, setAnimateModal] = useState(false);
     document.body.style.minHeight = "0px";
     window.scrollBy(0, -1);
     setTimeout(() => {
-      setShowconfirmpayModal(false); // Close the modal after animation completes
+      setShowConfirmDeclineModal(false); // Close the modal after animation completes
       setAnimateModal(false); // Reset the animation state
     }, 300); // 300 milliseconds
   };
+
+
+  const handleCloseDeclineRequestModal = () => {
+    document.body.style.overflowY = "scroll";
+    document.body.style.minHeight = "0px";
+    window.scrollBy(0, -1);
+    setShowConfirmDeclineModal(false);
+  };
+
+  const handleOpenDeclineRequestModal = () => {
+    document.body.style.overflowY = "hidden";
+    document.body.style.minHeight = "calc(100vh + 1px)";
+    window.scrollBy(0, 1);
+    setShowConfirmDeclineModal(true); // Open the confirm request modal
+  };
+  
+ 
+  const handleConfirmDecline = async () => {
+    try {
+      const declineData = {
+        decision: "false" // String to indicate a decline
+      };
+  
+      // Constructing the URL by appending the selected request ID
+      const url = `https://basepay-api.onrender.com/update-transaction-state/${selectedRequest.id}`;
+  
+      // Make a PATCH request to the correct endpoint
+      const response = await fetch(url, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(declineData)
+      });
+  
+      // Check if the request was successful
+      if (response.ok) {
+        console.log(`Declined the request with ID: ${selectedRequest.id}`);
+        // You can close the decline modal and refresh the request list or do any other UI updates here
+        handleCloseConfirmRequestModal();
+      } else {
+        // Handle the error appropriately
+        console.error('Error declining request:', await response.json());
+      }
+    } catch (error) {
+      console.error('Error declining request:', error);
+      // Handle the error appropriately
+    }
+  };
+
+
 
   
   return (
@@ -236,9 +288,7 @@ const [animateModal, setAnimateModal] = useState(false);
       <div className="text-black text-base mt-2 text-center">From: {selectedRequest.payment_requester.substring(0, 6)}...{selectedRequest.payment_requester.slice(-6)}</div>
       <div className="text-black text-base mt-2 text-center">Request Sent on {new Date(selectedRequest.request_time.seconds * 1000).toLocaleDateString()}</div>
       <div className="text-black text-base mt-2 text-center">Message: {selectedRequest.transaction_message || 'No message sent with request'}</div>
-      <button className="bg-base-blue text-white text-lg font-medium w-full h-12 rounded-3xl focus:outline-none mt-6" onClick={() => {
-          setShowConfirmDeclineModal(true);
-        }}>
+      <button className="bg-base-blue text-white text-lg font-medium w-full h-12 rounded-3xl focus:outline-none mt-6"  onClick={handleOpenDeclineRequestModal}>
         Decline Request
       </button>
     </div>
@@ -263,11 +313,11 @@ const [animateModal, setAnimateModal] = useState(false);
               <div className="text-black text-base mt-2 text-center">Request Sent on {new Date(selectedRequest.request_time.seconds * 1000).toLocaleDateString()}</div>
               <div className="text-black text-base mt-2 text-center">Message: {selectedRequest.transaction_message || 'No message sent with request'}</div>
               <button
-                className="bg-base-blue text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none mt-4 mb-2"
-               
-              >
-                Confirm Decline
-              </button>
+  className="bg-base-blue text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none mt-4 mb-2"
+  onClick={handleConfirmDecline}
+>
+  Confirm Decline
+</button>
             </div>
           </div>
         </div>

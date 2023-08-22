@@ -56,6 +56,18 @@ const Profile = () => {
     // You can also send any state or parameters needed to handle the modal on the /pay page
   };
 
+
+  const handleQRCodeClick = () => {
+    setShowQRCodeModal(true);
+    document.body.style.overflowY = "hidden"; // Apply scroll lock
+  };
+
+  // Function to handle close QR Code modal
+const handleCloseQRCodeModal = () => {
+  setShowQRCodeModal(false);
+  document.body.style.overflowY = "scroll"; // Remove scroll lock
+};
+
   return (
     <main className="flex flex-col min-h-screen bg-white">
       <Head>
@@ -69,7 +81,7 @@ const Profile = () => {
             <div className="bg-gray-300 rounded-full h-20 w-20 mb-6 mx-auto overflow-hidden border-2 border-gray-300">
               <AvatarIcon />
             </div>
-            <div className="bg-base-blue rounded-full h-8 w-8 absolute bottom-5.5 -right-1 flex items-center justify-center" onClick={() => setShowQRCodeModal(true)}>
+            <div className="bg-base-blue rounded-full h-8 w-8 absolute bottom-5.5 -right-1 flex items-center justify-center" onClick={handleQRCodeClick}>
                 <FontAwesomeIcon icon={faQrcode} className="h-5 w-5 text-white" /> {/* QR code icon */}
               </div>
           </div>
@@ -104,7 +116,7 @@ const Profile = () => {
 {showQRCodeModal && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
     <div className="bg-white p-6 rounded-xl absolute shadow-xl drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}> {/* Manual control of width and padding */}
-      <button onClick={() => setShowQRCodeModal(false)} className="absolute top-6 left-4">
+    <button onClick={handleCloseQRCodeModal} className="absolute top-6 left-4">
         <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
       </button>
       <div className="text-black text-2xl font-bold text-center mt-10 mb-4">Receive on <span className='text-base-blue'> BasePay</span></div>

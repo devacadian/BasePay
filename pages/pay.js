@@ -449,6 +449,20 @@ const handleScanClick = (actionType) => {
   actionType(); // Call either handlePayClick or handleRequestClick
 };
 
+
+// Function to handle open QR Choice modal
+const handleOpenQRChoiceModal = () => {
+  setShowQRChoiceModal(true);
+  document.body.style.overflowY = "hidden"; // Apply scroll lock
+};
+
+// Function to handle close QR Choice modal
+const handleCloseQRChoiceModal = () => {
+  setShowQRChoiceModal(false);
+  document.body.style.overflowY = "scroll"; // Remove scroll lock
+};
+
+
   return (
 <main className="min-h-screen flex flex-col bg-white pb-20">
       <div style={{ background: 'linear-gradient(to bottom, #0e76fd, #ffffff)' }} className="flex-grow flex flex-col">
@@ -478,7 +492,7 @@ const handleScanClick = (actionType) => {
   </div>
 </div>
 <div className="flex items-center relative">
-<div className="bg-gray-100 absolute h-6 w-7 rounded-md" onClick={() => setShowQRChoiceModal(true)} />
+<div className="bg-gray-100 absolute h-6 w-7 rounded-md" onClick={handleOpenQRChoiceModal}  />
       <FontAwesomeIcon icon={faBarcodeRead} className="h-7 w-7 text-base-blue z-10" onClick={() => setShowQRChoiceModal(true)} />
     </div>
       </div>
@@ -517,7 +531,7 @@ const handleScanClick = (actionType) => {
       {showQRChoiceModal && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
     <div className="bg-white p-6 rounded-xl absolute top-1/6 inset-x-4 shadow-xl drop-shadow">
-      <button onClick={() => setShowQRChoiceModal(false)} className="z-40 absolute top-6 left-4">
+    <button onClick={handleCloseQRChoiceModal}  className="z-40 absolute top-6 left-4">
         <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
       </button>
       <div className="flex flex-col items-center justify-center mt-6">

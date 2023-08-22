@@ -76,11 +76,13 @@ const [selectedRequestToPay, setSelectedRequestToPay] = useState(null);
   const openDeclineModal = (request) => {
     setSelectedRequest(request);
     setShowDeclineModal(true);
+    document.body.style.overflowY = "hidden";
   };
   
   const closeDeclineModal = () => {
     setShowDeclineModal(false);
     setSelectedRequest(null);
+    document.body.style.overflowY = "scroll"; 
   };
 
 
@@ -172,18 +174,18 @@ const [selectedRequestToPay, setSelectedRequestToPay] = useState(null);
 
 
   // Function to open the pay modal
-const openPayModal = (request) => {
-  setSelectedRequestToPay(request);
-  setShowPayRequestModal(true);
-};
+  const openPayModal = (request) => {
+    setSelectedRequestToPay(request);
+    setShowPayRequestModal(true);
+    document.body.style.overflowY = "hidden"; // Apply scroll lock
+  };
 
 // Function to close the pay modal
 const closePayModal = () => {
   setSelectedRequestToPay(null);
   setShowPayRequestModal(false);
+  document.body.style.overflowY = "scroll"; // Remove scroll lock
 };
-
-
   
   return (
     <main className="flex flex-col min-h-screen bg-white">

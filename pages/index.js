@@ -47,6 +47,12 @@ export default function Home() {
 
   const handleQRCodeClick = () => {
     setShowQRCodeModal(true);
+    document.body.style.overflowY = "hidden";
+  };
+
+  const handleQRCodeClickClose = () => {
+    setShowQRCodeModal(false);
+    document.body.style.overflowY = "scroll"; 
   };
 
   const copyToClipboard = () => {
@@ -60,10 +66,12 @@ export default function Home() {
 
   const handleInviteClick = () => {
     setShowInviteModal(true);
+    document.body.style.overflowY = "hidden";
   };
 
   const handleInviteModalClose = () => {
     setShowInviteModal(false);
+    document.body.style.overflowY = "scroll"; 
   };
 
 
@@ -193,11 +201,12 @@ export default function Home() {
 </div>
 
 
+
 {/* QR Code Modal */}
 {showQRCodeModal && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
     <div className="bg-white p-6 rounded-xl absolute shadow-xl drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}> {/* Manual control of width and padding */}
-      <button onClick={() => setShowQRCodeModal(false)} className="absolute top-6 left-4">
+      <button onClick={handleQRCodeClickClose} className="absolute top-6 left-4">
         <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
       </button>
       <div className="text-black text-2xl font-bold text-center mt-10 mb-4">Receive on <span className='text-base-blue'> BasePay</span></div>

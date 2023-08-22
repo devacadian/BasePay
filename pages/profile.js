@@ -20,6 +20,8 @@ const Profile = () => {
   const [showQRCodeModal, setShowQRCodeModal] = useState(false);
   const router = useRouter();
   const [activities, setActivities] = useState([]);
+  const hasFetchedRef = useRef(false);
+
 
   useEffect(() => {
     const balanceValue = parseFloat(data?.formatted || '0.0000');
@@ -34,7 +36,6 @@ const Profile = () => {
     setIsClient(true);
   }, []);
 
-  const hasFetchedRef = useRef(false);
 
   useEffect(() => {
     if (address && !hasFetchedRef.current) {

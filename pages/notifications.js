@@ -27,8 +27,10 @@ const [requestTransactionStatus, setRequestTransactionStatus] = useState(null); 
 const [txHashState, setTxHashState] = useState('');
 const [transactionStatus, setTransactionStatus] = useState(null);
 const [showConfirmRequestTransactionModal, setShowConfirmRequestTransactionModal] = useState(false); 
+const hasFetchedPaymentRequestsRef = useRef(false);
 
-  useEffect(() => {
+useEffect(() => {
+  if (address && !hasFetchedPaymentRequestsRef.current) {
     // Function to fetch payment requests
     const fetchPaymentRequests = async () => {
       try {
@@ -42,7 +44,10 @@ const [showConfirmRequestTransactionModal, setShowConfirmRequestTransactionModal
     };
 
     fetchPaymentRequests();
-  }, [address]);
+
+    hasFetchedPaymentRequestsRef.current = true; // Mark as fetched
+  }
+}, [address]); // Will run when address changes, but fetch only once per address
 
   const AvatarIcon = ({ seed }) => {
     const avatarRef = useRef(null);

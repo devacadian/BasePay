@@ -143,40 +143,48 @@ const [requestTransactionStatus, setRequestTransactionStatus] = useState(null); 
   };
   
  
-  const handleConfirmDecline = async () => {
+const handleConfirmDecline = async () => {
+  setShowDeclineRequestTransactionModal(true);
+  setRequestTransactionStatus('pending');
 
-    setShowDeclineRequestTransactionModal(true);
-    setRequestTransactionStatus('pending');
-    try {
-      const declineData = {
-        decision: false // Boolean to indicate a decline
-      };
-      // Constructing the URL by appending the selected payment request ID
-      const url = `https://basepay-api.onrender.com/update-transaction-state/${selectedRequest.paymentRequestId}`;
-  
-      // Make a PATCH request to the correct endpoint
-      const response = await fetch(url, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(declineData)
-      });
-  
-      // Check if the request was successful
-      if (response.ok) {
-        console.log(`Declined the request with ID: ${selectedRequest.paymentRequestId}`);
-        // You can close the decline modal and refresh the request list or do any other UI updates here
-        handleCloseConfirmRequestModal();
-      } else {
-        // Handle the error appropriately
-        console.error('Error declining request:', await response.json());
-      }
-    } catch (error) {
-      console.error('Error declining request:', error);
+  try {
+    const declineData = {
+      decision: false // Boolean to indicate a decline
+    };
+
+    // Constructing the URL by appending the selected payment request ID
+    const url = `https://basepay-api.onrender.com/update-transaction-state/${selectedRequest.paymentRequestId}`;
+
+    // Make a PATCH request to the correct endpoint
+    const response = await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(declineData)
+    });
+
+    const responseData = await response.json();
+
+    // Check if the request was successful
+    if (response.ok && responseData.transaction_state === "Rejected") {
+      console.log(`Declined the request with ID: ${selectedRequest.paymentRequestId}`);
+      
+      // Set a timeout and update the transaction state and UI
+      setTimeout(() => {
+        setRequestTransactionStatus('success'); // Update the status to success if the request succeeded
+        selectedRequest.transaction_state = "Rejected"; // Update the transaction state of the selected request
+      }, 750); // Introducing a delay for better UX
+
+    } else {
       // Handle the error appropriately
+      console.error('Error declining request:', responseData);
     }
-  };
+  } catch (error) {
+    console.error('Error declining request:', error);
+    // Handle the error appropriately
+  }
+};
 
   // Function to open the pay modal
   const openPayModal = (request) => {
@@ -460,10 +468,10 @@ const handlePayButttonClick = () => {
           {/* You can customize the link as needed */}
           <div className="flex items-center justify-start mb-6"> 
             <FontAwesomeIcon icon={faCircleCheck} className="text-base-blue h-7 w-7" /> 
-            <span className="ml-4 mt-0.5 text-black font-semibold">Request Successful!</span>
+            <span className="ml-4 mt-0.5 text-black font-semibold">Payment Request Declined!</span>
           </div>
           <div className="mb-4"> 
-            <div className="text-black font-semibold">Request sent successfully to {selectedRequest.payment_requester.substring(0, 6)}...{selectedRequest.payment_requester.slice(-6)} on Goerli Base Chain using BasePay!</div>
+            <div className="text-black font-semibold">Declining payment request from {selectedRequest.payment_requester.substring(0, 6)}...{selectedRequest.payment_requester.slice(-6)} on Goerli Base Chain was succesful!</div>
           </div>
           <div className="ml-0">
             <div className="text-gray-600 font-medium text-lg"> {selectedRequest.transaction_message || 'No message sent with request'}</div>
@@ -473,8 +481,8 @@ const handlePayButttonClick = () => {
               document.body.style.minHeight = "0px";
               window.scrollBy(0, -1);
               setShowDeclineRequestTransactionModal(false);
-              setshowRequestSelectionModal(false);
-              setShowRequestModal(false); // Close the success modal
+              setShowConfirmDeclineModal(false);
+              setShowDeclineModal(false); // Close the success modal
             }}>
             Continue
           </button>

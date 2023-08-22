@@ -221,7 +221,7 @@ router.get('/activties/:userAddress', async (req,res) => {
     }
 })
 
-/* ------------------------- Helper Functions ------------------------- */
+/* ------------------------- Payment Request Helper Functions ------------------------- */
 // query all PaymentRequest that payment_requester matches userId
 // returns a array of Activity Object: "Request Sent"
 const queryPaymentRequestSent = async(userAddress) => {
@@ -364,7 +364,7 @@ router.post('/create-private-chatroom', async (req,res) => {
     }
 })
 
-/* ------------------------- Helper Functions ------------------------- */
+/* ------------------------- PrivateChatRoom Helper Functions ------------------------- */
 const findChatWith = (userList, userId) => {
     for (const user of userList) {
         if (user !== userId) {

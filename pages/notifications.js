@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell, faListCheck, faArrowUpRightFromSquare, faEllipsis, faHandshakeSlash, faEye, faPaperPlane, faHand } from '@fortawesome/pro-solid-svg-icons';
+import { faBell, faListCheck, faArrowUpRightFromSquare, faEllipsis, faHandshakeSlash, faEye, faPaperPlane, faHand, faXmark } from '@fortawesome/pro-solid-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import Head from 'next/head';
 import { useAccount } from "wagmi";
@@ -11,6 +11,8 @@ const Notifications = () => {
   const [paymentRequests, setPaymentRequests] = useState([]);
   const [openDropdownIndex, setOpenDropdownIndex] = useState(null);
   const sortedPaymentRequests = paymentRequests.sort((a, b) => b.request_time.seconds - a.request_time.seconds);
+  const [showDeclineModal, setShowDeclineModal] = useState(false);
+const [selectedRequest, setSelectedRequest] = useState(null);
 
   useEffect(() => {
     // Function to fetch payment requests
@@ -65,6 +67,15 @@ const Notifications = () => {
     };
   }, []);
 
+  const openDeclineModal = (request) => {
+    setSelectedRequest(request);
+    setShowDeclineModal(true);
+  };
+  
+  const closeDeclineModal = () => {
+    setShowDeclineModal(false);
+    setSelectedRequest(null);
+  };
   
   return (
     <main className="flex flex-col min-h-screen bg-white">
@@ -154,10 +165,10 @@ const Notifications = () => {
       <FontAwesomeIcon icon={faPaperPlane} className="mr-3 h-5 w-5 text-base-blue" />
       Pay Request
     </div>
-    <div className="p-4 cursor-pointer flex items-center relative border-b-2 border-gray-200 text-black text-base">
-      <FontAwesomeIcon icon={faHandshakeSlash} className="mr-3 h-5 w-5 text-base-blue" /> {/* Make sure to use the correct icon */}
-      Decline Request
-    </div>
+    <div className="p-4 cursor-pointer flex items-center relative border-b-2 border-gray-200 text-black text-base" onClick={() => openDeclineModal(request)}>
+  <FontAwesomeIcon icon={faHandshakeSlash} className="mr-3 h-5 w-5 text-base-blue" />
+  Decline Request
+</div>
     <div className="p-4 cursor-pointer flex items-center text-black text-base -mb-3">
       <FontAwesomeIcon icon={faEye} className="mr-3 h-5 w-5 text-base-blue" />
       Mark as Read
@@ -171,6 +182,29 @@ const Notifications = () => {
 
 
         })}
+
+{showDeclineModal && selectedRequest && (
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
+    <div className="bg-white p-6 rounded-xl absolute shadow-xl drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}>
+      <button onClick={closeDeclineModal} className="absolute top-6 left-4">
+        <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
+      </button>
+      <div className="text-black text-lg font-bold mt-14 text-center">Request Details:</div>
+      <div className="text-black text-base mt-2 text-center">Amount: {selectedRequest.ether_amount} ETH</div>
+      <div className="text-black text-base mt-2 text-center">From: {selectedRequest.payment_requester.substring(0, 6)}...{selectedRequest.payment_requester.slice(-6)}</div>
+      <div className="text-black text-base mt-2 text-center">Request Sent on {new Date(selectedRequest.request_time.seconds * 1000).toLocaleDateString()}</div>
+      <div className="text-black text-base mt-2 text-center">Message: {selectedRequest.transaction_message || 'No message sent with request'}</div>
+      <button className="bg-base-blue text-white text-lg font-medium w-full h-12 rounded-3xl focus:outline-none mt-6" onClick={() => {
+        // Handle the decline action here
+      }}>
+        Decline Request
+      </button>
+    </div>
+  </div>
+)}
+
+
+
       </div>
     </main>
   );

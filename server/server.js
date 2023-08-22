@@ -2,11 +2,11 @@ const express = require('express')
 const cors = require('cors')
 const app = express()
 const router = express.Router()
-const PORT = process.env.port || 4000
+const PORT = process.env.port || 4001
 // import firestore instance
 const {db} = require("./firebase");
 const { collection, addDoc, serverTimestamp, where, getDocs, query, doc, getDoc, updateDoc, orderBy, limit } = require("firebase/firestore");
-const { queryPaymentRequestSent, queryPaymentRequestReceived, queryPaymentSent } = require('./modules/etherScan')
+const { queryPaymentSent,queryPaymentReceived } = require('./modules/etherScan')
 
 
 // Middlewares
@@ -198,10 +198,13 @@ router.post('/activties/:userAddress', async (req,res) => {
         // query activties
         const requestSendActivities = await queryPaymentRequestSent(userAddress)
         const requestReceivedActivities = await queryPaymentRequestReceived(userAddress)
-        const paymentSendActivities = await queryPaymentSent(etherscanDomain,userAddress)
-        const paymentReceivedActivities = await queryPaymentRequestReceived(etherscanDomain,userAddress)
+        //const paymentSendActivities = await queryPaymentSent(etherscanDomain,userAddress)
+        //const paymentReceivedActivities = await queryPaymentReceived(etherscanDomain,userAddress)
 
-        activities.push(...requestSendActivities, ...requestReceivedActivities, ...paymentSendActivities, ...paymentReceivedActivities);
+        //console.log(paymentSendActivities)
+
+        //activities.push(...requestSendActivities, ...requestReceivedActivities, ...paymentSendActivities, ...paymentReceivedActivities);
+        activities.push(...requestSendActivities, ...requestReceivedActivities);
 
         // sort the activities array by timestamp in descending order (latest appears as first)
         activities.sort((a, b) => {

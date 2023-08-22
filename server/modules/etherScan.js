@@ -43,7 +43,9 @@ async function queryPaymentSent(etherscanDomain, userAddress) {
             
             const { hash, isError, value, timeStamp } = txn
 
-            const firestoreTimestamp = Timestamp.fromMillis(timeStamp * 1000)
+            const unixTimestamp = timeStamp * 1000; // Convert to milliseconds
+            const dateObject = new Date(unixTimestamp);
+            const firestoreTimestamp = Timestamp.fromDate(dateObject)
 
             const transaction_state = isError == 0 ? "Processed" : "Failed"
 
@@ -96,7 +98,10 @@ async function queryPaymentReceived(etherscanDomain, userAddress) {
             
             const { hash, isError, value, timeStamp } = txn
 
-            const firestoreTimestamp = Timestamp.fromMillis(timeStamp * 1000)
+            //const firestoreTimestamp = Timestamp.fromMillis(timeStamp)
+            const unixTimestamp = timeStamp * 1000; // Convert to milliseconds
+            const dateObject = new Date(unixTimestamp);
+            const firestoreTimestamp = Timestamp.fromDate(dateObject)
 
             const transaction_state = isError == 0 ? "Processed" : "Failed"
 
@@ -153,10 +158,9 @@ module.exports = {
 }
 
 
-queryPaymentReceived(etherscanDomain, '0xAB60DdFE027D9D86C836e8e5f9133578E102F720')
+/*queryPaymentReceived(etherscanDomain, '0x6724A71f5689c51138F2f213E3Bbb00Ffe320A28')
     .then(console.log)
-
-
+queryPaymentSent(etherscanDomain, '0x6724A71f5689c51138F2f213E3Bbb00Ffe320A28')
+    .then(console.log)
+*/
 //queryAllTxn(etherscanDomain,'0x6724A71f5689c51138F2f213E3Bbb00Ffe320A28').then(console.log)
-//queryPaymentSent(etherscanDomain, '0x6724A71f5689c51138F2f213E3Bbb00Ffe320A28')
-//    .then(console.log)

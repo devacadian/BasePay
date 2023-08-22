@@ -130,10 +130,14 @@ const handleCloseQRCodeModal = () => {
           <div className="text-left text-black font-semibold text-2xl mt-8 px-4">Activity</div> {/* Activity text */}
 
           {activities.map((activity, index) => (
-              <div key={index} className="activity-item text-black">
-                <p>{activity.activityType}: {activity.amount} from {activity.counterParty}</p>
-              </div>
-            ))}
+  <div key={index} className="activity-item text-black">
+    <p>{activity.activityType}: {activity.amount} from {activity.counterParty}</p>
+    <p className="text-gray-500 text-sm">State: {activity.activityState}</p>
+    <p className="text-gray-500 text-sm">
+      {new Date(activity.timestamp.seconds * 1000 + activity.timestamp.nanoseconds / 1000000).toLocaleString()}
+    </p>
+  </div>
+))}
         </div>
       )}
 

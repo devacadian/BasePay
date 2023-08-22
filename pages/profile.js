@@ -126,6 +126,18 @@ const activitiesByDate = activities.reduce((acc, activity) => {
 }, {});
 
 
+const getActivityDisplayText = (activityType, activityState) => {
+  if (activityType === 'Request Sent' && activityState === 'Rejected') return 'Rejected Request';
+  if (activityType === 'Request Sent' && activityState === 'Pending') return 'Pending Request';
+  if (activityType === 'Request Sent' && activityState === 'Accepted') return 'Request Accepted';
+  if (activityType === 'Payment Sent' && activityState === 'Processed') return 'Payment Sent';
+  if (activityType === 'Request Received' && activityState === 'Rejected') return 'Request Declined';
+  if (activityType === 'Request Received' && activityState === 'Pending') return 'Request Sent';
+  if (activityType === 'Request Received' && activityState === 'Processed') return 'Request Paid';
+  return activityType; // Default fallback
+};
+
+
   return (
     <main className="flex flex-col min-h-screen bg-white">
       <Head>
@@ -168,7 +180,7 @@ const activitiesByDate = activities.reduce((acc, activity) => {
 
           <div className="text-left text-black font-semibold text-2xl mt-6 px-4 mb-6">Activity</div>
 
-<div className="px-4">
+          <div className="px-4 mb-36">
   {Object.keys(activitiesByDate).sort().reverse().map((date, index) => {
     const activitiesForDate = activitiesByDate[date];
     const today = new Date().toISOString().split('T')[0];
@@ -178,12 +190,21 @@ const activitiesByDate = activities.reduce((acc, activity) => {
       <div key={index}>
         <div className="text-left text-black text-base font-semibold mb-6 mt-6">{displayDate}</div>
         {activitiesForDate.map((activity, index) => (
-          <div key={index} className="activity-item text-black bg-gray-100 rounded-3xl p-4 mb-5">
-            <p className="font-bold">{activity.activityType}</p>
-            <p className="font-semibold">{activity.amount} ETH from {activity.counterParty.substring(0, 6) + '...' + activity.counterParty.substring(activity.counterParty.length - 6)}</p>
-            <div className="text-gray-500 font-semibold text-sm">
-              <p className="inline-block ">State: {activity.activityState}</p>
-              <p className="inline-block  ml-2">{formatTimestamp(activity.timestamp)}</p>
+          <div key={index} className="activity-item text-black bg-gray-100 rounded-3xl p-4 mb-5 flex">
+            <div className="flex justify-center items-center relative w-10 h-10 rounded-full bg-gray-300 shadow drop-shadow-sm">
+              <FontAwesomeIcon icon={faEthereum} className="text-black h-6 w-6 z-10" />
+            </div>
+            <div className="ml-4 flex flex-col text-left flex-grow"> {/* Added flex-grow here */}
+              <div className="flex justify-between"> {/* Added flex and justify-between here */}
+                <p className="font-bold inline-block">{getActivityDisplayText(activity.activityType, activity.activityState)}</p>
+                <p className="font-semibold inline-block ml-2">{formatTimestamp(activity.timestamp)}</p> {/* Moved to the right */}
+              </div>
+              <div className="flex justify-between"> {/* Added flex and justify-between here */}
+                <p className="font-semibold inline-block">{activity.amount} ETH</p>
+                <p className="font-semibold inline-block ml-2">from {activity.counterParty.substring(0, 6)}</p> {/* Moved to the right */}
+              </div>
+              <div className="text-gray-500 font-semibold text-sm">
+              </div>
             </div>
           </div>
         ))}

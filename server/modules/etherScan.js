@@ -1,0 +1,93 @@
+const axios = require('axios');
+const { ethers } = require("ethers") 
+const apiKey = '5BYP8B43Q9TU9ESS1GYCA2QRU6BG57Y7RH';
+const contractAddress = '0x255A1891359A67A50a459e64445E6429f652a23f';
+const etherscanDomain = 'https://api-goerli.basescan.org/'
+
+// query all transaction within the contract
+async function queryAllTxn(etherscanDomain, userAddress) {
+
+    // get internal transaction from the contract
+    // @dev update the offset limitation during production
+    // query txn by user address
+    // normal "from" = fund origin
+    //const normalResponse = await axios.get(`${etherscanDomain}api?module=account&action=txlist&address=${contractAddress}&startblock=0&endblock=99999999&&apikey=${apiKey}page=1&offset=15&sort=asc`)
+    const normalResponseByUserId = await axios.get(`${etherscanDomain}api?module=account&action=txlist&address=${userAddress}&startblock=0&endblock=99999999&&apikey=${apiKey}`)
+    // query internal txn by contract address
+    // internal "to" = final fund receipent
+    const internalResponseByContractAddress = await axios.get(`${etherscanDomain}api?module=account&action=txlistinternal&address=${contractAddress}&startblock=0&endblock=99999999&apikey=${apiKey}`)
+    
+
+    const result = {
+        normalResponseByUserId : normalResponseByUserId.data.result,
+        internalResponseByContractAddress : internalResponseByContractAddress.data.result
+    }
+
+    //console.log(result.normalTxn)
+    //console.log(result.normalTxn.length)
+    //console.log(result.internalTxn.length)
+    return result
+
+}
+
+// query Payment Send Activity
+async function queryPaymentSent(etherscanDomain, userAddress) {
+    
+    try {
+        const activities = []
+        const { normalResponseByUserId, internalResponseByContractAddress } = await queryAllTxn(etherscanDomain, userAddress)
+
+        for (const txn of normalResponseByUserId) {
+            
+            const { hash, isError, value, timeStamp } = txn
+
+            const transaction_state = isError == 0 ? "Processed" : "Failed"
+
+            const to = getToAddressByHash(internalResponseByContractAddress, hash)
+
+            if(to == null) {
+                continue
+            }
+
+            const activity = {
+                activityId : hash,
+                activityType : "Payment Sent",
+                activityState : transaction_state,
+                counterParty : to,
+                amount : ethers.utils.formatEther(value),
+                timestamp : timeStamp // timestamp in Unix format
+            }
+
+            activities.push(activity)
+
+        }
+
+        return activities
+
+    } catch(error) {
+        return error.message
+    }
+    
+}
+//queryAllTxn(etherscanDomain,'0x6724A71f5689c51138F2f213E3Bbb00Ffe320A28').then(console.log)
+queryPaymentSent(etherscanDomain, '0x6724A71f5689c51138F2f213E3Bbb00Ffe320A28')
+    .then(console.log)
+
+/* ------------------------- Helper Functions ------------------------- */
+function filterByFromAddress(transactions, targetAddress) {
+    // Use the filter method to filter objects by the "from" field
+    return transactions.filter(transaction => transaction.from.toLowerCase() === targetAddress.toLowerCase());
+  }
+
+function getToAddressByHash(transactions, targetHash) {
+    const transaction = transactions.find(tx => tx.hash === targetHash);
+    if (transaction) {
+        return transaction.to;
+    } else {
+        return null; // Return null if the hash is not found
+    }
+}
+
+module.exports = {
+    queryPaymentSent
+}

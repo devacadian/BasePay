@@ -226,10 +226,31 @@ const handleOpenPayConfirmModal = () => {
 const handleConfirmPayment = async () => {
   setTransactionStatus('pending'); // Set the status to pending before initiating payment
 
-  // Assuming 'initiatePayment' is a function that takes the required parameters to process the payment
-  const txHash = await initiatePayment(window.ethereum, selectedRequestToPay.payment_requester, selectedRequestToPay.ether_amount, (receipt) => {
+  const txHash = await initiatePayment(window.ethereum, selectedRequestToPay.payment_requester, selectedRequestToPay.ether_amount, async (receipt) => {
     if (receipt.status === 1) {
       setTransactionStatus('success'); // Update the status to success if the transaction succeeded
+
+      // 1. PATCH to update the transaction hash
+      const updateTransactionHashURL = `https://basepay-api.onrender.com/update-transaction-hash/${selectedRequestToPay.paymentRequestId}/${txHash}`;
+      await fetch(updateTransactionHashURL, {
+        method: 'PATCH'
+      });
+
+      // 2. PATCH to update the decision to true
+      const confirmData = { decision: true };
+      const url = `https://basepay-api.onrender.com/update-transaction-state/${selectedRequestToPay.paymentRequestId}`;
+      const response = await fetch(url, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(confirmData),
+      });
+
+      const responseData = await response.json();
+
+      // Check if the request was successful and update the transaction state
+      if (response.ok && responseData.transaction_state === "Processed") {
+        selectedRequestToPay.transaction_state = "Processed";
+      }
     } else {
       setTransactionStatus('fail'); // Update the status to fail if the transaction failed
     }
@@ -649,8 +670,9 @@ const handleConfirmPayment = async () => {
         document.body.style.overflowY = "scroll"; // Remove scroll lock
         document.body.style.minHeight = "0px";
         window.scrollBy(0, -1);
-        setShowtransactionModal(false);
-        setToAddress(''); // Close the success modal
+        setShowConfirmRequestTransactionModal(false);
+        setShowConfirmPayModal(false);
+        setShowPayRequestModal(false); // Close the success modal
       }}>
       Continue
     </button>

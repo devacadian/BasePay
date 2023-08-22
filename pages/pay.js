@@ -1,8 +1,8 @@
-import React, { useState, useEffect  } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
-import { faBarcodeRead, faPaperPlane, faFileInvoice, faXmark, faSpinner, faCircleCheck, faTimesCircle, faUpRightFromSquare, faArrowLeft, faPaste } from '@fortawesome/pro-solid-svg-icons';
+import { faBarcodeRead, faPaperPlane, faFileInvoice, faXmark, faSpinner, faCircleCheck, faTimesCircle, faUpRightFromSquare, faArrowLeft, faPaste, faQrcode } from '@fortawesome/pro-solid-svg-icons';
 import { faClockNine } from '@fortawesome/pro-regular-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import { initiatePayment } from "../controller/contract-control"
@@ -10,7 +10,8 @@ import { useAccount } from "wagmi";
 import { useBalance } from 'wagmi';
 import { useNetwork } from 'wagmi';
 import { useChainModal } from '@rainbow-me/rainbowkit'; 
-
+import createIcon from 'blockies';
+import { BrowserMultiFormatReader } from '@zxing/library';
 
 const Pay = () => {
   const [counter, setCounter] = useState('0');
@@ -39,8 +40,9 @@ const Pay = () => {
   const [showRequestTransactionModal, setShowRequestTransactionModal] = useState(false); // State for the request transaction modal
   const [requestTransactionStatus, setRequestTransactionStatus] = useState(null); // State to track request transaction status
   const [requestTxHashState, setRequestTxHashState] = useState(''); // State to store the transaction hash for the request
-
-
+  const [showScanner, setShowScanner] = useState(false);
+  const videoRef = useRef(null);
+  const [showQRChoiceModal, setShowQRChoiceModal] = useState(false);
 
 
   useEffect(() => {
@@ -361,8 +363,91 @@ const handleCloseAnimationRequest = () => {
   }, 300);
 };
 
+const AvatarIcon = ({ seed }) => {
+  const avatarRef = useRef(null);
+
+  useEffect(() => {
+    const icon = createIcon({
+      seed: seed,
+      color: '#000000', // Slightly darker gray foreground color
+      bgcolor: '#ffffff',
+      size: 11, // Width/height of the icon in blocks
+      scale: 7  // Width/height of each block in pixels
+    });
+
+    if (avatarRef.current) {
+      avatarRef.current.innerHTML = ''; // Clear previous children
+      avatarRef.current.appendChild(icon);
+    }
+  }, [seed]);
+  return <div ref={avatarRef} className="ml-0"></div>;
+};
 
 
+const navigateToProfile = () => {
+  router.push('/profile');
+};
+
+
+const handleVideoRef = (video) => {
+  videoRef.current = video;
+  if (video) {
+    const constraints = {
+      video: {
+        facingMode: 'environment', // Request the back camera
+      },
+    };
+
+    const stopVideoStream = () => {
+      const tracks = video.srcObject?.getTracks();
+      tracks?.forEach((track) => track.stop());
+      video.srcObject = null;
+    };
+
+    navigator.mediaDevices.getUserMedia(constraints)
+      .then((stream) => {
+        video.srcObject = stream;
+        video.play(); // Ensure the video is playing
+
+        // ZXing code reader
+        const codeReader = new BrowserMultiFormatReader();
+        codeReader.decodeFromVideoElement(video)
+          .then((result) => {
+            let address = result.getText();
+
+            // Check for known prefixes and extract the address
+            if (address.startsWith('eth:')) {
+              address = address.substring(4);
+            } else if (address.startsWith('ethereum:')) {
+              address = address.substring(9);
+            }
+
+            // Split at "@" symbol to remove network information, if present
+            address = address.split('@')[0];
+
+            // Verify that the extracted address is valid
+            if (address.length === 42 && address.startsWith('0x')) {
+              setToAddress(address); // Update the "to" value
+              setShowScanner(false);
+
+              stopVideoStream(); // Stop the video stream
+
+              codeReader.reset(); // Reset the reader to stop scanning
+            } else {
+              console.error('Invalid Ethereum address scanned:', address);
+            }
+          })
+          .catch((error) => console.error(error));
+      })
+      .catch(console.error);
+  }
+};
+
+const handleScanClick = (actionType) => {
+  setShowQRChoiceModal(false);
+  setShowScanner(true);
+  actionType(); // Call either handlePayClick or handleRequestClick
+};
 
   return (
 <main className="min-h-screen flex flex-col bg-white pb-20">
@@ -373,9 +458,12 @@ const handleCloseAnimationRequest = () => {
         </Head>
         <div className="px-4 pb-0 pt-8 flex items-center w-full justify-between">
         <div className="flex items-center">
-  <div className="bg-gray-100 rounded-full h-7 w-7 flex items-center justify-center"> 
-    <FontAwesomeIcon icon={faClockNine} className="h-7 w-7 text-base-blue" />
-  </div>
+          <div
+            className="bg-gray-100 rounded-full h-7 w-7 flex items-center justify-center"
+            onClick={navigateToProfile} // Add onClick event here
+          >
+            <FontAwesomeIcon icon={faClockNine} className="h-7 w-7 text-base-blue" />
+          </div>
   <div className={`${containerWidth} h-8 rounded-4xl bg-gray-100 border-base-blue border-2 flex items-center justify-center text-xs text-black font-semibold ml-4`}
        onClick={openChainModal}>
     {isClient && isBaseGoerli ? (
@@ -390,9 +478,9 @@ const handleCloseAnimationRequest = () => {
   </div>
 </div>
 <div className="flex items-center relative">
-          <div className=" bg-gray-100 absolute h-6 w-7 rounded-md"  />
-          <FontAwesomeIcon icon={faBarcodeRead} className="h-7 w-7 text-base-blue z-10" />
-        </div>
+<div className="bg-gray-100 absolute h-6 w-7 rounded-md" onClick={() => setShowQRChoiceModal(true)} />
+      <FontAwesomeIcon icon={faBarcodeRead} className="h-7 w-7 text-base-blue z-10" onClick={() => setShowQRChoiceModal(true)} />
+    </div>
       </div>
       <div className="text-6xl font-semibold mb-4 text-black flex justify-center items-baseline -ml-10 mt-10">
             <FontAwesomeIcon icon={faEthereum} className="mr-0 text-black h-10 w-10" /> 
@@ -426,6 +514,28 @@ const handleCloseAnimationRequest = () => {
         </button>
       </div>
 
+      {showQRChoiceModal && (
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
+    <div className="bg-white p-6 rounded-xl absolute top-1/6 inset-x-4 shadow-xl drop-shadow">
+      <button onClick={() => setShowQRChoiceModal(false)} className="z-40 absolute top-6 left-4">
+        <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
+      </button>
+      <div className="flex flex-col items-center justify-center mt-6">
+      <div className="text-black text-2xl font-bold mb-4">
+          <span className="inline-flex items-center">Scan QR Code <FontAwesomeIcon icon={faQrcode} className="text-black h-6 w-6 ml-2 -mt-0" /></span> {/* Wrapped in a span */}
+        </div>
+        <button onClick={() => handleScanClick(handlePayClick)} className="w-full bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 rounded-3xl focus:outline-none mb-4">
+          <FontAwesomeIcon icon={faPaperPlane} className="mr-2 h-4 w-4 text-white" />
+          Scan & Pay
+        </button>
+        <button onClick={() => handleScanClick(handleRequestClick)} className="w-full bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 rounded-3xl focus:outline-none mb-2">
+          <FontAwesomeIcon icon={faFileInvoice} className="mr-2 h-4 w-4 text-white" />
+          Scan & Request
+        </button>
+      </div>
+    </div>
+  </div>
+)}
 
       
 {/* Pay User Selection Modal */}
@@ -462,7 +572,9 @@ const handleCloseAnimationRequest = () => {
 <button onClick={handlePasteClick} className="mr-2"> {/* Paste Button */}
     <FontAwesomeIcon icon={faPaste} className="h-5.5 w-5.5 text-black" />
   </button>
-        <FontAwesomeIcon icon={faBarcodeRead} className="h-6 w-6 text-black ml-2" /> 
+  <button onClick={() => setShowScanner(true)}> {/* Trigger Scanner */}
+  <FontAwesomeIcon icon={faBarcodeRead} className="h-6 w-6 text-black ml-2" />
+</button>
       </div>
       <div className="border-t border-gray-300"></div> 
       <div className="px-4 py-2 flex items-center">
@@ -476,6 +588,42 @@ const handleCloseAnimationRequest = () => {
       onChange={(e) => setForValue(e.target.value)} // Update the state with the entered value
     />
       </div>
+
+      {showScanner && (
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
+    <div className="bg-white p-6 rounded-xl absolute top-1/6 inset-x-4 shadow-xl drop-shadow">
+      <button
+        onClick={() => {
+          setShowScanner(false);
+          const video = videoRef.current;
+          if (video && video.srcObject) {
+            const tracks = video.srcObject.getTracks();
+            tracks.forEach((track) => track.stop());
+            video.srcObject = null;
+          }
+        }}
+        className="z-40 absolute top-6 left-4"
+      >
+        <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
+      </button>
+      <div className="flex flex-col items-center justify-center mt-4">
+        <div className="text-black text-2xl font-bold mb-4">Pay Address</div> {/* "Pay" text */}
+        <div className="relative">
+          <video ref={handleVideoRef} className="z-40 rounded-lg" autoPlay /> {/* Scanner Display with rounded corners */}
+          
+          {/* Scan Overlay */}
+          <div className="absolute top-20 left-10 border-t-3 border-l-3 border-base-blue h-7 w-7 rounded-tl "></div>
+          <div className="absolute top-20 right-10 border-t-3 border-r-3 border-base-blue h-7 w-7 rounded-tr"></div>
+          <div className="absolute bottom-20 left-10 border-b-3 border-l-3 border-base-blue h-7 w-7 rounded-bl"></div>
+          <div className="absolute bottom-20 right-10 border-b-3 border-r-3 border-base-blue h-7 w-7 rounded-br"></div>
+        </div>
+        <div className="text-black text-lg font-bold mt-6 mb-2">
+          <span className="text-base-blue">Scanning</span> for addresses...
+        </div> 
+      </div>
+    </div>
+  </div>
+)}
 
 
       <div className="bg-gray-100 h-10 flex items-center">
@@ -616,7 +764,8 @@ const handleCloseAnimationRequest = () => {
         document.body.style.overflowY = "scroll"; // Remove scroll lock
         document.body.style.minHeight = "0px";
         window.scrollBy(0, -1);
-        setShowtransactionModal(false); // Close the success modal
+        setShowtransactionModal(false);
+        setToAddress(''); // Close the success modal
       }}>
       Continue
     </button>
@@ -697,7 +846,9 @@ const handleCloseAnimationRequest = () => {
          <button onClick={handlePasteClick} className="ml-1 mr-2"> {/* Add button wrapper */}
     <FontAwesomeIcon icon={faPaste} className="h-5.5 w-5.5 text-black" /> {/* Paste icon */}
   </button>
-  <FontAwesomeIcon icon={faBarcodeRead} className="h-6 w-6 text-black ml-2" /> {/* Scan icon */}
+  <button onClick={() => setShowScanner(true)}> {/* Trigger Scanner */}
+  <FontAwesomeIcon icon={faBarcodeRead} className="h-6 w-6 text-black ml-2" />
+</button>
 </div>
       <div className="bg-gray-100 h-10 flex items-center">
         <span className="text-gray-500 text-base font-bold ml-4">Suggested</span>
@@ -706,6 +857,43 @@ const handleCloseAnimationRequest = () => {
       <div className="text-center text-black text-sm font-medium my-10">
         Start using BasePay to find suggested contacts!
       </div>
+
+      {showScanner && (
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
+    <div className="bg-white p-6 rounded-xl absolute top-1/6 inset-x-4 shadow-xl drop-shadow">
+      <button
+        onClick={() => {
+          setShowScanner(false);
+          const video = videoRef.current;
+          if (video && video.srcObject) {
+            const tracks = video.srcObject.getTracks();
+            tracks.forEach((track) => track.stop());
+            video.srcObject = null;
+          }
+        }}
+        className="z-40 absolute top-6 left-4"
+      >
+        <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
+      </button>
+      <div className="flex flex-col items-center justify-center mt-4">
+        <div className="text-black text-2xl font-bold mb-4">Request to Address</div> {/* "Pay" text */}
+        <div className="relative">
+          <video ref={handleVideoRef} className="z-40 rounded-lg" autoPlay /> {/* Scanner Display with rounded corners */}
+          
+          {/* Scan Overlay */}
+          <div className="absolute top-20 left-10 border-t-3 border-l-3 border-base-blue h-7 w-7 rounded-tl "></div>
+          <div className="absolute top-20 right-10 border-t-3 border-r-3 border-base-blue h-7 w-7 rounded-tr"></div>
+          <div className="absolute bottom-20 left-10 border-b-3 border-l-3 border-base-blue h-7 w-7 rounded-bl"></div>
+          <div className="absolute bottom-20 right-10 border-b-3 border-r-3 border-base-blue h-7 w-7 rounded-br"></div>
+        </div>
+        <div className="text-black text-lg font-bold mt-6 mb-2">
+          <span className="text-base-blue">Scanning</span> for addresses...
+        </div> 
+      </div>
+    </div>
+  </div>
+)}
+
       {/* Add your user selection content here */}
       
       <div className="fixed bottom-0 left-0 right-0 px-4 pb-6"> {/* Button container */}
@@ -732,7 +920,7 @@ const handleCloseAnimationRequest = () => {
         <div className="flex justify-end"></div> {/* Empty div to keep the grid layout */}
       </div>
       <div className="flex justify-center"> {/* Gray circle */}
-        <div className="bg-gray-300 rounded-full h-20 w-20 mt-6"></div>
+        <div className="bg-gray-300 border-3 border-gray-300 rounded-full h-20 w-20 mt-6 flex items-center justify-center overflow-hidden">   <AvatarIcon seed={toAddress} /> </div>
       </div>
       <div className="text-center text-black text-lg font-medium mt-6"> {/* Displaying the truncated toAddress */}
         {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress}
@@ -884,6 +1072,7 @@ const handleCloseAnimationRequest = () => {
               setshowRequestSelectionModal(false);
               setShowRequestModal(false); // Close the success modal
               setCounter('0');
+              setToAddress('');
             }}>
             Continue
           </button>

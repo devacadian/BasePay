@@ -61,7 +61,7 @@ export default function Home() {
 
   const handleRequestPayment = () => {
     router.push('/pay?request=true');
-    // You can also send any state or parameters needed to handle the modal on the /pay page
+
   };
 
   const handleInviteClick = () => {

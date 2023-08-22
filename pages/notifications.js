@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell, faListCheck, faArrowUpRightFromSquare, faEllipsis, faHandshakeSlash, faEye, faPaperPlane, faHand, faXmark } from '@fortawesome/pro-solid-svg-icons';
+import { faBell, faListCheck, faArrowUpRightFromSquare, faEllipsis, faHandshakeSlash, faEye, faPaperPlane, faHand, faXmark, faFileInvoice } from '@fortawesome/pro-solid-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import Head from 'next/head';
 import { useAccount } from "wagmi";
 import createIcon from 'blockies';
+import { useRouter } from 'next/router';
 
 const Notifications = () => {
   const { address } = useAccount();
@@ -18,7 +19,7 @@ const [animateModal, setAnimateModal] = useState(false);
 const [touchStartY, setTouchStartY] = useState(0); // State to track the touch start position
 const [showPayRequestModal, setShowPayRequestModal] = useState(false);
 const [selectedRequestToPay, setSelectedRequestToPay] = useState(null);
-
+const router = useRouter();
 
   useEffect(() => {
     // Function to fetch payment requests
@@ -186,7 +187,16 @@ const closePayModal = () => {
   setShowPayRequestModal(false);
   document.body.style.overflowY = "scroll"; // Remove scroll lock
 };
-  
+
+
+const handleRequestButtonClick = () => {
+  router.push('/pay?request=true');
+};
+
+const handlePayButttonClick = () => {
+  router.push('/pay');
+};  
+
   return (
     <main className="flex flex-col min-h-screen bg-white">
       <Head>
@@ -205,11 +215,23 @@ const closePayModal = () => {
       <div className="px-4 mb-30">
       {sortedPaymentRequests.length === 0 ? (
         <div className="flex flex-col items-center justify-center text-center mt-10">
-          <span className="text-black font-semibold text-xl">No notifications received yet!</span>
-          <span className="text-gray-600 font-medium text-base mt-20">
-  Pay or Request on <span className="text-base-blue">BasePay</span> to receive notifications!
-</span>
-        </div>
+  <span className="text-black font-semibold text-xl">No notifications received yet!</span>
+  <div className="flex w-full mt-14">
+    <button className="bg-base-blue text-white font-medium rounded-full w-full py-2 mx-1 flex items-center justify-center" onClick={handlePayButttonClick}>
+      <FontAwesomeIcon icon={faPaperPlane} className="h-4 w-4 text-white mr-2" />
+      Pay
+    </button>
+    <button className="bg-base-blue text-white font-medium rounded-full w-full py-2 mx-1 flex items-center justify-center" onClick={handleRequestButtonClick}>
+      <FontAwesomeIcon icon={faFileInvoice} className="h-4 w-4 text-white mr-2" />
+      Request
+    </button>
+  </div>
+  <span className="text-gray-600 font-medium text-base mt-4">
+    Pay or Request on <span className="text-base-blue">BasePay</span> to receive
+    <br />
+    notifications!
+  </span>
+</div>
       ) : (
         sortedPaymentRequests.map((request, index) => {
           // Convert the request time to a readable format

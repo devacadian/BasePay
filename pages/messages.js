@@ -9,7 +9,7 @@ import createIcon from 'blockies';
 import { collection, query, orderBy } from "firebase/firestore";
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { db } from '../controller/firebase'; // Make sure to import your Firebase db configuration
-
+import axios from 'axios'
 
 
 export default function Messages() {
@@ -21,6 +21,7 @@ export default function Messages() {
   const [isLoadingChatRooms, setIsLoadingChatRooms] = useState(false);
   const [showChatRoomModal, setShowChatRoomModal] = useState(false);
 
+  const [messageContent, setMessageContent] = useState('');
   
   const [selectedChatRoomId, setSelectedChatRoomId] = useState(null);
   const [selectedChatRoomName, setSelectedChatRoomName] = useState('');
@@ -118,6 +119,23 @@ export default function Messages() {
   };
 
 
+  const sendMessage = async () => {
+    const url = 'https://basepay-api.onrender.com/send-message';
+    const data = {
+      chatroomId: selectedChatRoomId, // Using the selected chat room ID
+      currentUserAddress: address, // Using the connected address
+      message_content: messageContent // Using the chatbox input
+    };
+    const response = await axios.post(url, data);
+    console.log(response);
+
+    setMessageContent(''); // Clear the chatbox input
+  };
+
+  // Function to handle input changes
+  const handleInputChange = (e) => {
+    setMessageContent(e.target.value);
+  };
 
 
   
@@ -208,7 +226,7 @@ export default function Messages() {
         if (textOrRequest === 'text') {
           return (
             <div key={doc.id} className={`${bubbleColor} rounded-2xl p-2 my-1 mt-2 text-white`}> {/* Individual message bubble */}
-              <div>{JSON.stringify(doc.data().text_content)}</div>
+              <div>{JSON.stringify(doc.data().text_content).trim().slice(1, -1)}</div>
             </div>
           );
         } else if (textOrRequest === "request") {
@@ -217,14 +235,17 @@ export default function Messages() {
       })}
     </div>
     {/* Chat Input Box */}
-    <div className="p-2 white border-1 border rounded-xl mb-2 ml-2 mr-2">
-      <input 
-        type="text" 
-        placeholder="Enter message.." 
-        className="w-full py-2 px-4 text-black rounded bg-white border-base-blue border-1 focus:outline-none" 
-      />
-    </div>
-  </div>
+    <div className="p-2 bg-white border-1 border rounded-xl mb-2 ml-2 mr-2">
+          <input
+            type="text"
+            placeholder="Enter message.."
+            value={messageContent} // Controlled input
+            onChange={handleInputChange} // Handle input changes
+            className="w-full py-2 px-4 text-black rounded bg-white border-base-blue border-1 focus:outline-none"
+          />
+          <button onClick={sendMessage} className="bg-base-blue text-white rounded p-2">Send</button> {/* Send button */}
+        </div>
+      </div>
 )}
 
 

@@ -118,17 +118,23 @@ export default function Messages() {
     return <div ref={avatarRef} className="-ml-1"></div>;
   };
 
-
   const sendMessage = async () => {
+    // Trim the message content and check if it's empty
+    const trimmedMessageContent = messageContent.trim();
+    if (trimmedMessageContent === '') {
+      // If the message is empty or only contains whitespace, return without sending
+      return;
+    }
+  
     const url = 'https://basepay-api.onrender.com/send-message';
     const data = {
       chatroomId: selectedChatRoomId, // Using the selected chat room ID
       currentUserAddress: address, // Using the connected address
-      message_content: messageContent // Using the chatbox input
+      message_content: trimmedMessageContent // Using the trimmed chatbox input
     };
     const response = await axios.post(url, data);
     console.log(response);
-
+  
     setMessageContent(''); // Clear the chatbox input
   };
 
@@ -241,6 +247,7 @@ export default function Messages() {
         placeholder="Enter message.."
         value={messageContent}
         onChange={handleInputChange}
+        onKeyPress={(e) => { if (e.key === 'Enter') sendMessage(); }} // Trigger sendMessage on Enter key
         className="flex-grow py-2 px-4 text-black rounded-l bg-white border-base-blue border-1 focus:outline-none"
       />
       <button onClick={sendMessage} className="bg-base-blue text-white rounded-xl p-2">Send</button> {/* Send button */}

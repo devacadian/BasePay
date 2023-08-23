@@ -215,43 +215,52 @@ const getCounterPartyPrefix = (activityType, activityState) => {
 
           <div className="text-left text-black font-semibold text-2xl mt-6 px-4 mb-6">Activity</div>
 
-          <div className="px-4 mb-36">
-  {Object.keys(activitiesByDate).sort().reverse().map((date, index) => {
-    const activitiesForDate = activitiesByDate[date];
-    const today = new Date().toISOString().split('T')[0];
-    const displayDate = date === today ? "Today" : new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(date));
-
-    return (
-      <div key={index}>
-        <div className="text-left text-black text-base font-semibold mb-6 mt-6">{displayDate}</div>
-        {activitiesForDate.map((activity, index) => (
-          <div key={index} className="activity-item text-black bg-gray-100 rounded-3xl p-4 mb-5 flex">
-            <div className="flex justify-center items-center relative w-12 h-12 rounded-full bg-white drop-shadow-sm mt-1.5 -ml-0.5">
-            {getIconForActivity(activity.activityType, activity.activityState)}
-            </div>
-            <div className="ml-4 flex flex-col text-left flex-grow mt-1.5 mb-0.5"> {/* Added flex-grow here */}
-              <div className="flex justify-between"> {/* Added flex and justify-between here */}
-                <p className="font-bold inline-block">{getActivityDisplayText(activity.activityType, activity.activityState)}</p>
-                <p className="font-semibold inline-block ml-2 text-gray-500">{formatTimestamp(activity.timestamp)}</p> {/* Moved to the right */}
-              </div>
-              <div className="flex justify-between mt-1"> {/* Added flex and justify-between here */}
-                <p className="font-semibold inline-block">{activity.amount} ETH</p>
-                <p className="font-semibold inline-block ml-2">{getCounterPartyPrefix(activity.activityType, activity.activityState)} {activity.counterParty.substring(0, 6)}</p>
-              </div>
-              <div className="text-gray-500 font-semibold text-sm">
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  })}
+<div className="px-4 mb-36">
+  {Object.keys(activitiesByDate).length === 0 ? (
+  <div>
+ <div className="text-gray-500 text-2xl font-semibold mt-14">🧾</div>
+<div className="text-black text-xl font-semibold mt-6">No activities yet!</div>
+<div className="text-gray-500 text-base font-semibold mt-2">
+  Start using <span className="text-base-blue">BasePay</span> to view activities!
 </div>
+</div>
+  ) : (
+    Object.keys(activitiesByDate).sort().reverse().map((date, index) => {
+      const activitiesForDate = activitiesByDate[date];
+      const today = new Date().toISOString().split('T')[0];
+      const displayDate = date === today ? "Today" : new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(date));
 
+      return (
+        <div key={index}>
+          <div className="text-left text-black text-base font-semibold mb-6 mt-6">{displayDate}</div>
+          {activitiesForDate.map((activity, index) => (
+            <div key={index} className="activity-item text-black bg-gray-100 rounded-3xl p-4 mb-5 flex">
+              <div className="flex justify-center items-center relative w-12 h-12 rounded-full bg-white drop-shadow-sm mt-1.5 -ml-0.5">
+              {getIconForActivity(activity.activityType, activity.activityState)}
+              </div>
+              <div className="ml-4 flex flex-col text-left flex-grow mt-1.5 mb-0.5">
+                <div className="flex justify-between">
+                  <p className="font-bold inline-block">{getActivityDisplayText(activity.activityType, activity.activityState)}</p>
+                  <p className="font-semibold inline-block ml-2 text-gray-500">{formatTimestamp(activity.timestamp)}</p>
+                </div>
+                <div className="flex justify-between mt-1">
+                  <p className="font-semibold inline-block">{activity.amount} ETH</p>
+                  <p className="font-semibold inline-block ml-2">{getCounterPartyPrefix(activity.activityType, activity.activityState)} {activity.counterParty.substring(0, 6)}</p>
+                </div>
+                <div className="text-gray-500 font-semibold text-sm">
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-      )}
+      );
+    })
+  )}
+</div>
+</div>
+)}
 
-      </div>
+</div>
 
 {/* QR Code Modal */}
 {showQRCodeModal && (

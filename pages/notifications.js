@@ -283,9 +283,7 @@ const handleConfirmPayment = async () => {
         <h1 className="text-black text-3xl font-semibold pt-2 mr-1">Notifications</h1>
           <FontAwesomeIcon icon={faBells} className="h-7 w-7 text-black align-middle mt-2 ml-2" />
         </div>
-        <div className="bg-base-blue rounded-full h-8 w-8 flex items-center justify-center mt-2">
-          <FontAwesomeIcon icon={faListCheck} className="text-white h-4 w-4" />
-        </div>
+     
       </div>
       <div className="bg-white w-full -mb-2"></div>
       <div className="px-4 mb-30">
@@ -393,13 +391,9 @@ const handleConfirmPayment = async () => {
           <FontAwesomeIcon icon={faPaperPlane} className="mr-3 h-5 w-5 text-base-blue" />
           Pay Request
         </div>
-        <div className="p-4 cursor-pointer flex items-center relative border-b-2 border-gray-200 text-black text-base" onClick={() => openDeclineModal(request)}>
+        <div className="p-4 cursor-pointer flex items-center relative  text-black text-base -mb-2" onClick={() => openDeclineModal(request)}>
           <FontAwesomeIcon icon={faHandshakeSlash} className="mr-3 h-5 w-5 text-base-blue" />
           Decline Request
-        </div>
-        <div className="p-4 cursor-pointer flex items-center text-black text-base -mb-3">
-          <FontAwesomeIcon icon={faEye} className="mr-3 h-5 w-5 text-base-blue" />
-          Mark as Read
         </div>
       </div>
     )}

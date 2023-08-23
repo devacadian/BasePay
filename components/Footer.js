@@ -38,7 +38,7 @@ const Footer = () => {
         </Link>
         <Link href="/messages">
           <div className="flex flex-col items-center font-semibold pt-2">
-            <FontAwesomeIcon icon={faMessagesDollar} className={` ${activeTab === 'messages' ? 'text-base-blue w-8 h-8' : 'text-gray-400 w-6 h-6'}`} />
+            <FontAwesomeIcon icon={faMessages} className={` ${activeTab === 'messages' ? 'text-base-blue w-8 h-8' : 'text-gray-400 w-6 h-6'}`} />
             <span className={` ${activeTab === 'messages' ? 'text-base-blue pb-2' : 'text-gray-400'}`}>Messages</span>
           </div>
         </Link>

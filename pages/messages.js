@@ -14,7 +14,9 @@ export default function Messages() {
   const { address } = useAccount();
   const [chatRooms, setChatRooms] = useState([]);
   const [isLoadingChatRooms, setIsLoadingChatRooms] = useState(false);
-
+  const [showChatRoomModal, setShowChatRoomModal] = useState(false);
+  const [selectedChatRoomName, setSelectedChatRoomName] = useState('');
+  
 
   useEffect(() => {
     if (address) {
@@ -40,6 +42,16 @@ export default function Messages() {
 
 
 
+  
+  const openChatRoomModal = (chatRoomId) => {
+    const chatRoom = chatRooms.find((room) => room.chatroomId === chatRoomId);
+    setSelectedChatRoomName(chatRoom.chatWith); // or the proper name, if available
+    setShowChatRoomModal(true);
+  };
+  
+  const handleCloseChatRoomModal = () => {
+    setShowChatRoomModal(false);
+  };
 
 
   const handleCloseModal = () => {
@@ -147,6 +159,33 @@ export default function Messages() {
     })}
 
 
+{/* Chat Room Modal */}
+
+{showChatRoomModal && (
+  <div className="fixed inset-0 bg-white z-50 flex flex-col">
+    <div className="p-4 flex items-center mt-2">
+      <button onClick={handleCloseChatRoomModal} className="focus:outline-none">
+        <FontAwesomeIcon icon={faArrowLeft} className="h-8 w-8 text-black" />
+      </button>
+      <div className="bg-gray-300 rounded-full h-10 w-10 mx-2 overflow-hidden border-2 border-gray-300 ml-4"
+           style={{ maskImage: 'radial-gradient(circle, white, black)' }}>
+        <AvatarIcon seed={selectedChatRoomName} />
+      </div>
+      <h1 className="text-black text-2xl font-semibold ml-2">
+        {selectedChatRoomName.substring(0, 7) + "..."}
+      </h1>
+    </div>
+    <div className="flex-grow overflow-y-scroll">
+      {/* Chat content goes here */}
+    </div>
+  </div>
+)}
+
+
+
+
+
+
 
 
 
@@ -163,10 +202,6 @@ export default function Messages() {
         </button>
       )}
       <div className="h-24 bg-white w-full absolute bottom-0">
-
-
-
-
 
 
       {showModal && (

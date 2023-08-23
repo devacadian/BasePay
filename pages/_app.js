@@ -66,13 +66,18 @@ function AppContent({ Component, pageProps }) {
   return (
     <>
       <Component {...pageProps} />
+    
+    
       {isDesktop && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-50">
-          <div className="text-center text-black">
-            <h1>This site is only accessible on mobile devices.</h1>
-          </div>
-        </div>
-      )}
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-50">
+    <div className="text-center text-black">
+      <h1 className="text-4xl font-bold text-base-blue mb-4">BasePay</h1>
+      <h2 className="text-xl text-black font-semibold">Visit on mobile device to access dApp.</h2>
+    </div>
+  </div>
+)}
+
+
       {isClient && !isDesktop && !isConnected && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-50">
           <div className="-ml-2 flex items-center justify-center mt-32 mb-34">

@@ -6,6 +6,11 @@ import { faMessagePen, faMagnifyingGlass, faArrowLeft, faBarcodeRead, faMessages
 import QRCode from 'qrcode.react'; 
 import { useAccount } from "wagmi";
 import createIcon from 'blockies';
+import { collection, query, orderBy } from "firebase/firestore";
+import { useCollection } from 'react-firebase-hooks/firestore';
+import { db } from '../controller/firebase'; // Make sure to import your Firebase db configuration
+
+
 
 export default function Messages() {
   const router = useRouter();
@@ -15,8 +20,25 @@ export default function Messages() {
   const [chatRooms, setChatRooms] = useState([]);
   const [isLoadingChatRooms, setIsLoadingChatRooms] = useState(false);
   const [showChatRoomModal, setShowChatRoomModal] = useState(false);
+
+  
+  const [selectedChatRoomId, setSelectedChatRoomId] = useState(null);
   const [selectedChatRoomName, setSelectedChatRoomName] = useState('');
   
+  // Create a ref for the query
+  const queryRef = useRef(null);
+
+  // Update the query ref whenever selectedChatRoomId changes
+  useEffect(() => {
+    if (selectedChatRoomId) {
+      const privateChatRef = collection(db, "PrivateChatRooms", selectedChatRoomId, "Messages");
+      queryRef.current = query(privateChatRef, orderBy('timestamp'));
+    }
+  }, [selectedChatRoomId]);
+
+  // Use the useCollection hook to listen to Firestore
+  const [value, loading, error] = useCollection(queryRef.current);
+
 
   useEffect(() => {
     if (address) {
@@ -46,8 +68,10 @@ export default function Messages() {
   const openChatRoomModal = (chatRoomId) => {
     const chatRoom = chatRooms.find((room) => room.chatroomId === chatRoomId);
     setSelectedChatRoomName(chatRoom.chatWith); // or the proper name, if available
+    setSelectedChatRoomId(chatRoomId); // Set the selected chat room ID
     setShowChatRoomModal(true);
   };
+  
   
   const handleCloseChatRoomModal = () => {
     setShowChatRoomModal(false);
@@ -96,6 +120,7 @@ export default function Messages() {
 
 
 
+  
   return (
     <main className="flex flex-col min-h-screen bg-white">
       <Head>
@@ -161,6 +186,7 @@ export default function Messages() {
 
 {/* Chat Room Modal */}
 
+{/* Chat Room Modal */}
 {showChatRoomModal && (
   <div className="fixed inset-0 bg-white z-50 flex flex-col">
     <div className="p-4 flex items-center mt-2">
@@ -175,13 +201,24 @@ export default function Messages() {
         {selectedChatRoomName.substring(0, 7) + "..."}
       </h1>
     </div>
-    <div className="flex-grow overflow-y-scroll">
-      {/* Chat content goes here */}
+    <div className="flex-grow overflow-y-scroll bg-base-blue text-white font-medium w-full py-2 mx-1 mb-4 flex flex-col text-left p-10 rounded">
+      {value && value.docs.map((doc) => {
+        const textOrRequest = doc.data().payment_request_message ? "request" : "text";
+
+        if (textOrRequest === 'text') {
+          return (
+            <div key={doc.id}>
+              <>{JSON.stringify(doc.data().from)}</>
+              <>{JSON.stringify(doc.data().text_content)}</>
+            </div>
+          );
+        } else if (textOrRequest === "request") {
+          // Handle request content if needed
+        }
+      })}
     </div>
   </div>
 )}
-
-
 
 
 

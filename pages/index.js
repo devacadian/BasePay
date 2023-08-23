@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,7 +8,7 @@ import { useBalance } from 'wagmi';
 import { useAccount } from "wagmi";
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import QRCode from 'qrcode.react'; 
-
+import { NotificationContext } from "../components/NotificationProvider";
 
 export default function Home() {
   const { address } = useAccount();
@@ -17,6 +17,8 @@ export default function Home() {
   const router = useRouter();
   const [showQRCodeModal, setShowQRCodeModal] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
+  const { showNotification } = useContext(NotificationContext);
+
 
   useEffect(() => {
     const balanceValue = parseFloat(data?.formatted || '0.0000');
@@ -25,6 +27,7 @@ export default function Home() {
 
   const handleCopyAddress = () => {
     navigator.clipboard.writeText(address).then(() => {
+      showNotification("Address copied to clipboard!", "success");
       // You can add a success message or other behavior here if needed
     });
   };
@@ -56,6 +59,7 @@ export default function Home() {
   };
 
   const copyToClipboard = () => {
+    showNotification("Copied to clipboard!", "success");
     navigator.clipboard.writeText(address);
   };
 
@@ -72,6 +76,14 @@ export default function Home() {
   const handleInviteModalClose = () => {
     setShowInviteModal(false);
     document.body.style.overflowY = "scroll"; 
+  };
+
+  const handleCopyClick = () => {
+    navigator.clipboard.writeText("https://www.basepay.app").then(() => {
+      showNotification("Link copied to clipboard!", "success");
+    }).catch((err) => {
+      showNotification("Failed to copy the address!", "error");
+    });
   };
 
 
@@ -244,13 +256,13 @@ export default function Home() {
         <div className="text-black text-lg font-bold mt-4">Scan to visit BasePay</div>
         <div className="flex items-center justify-center text-black text-lg mt-4 mb-4">
           <span>basepay.app</span>
-          <button onClick={() => navigator.clipboard.writeText("https://www.basepay.app")} className="ml-2 focus:outline-none text-gray-500">
-            <FontAwesomeIcon icon={faCopy} className="h-4 w-4" />
-          </button>
+          <button onClick={handleCopyClick} className="ml-2 focus:outline-none text-gray-500">
+  <FontAwesomeIcon icon={faCopy} className="h-4 w-4" />
+</button>
         </div>
         <button
           className="bg-base-blue text-white text-lg font-medium flex items-center justify-center w-full h-12 rounded-3xl focus:outline-none mt-2 mb-2"
-          onClick={() => navigator.clipboard.writeText("https://www.basepay.app")}
+          onClick={handleCopyClick}
         >
                 <FontAwesomeIcon icon={faUpRightFromSquare} className="mr-2.5 h-4 w-4 text-white" />
           Copy Invite

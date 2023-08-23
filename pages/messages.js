@@ -105,7 +105,7 @@ export default function Messages() {
 
     
 
-{chatRooms.map((chatRoom, index) => {
+{chatRooms.map((chatRoom) => {
       const chatRoomTimestamp = chatRoom.lastestMessageTimeStamp.seconds * 1000;
       const timeDifferenceMinutes = Math.floor((Date.now() - chatRoomTimestamp) / (1000 * 60));
       const truncatedChatWith = chatRoom.chatWith.substring(0, 6) + "...";
@@ -128,7 +128,7 @@ export default function Messages() {
       }
 
       return (
-        <div className="flex items-start p-4 mt-0" key={chatRoom.chatroomId}>
+        <button onClick={() => openChatRoomModal(chatRoom.chatroomId)} className="flex items-start py-1 px-4 mt-0 focus:outline-none w-full text-left" key={chatRoom.chatroomId}>
           <div className="bg-gray-300 rounded-full h-14 w-14 mb-6 mx-auto overflow-hidden border-2 border-gray-300 shrink-0"
                style={{ maskImage: 'radial-gradient(circle, white, black)' }}>
             <AvatarIcon seed={chatRoom.chatWith} />
@@ -140,12 +140,13 @@ export default function Messages() {
             </div>
             <div className="grid grid-cols-[1fr,auto] items-center gap-x-2">
               <p className="text-black text-sm truncate overflow-hidden whitespace-nowrap">{chatRoom.lastestMessage}</p>
-              {/* You can add other elements here if needed */}
             </div>
           </div>
-        </div>
+        </button>
       );
     })}
+
+
 
 
 

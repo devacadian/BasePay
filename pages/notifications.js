@@ -289,13 +289,15 @@ const handleConfirmPayment = async () => {
         <h1 className="text-black text-3xl font-semibold pt-2 mr-1">Notifications</h1>
         <FontAwesomeIcon icon={faBells} className="h-7 w-7 text-black align-middle mt-2 ml-2" />
       </div>
-      <FontAwesomeIcon
-        icon={faRotateRight}
-        className="h-6 w-6 text-gray-500 align-middle mt-2 mr-2 cursor-pointer"
-        onClick={() => setRefreshKey(refreshKey + 1)} // Increment refreshKey to trigger useEffect
-      />
-    </div>
 
+      <div className="bg-base-blue rounded-full h-8 w-8 flex items-center justify-center mt-1.5">
+  <FontAwesomeIcon
+    icon={faRotateRight}
+    className="h-4.5 w-4.5 text-white cursor-pointer" // Fixed class name
+    onClick={() => setRefreshKey(refreshKey + 1)} // Increment refreshKey to trigger useEffect
+  />
+</div>
+</div>
      
     <div className="bg-white w-full -mb-2"></div>
     <div className="px-4 mb-30">

@@ -99,6 +99,17 @@ const handleNumberClick = (number) => {
       // You can display a message or do something else here if needed
       return;
     }
+
+    
+  // Convert the balance data to a number
+  const balance = parseFloat(data?.formatted || '0.0000');
+
+  // Check if counter is greater than the available balance
+  if (Number(counter) > balance) {
+    showNotification("Payment cannot exceed available balance.", "error");
+    return;
+  }
+  
   
     setshowPaySelectionModal(true); // Show the modal when the Pay button is clicked
   };

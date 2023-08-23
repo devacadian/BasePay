@@ -193,47 +193,52 @@ export default function Messages() {
 
     
 
-{chatRooms.map((chatRoom) => {
-const chatRoomTimestamp = chatRoom.lastestMessageTimeStamp?.seconds * 1000 || 0;
-      const timeDifferenceMinutes = Math.floor((Date.now() - chatRoomTimestamp) / (1000 * 60));
-      const truncatedChatWith = (chatRoom.chatWith || '').substring(0, 6) + "...";
+      {chatRooms.length > 0 ? (
+  chatRooms.map((chatRoom) => {
+    const chatRoomTimestamp = chatRoom.lastestMessageTimeStamp?.seconds * 1000 || 0;
+    const timeDifferenceMinutes = Math.floor((Date.now() - chatRoomTimestamp) / (1000 * 60));
+    const truncatedChatWith = (chatRoom.chatWith || '').substring(0, 6) + "...";
 
-      let chatRoomTimeString;
-      if (timeDifferenceMinutes === 1) {
-        chatRoomTimeString = `${timeDifferenceMinutes} min ago`;
-      } else if (timeDifferenceMinutes < 60) {
-        chatRoomTimeString = `${timeDifferenceMinutes} mins ago`;
-      } else {
-        const timeDifferenceHours = Math.floor(timeDifferenceMinutes / 60);
-        chatRoomTimeString = timeDifferenceHours === 1
-          ? `${timeDifferenceHours} hr ago`
-          : `${timeDifferenceHours} hrs ago`;
+    let chatRoomTimeString;
+    if (timeDifferenceMinutes === 1) {
+      chatRoomTimeString = `${timeDifferenceMinutes} min ago`;
+    } else if (timeDifferenceMinutes < 60) {
+      chatRoomTimeString = `${timeDifferenceMinutes} mins ago`;
+    } else {
+      const timeDifferenceHours = Math.floor(timeDifferenceMinutes / 60);
+      chatRoomTimeString = timeDifferenceHours === 1
+        ? `${timeDifferenceHours} hr ago`
+        : `${timeDifferenceHours} hrs ago`;
 
-        if (timeDifferenceMinutes >= 24 * 60) {
-          const chatRoomDate = new Date(chatRoomTimestamp);
-          chatRoomTimeString = chatRoomDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-        }
+      if (timeDifferenceMinutes >= 24 * 60) {
+        const chatRoomDate = new Date(chatRoomTimestamp);
+        chatRoomTimeString = chatRoomDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
       }
+    }
 
-      return (
-        <button onClick={() => openChatRoomModal(chatRoom.chatroomId)} className="flex items-start py-1 px-4 mt-0 focus:outline-none w-full text-left" key={chatRoom.chatroomId}>
-          <div className="bg-gray-300 rounded-full h-14 w-14 mb-6 mx-auto overflow-hidden border-2 border-gray-300 shrink-0"
-               style={{ maskImage: 'radial-gradient(circle, white, black)' }}>
-            <AvatarIcon seed={chatRoom.chatWith} />
+    return (
+      <button onClick={() => openChatRoomModal(chatRoom.chatroomId)} className="flex items-start py-1 px-4 mt-0 focus:outline-none w-full text-left" key={chatRoom.chatroomId}>
+        <div className="bg-gray-300 rounded-full h-14 w-14 mb-6 mx-auto overflow-hidden border-2 border-gray-300 shrink-0"
+             style={{ maskImage: 'radial-gradient(circle, white, black)' }}>
+          <AvatarIcon seed={chatRoom.chatWith} />
+        </div>
+        <div className="ml-4 flex flex-col flex-grow">
+          <div className="grid grid-cols-[auto,1fr,auto] items-center gap-x-2">
+            <p className="text-black text-xl font-semibold mt-1 truncate">{truncatedChatWith}</p>
+            <span className="text-black text-sm font-semibold justify-self-end">{chatRoomTimeString}</span>
           </div>
-          <div className="ml-4 flex flex-col flex-grow">
-            <div className="grid grid-cols-[auto,1fr,auto] items-center gap-x-2">
-              <p className="text-black text-xl font-semibold mt-1 truncate">{truncatedChatWith}</p>
-              <span className="text-black text-sm font-semibold justify-self-end">{chatRoomTimeString}</span>
-            </div>
-            <div className="grid grid-cols-[1fr,auto] items-center gap-x-2">
-              <p className="text-black text-sm truncate overflow-hidden whitespace-nowrap">{chatRoom.lastestMessage}</p>
-            </div>
+          <div className="grid grid-cols-[1fr,auto] items-center gap-x-2">
+            <p className="text-black text-sm truncate overflow-hidden whitespace-nowrap">{chatRoom.lastestMessage}</p>
           </div>
-        </button>
-      );
-    })}
-
+        </div>
+      </button>
+    );
+  })
+) : (
+  <div className="text-center text-black text-xl font-medium my-10">
+    No chats created yet!
+  </div>
+)}
 
 
 {/* Chat Room Modal */}

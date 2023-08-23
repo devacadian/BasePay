@@ -103,11 +103,11 @@ export default function Messages() {
   
     useEffect(() => {
       const icon = createIcon({
-        seed: address,
+        seed: seed,
         color: '#000000', // Foreground color
         bgcolor: '#ffffff',
         size: 11,
-        scale: 7.5  // Width/height of each block in pixels
+        scale: 5  // Width/height of each block in pixels
       });
   
       if (avatarRef.current) {
@@ -115,7 +115,7 @@ export default function Messages() {
         avatarRef.current.appendChild(icon);
       }
     }, [seed]);
-    return <div ref={avatarRef} className="-ml-1"></div>;
+    return <div ref={avatarRef} className="-ml-0.5"></div>;
   };
 
   const sendMessage = async () => {

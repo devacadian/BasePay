@@ -1,6 +1,5 @@
 import '@/styles/globals.css'
 import '@rainbow-me/rainbowkit/styles.css';
-
 import { NotificationProvider } from "../components/NotificationProvider";
 import 'react-toastify/dist/ReactToastify.css'; // Import CSS file
 import React, { useState, useEffect } from 'react';
@@ -12,7 +11,7 @@ import Head from 'next/head';
 import Footer from '../components/Footer';
 import { useAccount } from 'wagmi'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useSignTypedData } from 'wagmi';
+
 
 
 
@@ -67,44 +66,6 @@ function AppContent({ Component, pageProps }) {
     return () => window.removeEventListener('resize', handleResize); // Cleanup on unmount
   }, []);
 
-  const domain = {
-    name: 'BasePay',
-    version: '1',
-    chainId: 84531, // Set the appropriate chain ID
-  };
-
-  const types = {
-    Person: [
-      { name: 'name', type: 'string' },
-      { name: 'wallet', type: 'address' },
-    ],
-    Mail: [
-      { name: 'from', type: 'Person' },
-      { name: 'to', type: 'Person' },
-      { name: 'contents', type: 'string' },
-    ],
-  };
-
-  const message = {
-    from: {
-      name: 'Cow', // Must be a string
-      wallet: '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826', // Must be a valid address
-    },
-    to: {
-      name: 'Bob', // Must be a string
-      wallet: '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB', // Must be a valid address
-    },
-    contents: 'Hello, Bob!', // Must be a string
-  };
-
-  const { data, isError, isLoading, isSuccess, signTypedData } = useSignTypedData({
-    domain,
-    message,
-    primaryType: 'Person', // Set the appropriate primary type
-    types,
-  });
-
-
 
   return (
     <>
@@ -116,11 +77,6 @@ function AppContent({ Component, pageProps }) {
     <div className="text-center text-black">
       <h1 className="text-4xl font-bold text-base-blue mb-4">BasePay</h1>
       <h2 className="text-xl text-black font-semibold">Visit on mobile device to access dApp.</h2>
-
-      <button disabled={isLoading} onClick={() => signTypedData()}>
-        Sign in with BasePay
-      </button>
-      {isSuccess && <div>Signature: {data}</div>}
     </div>
   </div>
 )}

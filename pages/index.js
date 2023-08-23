@@ -92,18 +92,9 @@ export default function Home() {
       <Head>
         {/* Head content */}
       </Head>
-      <div className="pb-8 pt-6 px-4 flex items-center">
-        <div className="flex items-center border-2 border-blue-500 rounded-3xl w-full p-2">
-          <FontAwesomeIcon icon={faMagnifyingGlass} className="pl-2 mr-2 text-black w-6 h-6" />
-          <input
-            type="text"
-            placeholder="Search for an ENS or Base address..."
-            className="w-full bg-transparent outline-none text-black"
-          />
-        </div>
-        <FontAwesomeIcon icon={faBarcodeRead} className="ml-4 mr-0 h-8 w-8 text-gray-600" />
-      </div>
-      <div className="px-4"> {/* Container for padding */}
+    
+
+      <div className="px-4 mt-6"> {/* Container for padding */}
         <div className="bg-gray-100 h-20 rounded-3xl flex items-center justify-start w-full shadow-sm drop-shadow-sm p-4"> {/* Wrapper div */}
           <div className="flex justify-center items-center relative w-10 h-10 rounded-full bg-gray-300 shadow drop-shadow-sm ml-4"> {/* Ethereum logo */}
             <FontAwesomeIcon icon={faEthereum} className="text-black h-6 w-6 z-10" />

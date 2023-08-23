@@ -95,7 +95,7 @@ const handleNumberClick = (number) => {
 
   const handlePayClick = () => {
     if (Number(counter) === 0) {
-      showNotification("Counter is 0. Cannot proceed to pay modal.", "error");
+      showNotification("Must be greater than 0 ETH to proceed to pay modal.", "error");
       // You can display a message or do something else here if needed
       return;
     }
@@ -150,11 +150,25 @@ const handleNumberClick = (number) => {
   };
 
   const handleOpenconfirmpayModal = () => {
+    // Check if no address is entered
+    if (toAddress.length === 0) {
+      showNotification("No address entered!", "error");
+      return; // Exit the function if no address is entered
+    }
+  
+    // Check if the "to" field's length is exactly 42 characters
+    if (toAddress.length !== 42) {
+      showNotification("Address incorrect - ensure 42 character address is input.", "error");
+      return; // Exit the function if the condition is not met
+    }
+  
     document.body.style.overflowY = "hidden";
     document.body.style.minHeight = "calc(100vh + 1px)";
     window.scrollBy(0, 1);
     setShowconfirmpayModal(true);
   };
+  
+
 
   // Function to close the payment modal
   const handleCloseconfirmpayModal = () => {
@@ -221,20 +235,36 @@ const handleNumberClick = (number) => {
     setCounter('0');
   };
 
- // Function to handle opening the Request Modal
- const handleOpenRequestModal = () => {
-
-  if (counter && counter !== '0') {
-    // Set the request counter to be the same value
-    setCounter(counter);
-  } else {
-    // If not, set the request counter to '0.00'
-    setCounter('');
-  }
-
-
-  setShowRequestModal(true);
-};
+  const handleOpenRequestModal = () => {
+    // Check if the "to" field is empty
+    if (toAddress === '') {
+      showNotification("No address entered!", "error");
+      return; // Exit the function if no address is entered
+    }
+  
+    // Check if the "to" field's length is exactly 42 characters
+    if (toAddress.length !== 42) {
+      showNotification("Address incorrect - ensure 42 character address is input.", "error");
+      return; // Exit the function if the condition is not met
+    }
+  
+    // Check if the "to" address is the same as the user's own address
+    if (toAddress === address) {
+      showNotification("Cannot send request to own address!", "error");
+      return; // Exit the function if the addresses are the same
+    }
+  
+    if (counter && counter !== '0') {
+      // Set the request counter to be the same value
+      setCounter(counter);
+    } else {
+      // If not, set the request counter to '0.00'
+      setCounter('');
+    }
+  
+    setShowRequestModal(true);
+  };
+  
 
 // Function to handle closing the Request Modal
 const handleCloseRequestModal = () => {
@@ -597,7 +627,7 @@ const handleCloseQRChoiceModal = () => {
   type="text"
   id="to"
   className="rounded p-2 flex-grow ml-1 text-black font-medium outline-none"
-  placeholder="Enter ENS or Base address..."
+  placeholder="Enter Goerli Base address..."
   value={toAddress}
   onChange={(e) => setToAddress(e.target.value.trim())} // Trim method here to prevent sending to incorrect addresses
 />
@@ -740,7 +770,7 @@ const handleCloseQRChoiceModal = () => {
     </div>
 
 
-    <div className="mb-10 text-center text-gray-600 font-medium"> {/* Added a "View on Basescan" link */}
+    <div className="mb-6 text-center text-gray-600 font-medium"> {/* Added a "View on Basescan" link */}
   <a href={`https://goerli.basescan.org/tx/${txHashState}`} target="_blank" rel="noopener noreferrer" className="flex justify-center items-center">
     View on <span className="text-gray-600 ml-1 font-semibold">BaseScan</span> <FontAwesomeIcon icon={faUpRightFromSquare} className="h-4.5 w-4.5 ml-2 text-gray-500" />
   </a>
@@ -756,9 +786,13 @@ const handleCloseQRChoiceModal = () => {
       <div className="text-black font-semibold">Transaction to {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress} on Goerli Base Chain is processing.</div>
     </div>
     <div className="ml-0">
-      <div className="text-gray-600 font-medium text-lg"> {forValue || "No note added"}</div>
+    <div className={`text-gray-600 font-medium text-lg ${forValue ? 'text-left' : 'text-left'}`}>
+  {forValue
+    ? `Message: ${forValue}`
+    : <i>No note added</i>} {/* Conditional rendering */}
+</div>
     </div>
-    <button className="bg-gray-300 text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" >
+    <button className="bg-gray-300 text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-6 mb-0" >
       Continue
     </button>
   </div>
@@ -776,7 +810,7 @@ const handleCloseQRChoiceModal = () => {
       <div className="text-black font-bold text-2xl">{counter || '0'} ETH</div>
     </div>
 
-    <div className="mb-10 text-center text-gray-600 font-medium"> {/* Added a "View on Basescan" link */}
+    <div className="mb-6 text-center text-gray-600 font-medium"> {/* Added a "View on Basescan" link */}
   <a href={`https://goerli.basescan.org/tx/${txHashState}`} target="_blank" rel="noopener noreferrer" className="flex justify-center items-center">
     View on <span className="text-gray-600 ml-1 font-semibold">BaseScan</span> <FontAwesomeIcon icon={faUpRightFromSquare} className="h-4.5 w-4.5 ml-2 text-gray-500" />
   </a>
@@ -788,12 +822,17 @@ const handleCloseQRChoiceModal = () => {
     </div>
 
     <div className=" mb-4"> 
-      <div className="text-black font-semibold">Sent successfully to {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress} on Goerli Base Chain using BasePay!</div>
+      <div className="text-black font-semibold">Sent successfully to {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress} on Goerli Base Chain using <span className='text-base-blue'>BasePay</span>!</div>
     </div>
     <div className="ml-0">
-      <div className="text-gray-600 font-medium text-lg"> {forValue || "No note added"}</div>
+    <div className={`text-gray-600 font-medium text-lg ${forValue ? 'text-left' : 'text-left'}`}>
+  {forValue
+    ? `Message: ${forValue}`
+    : <i>No note added</i>} {/* Conditional rendering */}
+</div>
+
     </div>
-    <button className="bg-base-blue shadow-sm drop-shadow text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" onClick={() => {
+    <button className="bg-base-blue shadow-sm drop-shadow text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-6 mb-0" onClick={() => {
         document.body.style.overflowY = "scroll"; // Remove scroll lock
         document.body.style.minHeight = "0px";
         window.scrollBy(0, -1);
@@ -1072,9 +1111,11 @@ const handleCloseQRChoiceModal = () => {
             <div className="text-black font-semibold">Request to {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress} on Goerli Base Chain is processing.</div>
           </div>
           <div className="ml-0">
-            <div className="text-gray-600 font-medium text-lg"> {requestNote || "No note added"}</div>
+          <div className="text-gray-600 font-medium text-lg">
+  {requestNote ? `Message: ${requestNote}` : <i>No note added</i>}
+</div>
           </div>
-          <button className="bg-gray-300 text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" >
+          <button className="bg-gray-300 text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-6 mb-0" >
             Continue
           </button>
         </div>
@@ -1095,12 +1136,15 @@ const handleCloseQRChoiceModal = () => {
             <span className="ml-4 mt-0.5 text-black font-semibold">Request Successful!</span>
           </div>
           <div className="mb-4"> 
-            <div className="text-black font-semibold">Request sent successfully to {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress} on Goerli Base Chain using BasePay!</div>
+            <div className="text-black font-semibold">Request sent successfully to {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress} on Goerli Base Chain using <span className='text-base-blue'>BasePay</span>!</div>
           </div>
           <div className="ml-0">
-            <div className="text-gray-600 font-medium text-lg"> {requestNote || "No note added"}</div>
+          <div className="text-gray-600 font-medium text-lg">
+  {requestNote ? `Message: ${requestNote}` : <i>No note added</i>}
+</div>
+
           </div>
-          <button className="bg-base-blue shadow-sm drop-shadow text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" onClick={() => {
+          <button className="bg-base-blue shadow-sm drop-shadow text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-6 mb-0" onClick={() => {
               document.body.style.overflowY = "scroll"; // Remove scroll lock
               document.body.style.minHeight = "0px";
               window.scrollBy(0, -1);

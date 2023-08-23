@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell, faListCheck, faArrowUpRightFromSquare, faEllipsis, faHandshakeSlash, faEye, faPaperPlane, faHand, faXmark, faFileInvoice, faBells, faCircleCheck, faSpinner, faUpRightFromSquare, faRightLeft, faCircleX } from '@fortawesome/pro-solid-svg-icons';
+import { faBell, faListCheck, faArrowUpRightFromSquare, faEllipsis, faHandshakeSlash, faEye, faPaperPlane, faHand, faXmark, faFileInvoice, faBells, faCircleCheck, faSpinner, faUpRightFromSquare, faRightLeft, faCircleX, faRotateRight } from '@fortawesome/pro-solid-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import Head from 'next/head';
 import { useAccount } from "wagmi";
@@ -29,10 +29,10 @@ const [transactionStatus, setTransactionStatus] = useState(null);
 const [showConfirmRequestTransactionModal, setShowConfirmRequestTransactionModal] = useState(false); 
 const hasFetchedPaymentRequestsRef = useRef(false);
 const [isLoadingNotifications, setIsLoadingNotifications] = useState(false);
-
+const [refreshKey, setRefreshKey] = useState(0);
 
 useEffect(() => {
-  if (address && !hasFetchedPaymentRequestsRef.current) {
+  if (address) {
     // Function to fetch payment requests
     const fetchPaymentRequests = async () => {
       setIsLoadingNotifications(true); // Set loading state to true before fetching
@@ -50,10 +50,10 @@ useEffect(() => {
     };
 
     fetchPaymentRequests();
-
-    hasFetchedPaymentRequestsRef.current = true; // Mark as fetched
+    hasFetchedPaymentRequestsRef.current = false; // Reset fetch state
   }
-}, [address]); // Will run when address changes, but fetch only once per address
+}, [address, refreshKey]); // Will run when address changes or refreshKey changes
+
 
   const AvatarIcon = ({ seed }) => {
     const avatarRef = useRef(null);
@@ -285,13 +285,16 @@ const handleConfirmPayment = async () => {
         {/* Other head content */}
       </Head>
       <div className="p-4 flex items-center justify-between">
-        <div className="flex items-center">
+      <div className="flex items-center">
         <h1 className="text-black text-3xl font-semibold pt-2 mr-1">Notifications</h1>
-          <FontAwesomeIcon icon={faBells} className="h-7 w-7 text-black align-middle mt-2 ml-2" />
-        </div>
-
+        <FontAwesomeIcon icon={faBells} className="h-7 w-7 text-black align-middle mt-2 ml-2" />
       </div>
-
+      <FontAwesomeIcon
+        icon={faRotateRight}
+        className="h-6 w-6 text-gray-500 align-middle mt-2 mr-2 cursor-pointer"
+        onClick={() => setRefreshKey(refreshKey + 1)} // Increment refreshKey to trigger useEffect
+      />
+    </div>
 
      
     <div className="bg-white w-full -mb-2"></div>

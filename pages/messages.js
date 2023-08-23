@@ -25,6 +25,7 @@ export default function Messages() {
   
   const [selectedChatRoomId, setSelectedChatRoomId] = useState(null);
   const [selectedChatRoomName, setSelectedChatRoomName] = useState('');
+  const [searchAddress, setSearchAddress] = useState('');
   
   // Create a ref for the query
   const queryRef = useRef(null);
@@ -66,10 +67,14 @@ export default function Messages() {
 
 
   
-  const openChatRoomModal = (chatRoomId) => {
-    const chatRoom = chatRooms.find((room) => room.chatroomId === chatRoomId);
-    setSelectedChatRoomName(chatRoom.chatWith); // or the proper name, if available
-    setSelectedChatRoomId(chatRoomId); // Set the selected chat room ID
+  const openChatRoomModal = (chatRoomId, chatRoomName = null) => {
+    if (!chatRoomName) {
+      const chatRoom = chatRooms.find((room) => room.chatroomId === chatRoomId);
+      chatRoomName = chatRoom ? chatRoom.chatWith : 'Unknown'; // Provide a fallback value if needed
+    }
+    setSelectedChatRoomName(chatRoomName);
+    setSelectedChatRoomId(chatRoomId);
+    console.log("Selected Chat Room ID:", chatRoomId); // Debug log
     setShowChatRoomModal(true);
   };
   
@@ -143,7 +148,29 @@ export default function Messages() {
     setMessageContent(e.target.value);
   };
 
-
+  // Function to create a private chat room
+  const createPrivateChatRoom = async () => {
+    const url = 'https://basepay-api.onrender.com/create-private-chatroom';
+    const data = {
+      "currentUserAddress": address,
+      "secondUserAddress": searchAddress
+    };
+  
+    const response = await axios.post(url, data);
+    const chatRoomId = response.data; // Directly use the response data as the chat room ID
+  
+    // Assuming the response includes the chat room name or other necessary details
+    const newChatRoom = { chatroomId: chatRoomId }; // Adjust as needed
+  
+    // Update the chat rooms array with the newly created chat room
+    setChatRooms([...chatRooms, newChatRoom]);
+  
+    // Open the chat room modal with the new chat room ID
+    openChatRoomModal(chatRoomId);
+  };
+  
+  
+  
   
   return (
     <main className="flex flex-col min-h-screen bg-white">
@@ -167,9 +194,9 @@ export default function Messages() {
     
 
 {chatRooms.map((chatRoom) => {
-      const chatRoomTimestamp = chatRoom.lastestMessageTimeStamp.seconds * 1000;
+const chatRoomTimestamp = chatRoom.lastestMessageTimeStamp?.seconds * 1000 || 0;
       const timeDifferenceMinutes = Math.floor((Date.now() - chatRoomTimestamp) / (1000 * 60));
-      const truncatedChatWith = chatRoom.chatWith.substring(0, 6) + "...";
+      const truncatedChatWith = (chatRoom.chatWith || '').substring(0, 6) + "...";
 
       let chatRoomTimeString;
       if (timeDifferenceMinutes === 1) {
@@ -309,12 +336,14 @@ export default function Messages() {
         <input
           type="text"
           placeholder="Search for an ENS or Base address..."
+          value={searchAddress} // Controlled input
+          onChange={(e) => setSearchAddress(e.target.value)} // Update state on input change
+          onKeyPress={(e) => { if (e.key === 'Enter') createPrivateChatRoom(); }} // Trigger createPrivateChatRoom on Enter key
           className="w-full bg-transparent outline-none text-black text-base"
         />
       </div>
       <FontAwesomeIcon icon={faBarcodeRead} className="ml-4 mr-0 h-8 w-8 text-gray-600" />
     </div>
-
     <div className="bg-gray-100 h-10 flex items-center shadow-sm mt-22">
         <span className="text-gray-500 text-base font-bold ml-4">Last Messaged</span>
       </div>

@@ -49,7 +49,6 @@ Whether you're organizing a vacation or sharing lunch expenses, BasePay streamli
 1. Access the chat feature.
 2. Start a conversation with your contact.
 3. Send and receive messages in real-time.
-<img src="https://github.com/devacadian/BasePay/blob/main/documentations/assets/Chat.PNG" alt="Landing Page" height="600" width="270">
 
 ### Transaction History
 

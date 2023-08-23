@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMessagePen, faMagnifyingGlass, faArrowLeft, faBarcodeRead, faMessages } from '@fortawesome/pro-solid-svg-icons';
+import { faMessagePen, faMagnifyingGlass, faArrowLeft, faBarcodeRead, faMessages, faXmark, faCopy, faUpRightFromSquare } from '@fortawesome/pro-solid-svg-icons';
+import QRCode from 'qrcode.react'; 
 
 export default function Messages() {
   const router = useRouter();
   const [showModal, setShowModal] = useState(router.query.newmessage === 'true');
-
+  const [showInviteModal, setShowInviteModal] = useState(false);
   
   const handleCloseModal = () => {
     // Create a copy of the query object without the 'newmessage' key
@@ -21,6 +22,10 @@ export default function Messages() {
     
     // Close the modal
     setShowModal(false);
+  };
+
+  const handleInviteModalClose = () => {
+    setShowInviteModal(false);
   };
 
   return (
@@ -118,15 +123,47 @@ export default function Messages() {
         Start using BasePay to find suggested contacts!
       </div>
       <div className="text-center ">
-            <button
-              className="w-40 h-12 bg-base-blue text-white font-semibold text-sm rounded-3xl shadow-md"
-              onClick={() => {
-                // Logic for inviting to BasePay
-              }}
-            >
-              Invite to BasePay
-            </button>
+      <button
+  className="w-40 h-12 bg-base-blue text-white font-semibold text-sm rounded-3xl shadow-md"
+  onClick={() => setShowInviteModal(true)} // Open the invite modal on click
+>
+  Invite to BasePay
+</button>
           </div>
+
+
+
+{/* Invite Modal */}
+{showInviteModal && (
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
+    <div className="bg-white p-6 rounded-xl absolute shadow-xl drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}>
+      <button onClick={handleInviteModalClose} className="absolute top-6 left-4">
+        <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
+      </button>
+      <div className="text-black text-2xl font-bold text-center mt-8">
+        Invite to <span className='text-base-blue'>BasePay</span>
+      </div>
+      <div className="flex flex-col items-center justify-center mt-6">
+        <QRCode value="https://www.basepay.app" size={128} /> {/* Display the QR code */}
+        <div className="text-black text-lg font-bold mt-4">Scan to visit BasePay</div>
+        <div className="flex items-center justify-center text-black text-lg mt-4 mb-4">
+          <span>basepay.app</span>
+          <button onClick={() => navigator.clipboard.writeText("https://www.basepay.app")} className="ml-2 focus:outline-none text-gray-500">
+            <FontAwesomeIcon icon={faCopy} className="h-4 w-4" />
+          </button>
+        </div>
+        <button
+          className="bg-base-blue text-white text-lg font-medium flex items-center justify-center w-full h-12 rounded-3xl focus:outline-none mt-2 mb-2"
+          onClick={() => navigator.clipboard.writeText("https://www.basepay.app")}
+        >
+                <FontAwesomeIcon icon={faUpRightFromSquare} className="mr-2.5 h-4 w-4 text-white" />
+          Copy Invite
+        
+        </button>
+      </div>
+    </div>
+  </div>
+)}
 
 
   </div>

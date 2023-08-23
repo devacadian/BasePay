@@ -227,7 +227,7 @@ export default function Messages() {
     <div className="flex-grow overflow-y-scroll bg-white text-white font-medium w-full mb-4 flex flex-col text-left p-3 rounded">
       {value && value.docs.map((doc) => {
         const textOrRequest = doc.data().payment_request_message ? "request" : "text";
-        const bubbleColor = doc.data().from === address ? "bg-green-400" : "bg-blue-500"; // Conditional color
+        const bubbleColor = doc.data().from === address ? "bg-blue-500 mr-10" : "bg-green-400 ml-10"; // Conditional color
 
         if (textOrRequest === 'text') {
           return (

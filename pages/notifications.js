@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell, faListCheck, faArrowUpRightFromSquare, faEllipsis, faHandshakeSlash, faEye, faPaperPlane, faHand, faXmark, faFileInvoice, faBells, faCircleCheck, faSpinner, faUpRightFromSquare } from '@fortawesome/pro-solid-svg-icons';
+import { faBell, faListCheck, faArrowUpRightFromSquare, faEllipsis, faHandshakeSlash, faEye, faPaperPlane, faHand, faXmark, faFileInvoice, faBells, faCircleCheck, faSpinner, faUpRightFromSquare, faRightLeft } from '@fortawesome/pro-solid-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import Head from 'next/head';
 import { useAccount } from "wagmi";
@@ -419,18 +419,61 @@ const handleConfirmPayment = async () => {
       <button onClick={closeDeclineModal} className="absolute top-6 left-4">
         <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
       </button>
-      <div className="text-black text-lg font-bold mt-14 text-center">Request Details:</div>
-      <div className="text-black text-base mt-2 text-center">Amount: {selectedRequest.ether_amount} ETH</div>
-      <div className="text-black text-base mt-2 text-center">From: {selectedRequest.payment_requester.substring(0, 6)}...{selectedRequest.payment_requester.slice(-6)}</div>
-      <div className="text-black text-base mt-2 text-center">Request Sent on {new Date(selectedRequest.request_time.seconds * 1000).toLocaleDateString()}</div>
-      <div className="text-black text-base mt-2 text-center">Message: {selectedRequest.transaction_message || 'No message sent with request'}</div>
-      <button className="bg-base-blue text-white text-lg font-medium w-full h-12 rounded-3xl focus:outline-none mt-6"  onClick={handleOpenDeclineRequestModal}>
+
+      <div className="text-black text-2xl font-bold mt-8 text-center">Request Details</div>
+
+   
+      <div className="flex justify-center items-center mt-4">
+        <div className="w-full bg-gray-100 h-18 rounded-3xl flex items-center justify-start shadow-sm drop-shadow-sm p-4 mt-4">
+          <div className="relative h-12 w-12 border-2 border-gray-300 rounded-3xl">
+            <div className="relative w-full h-full overflow-hidden rounded-3xl" style={{ maskImage: 'radial-gradient(circle, white, black)' }}>
+              <AvatarIcon seed={address} />
+            </div>
+          </div>
+          <div className="text-black text-base ml-4 font-semibold">From: {address.substring(0, 6)}...{address.slice(-6)}</div> {/* Truncated address */}
+        </div>
+      </div>
+      
+      <div className="flex justify-center items-center mt-2">
+        <div className="w-full bg-gray-100 h-18 rounded-3xl flex items-center justify-start shadow-sm drop-shadow-sm p-4 mt-4">
+          <div className="relative h-12 w-12 border-2 border-gray-300 rounded-3xl">
+            <div className="relative w-full h-full overflow-hidden rounded-3xl" style={{ maskImage: 'radial-gradient(circle, white, black)' }}>
+              <AvatarIcon seed={selectedRequest.payment_requester} />
+            </div>
+          </div>
+          <div className="text-black text-base ml-4 font-semibold">To: {selectedRequest.payment_requester.substring(0, 6)}...{selectedRequest.payment_requester.slice(-6)}</div>
+        </div>
+      </div>
+     
+      <div className="flex justify-center mt-2"> {/* Centered icon div */}
+      <div className=" w-16 h-10 rounded-2xl flex items-center justify-center p-0 mt-0">
+        <FontAwesomeIcon icon={faRightLeft} className="text-base-blue h-5 w-5" />
+      </div>
+      </div>
+
+
+      <div className="w-full bg-gray-100 h-18 rounded-3xl flex items-center justify-start shadow-sm drop-shadow-sm p-4 mt-2">
+        <div className="flex justify-center items-center relative w-12 h-12 rounded-full bg-gray-300 shadow drop-shadow-sm">
+          <FontAwesomeIcon icon={faEthereum} className="text-black h-8 w-8 z-10" />
+        </div>
+        <div className="text-black text-base ml-4 font-semibold">Amount: {selectedRequest.ether_amount} ETH</div> {/* Added amount text here */}
+      </div>
+       {/* Left-justified */}
+       <div className={`text-black text-base font-semibold mt-6 ${selectedRequest.transaction_message ? 'text-left ml-2' : 'text-center ml-0'}`}>
+  {selectedRequest.transaction_message 
+    ? `Message: ${selectedRequest.transaction_message}` 
+    : <i>No message sent with request</i>} {/* Conditional rendering */}
+</div>
+  
+      <button className="bg-base-blue text-white text-lg font-medium w-full h-12 rounded-3xl flex justify-center items-center focus:outline-none mt-5" onClick={handleOpenDeclineRequestModal}>
+     
         Decline Request
       </button>
+
+      <div className="text-gray-500 text-sm mt-5 mb-0 text-center font-semibold ml-0">Request received on {new Date(selectedRequest.request_time.seconds * 1000).toLocaleDateString()}.</div>
     </div>
   </div>
 )}
-
 
 
 

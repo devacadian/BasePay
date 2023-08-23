@@ -354,11 +354,11 @@ router.post('/create-private-chatroom', async (req,res) => {
         }
 
         // validation: can't create private chatroom with a same set of participants
-        const q = query(PrivateChatRoomsRef, where("participants", "array-contains-any", [currentUserAddress, secondUserAddress]));
-        const querySnapshot = await getDocs(q);
-        if (querySnapshot.empty != true) {
-            return res.status(400).json(`Bad request: You aleardy engaged in a chat with ${secondUserAddress} `)
-        }
+        //const q = query(PrivateChatRoomsRef, where("participants", "array-contains-any", [currentUserAddress, secondUserAddress]));
+        //const querySnapshot = await getDocs(q);
+        //if (querySnapshot.empty != true) {
+        //    return res.status(400).json(`Bad request: You aleardy engaged in a chat with ${secondUserAddress} `)
+        //}
 
         const data = { participants : [currentUserAddress, secondUserAddress] }
 

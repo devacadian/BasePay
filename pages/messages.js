@@ -224,15 +224,35 @@ export default function Messages() {
         {selectedChatRoomName.substring(0, 7) + "..."}
       </h1>
     </div>
-    <div className="flex-grow overflow-y-scroll bg-white text-white font-medium w-full mb-4 flex flex-col text-left p-3 rounded">
+    <div className="flex-grow overflow-y-scroll bg-white text-white  w-full mb-4 flex flex-col text-left p-3 rounded">
       {value && value.docs.map((doc) => {
+        const chatRoomTimestamp = doc.data().timestamp.seconds * 1000;
+        const timeDifferenceMinutes = Math.floor((Date.now() - chatRoomTimestamp) / (1000 * 60));
+        let chatRoomTimeString;
+        if (timeDifferenceMinutes === 1) {
+          chatRoomTimeString = `${timeDifferenceMinutes} min ago`;
+        } else if (timeDifferenceMinutes < 60) {
+          chatRoomTimeString = `${timeDifferenceMinutes} mins ago`;
+        } else {
+          const timeDifferenceHours = Math.floor(timeDifferenceMinutes / 60);
+          chatRoomTimeString = timeDifferenceHours === 1
+            ? `${timeDifferenceHours} hr ago`
+            : `${timeDifferenceHours} hrs ago`;
+
+          if (timeDifferenceMinutes >= 24 * 60) {
+            const chatRoomDate = new Date(chatRoomTimestamp);
+            chatRoomTimeString = chatRoomDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+          }
+        }
+
         const textOrRequest = doc.data().payment_request_message ? "request" : "text";
         const bubbleColor = doc.data().from === address ? "bg-blue-500 mr-10" : "bg-green-400 ml-10"; // Conditional color
 
         if (textOrRequest === 'text') {
           return (
-            <div key={doc.id} className={`${bubbleColor} rounded-2xl p-2 my-1 mt-2 text-white`}> {/* Individual message bubble */}
-              <div>{JSON.stringify(doc.data().text_content).trim().slice(1, -1)}</div>
+            <div key={doc.id} className={`${bubbleColor} rounded-2xl p-2 my-1 mt-2 text-white `}> {/* Individual message bubble */}
+              <div className="mt-1 ml-1 mr-12 font-semibold text-white">{JSON.stringify(doc.data().text_content).trim().slice(1, -1)}</div>
+              <div className="text-xs text-right font-medium text-gray-100 -mt-4 mb-1 mr-1">{chatRoomTimeString}</div> {/* Timestamp */}
             </div>
           );
         } else if (textOrRequest === "request") {

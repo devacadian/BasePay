@@ -77,20 +77,30 @@ function AppContent({ Component, pageProps }) {
   </div>
 )}
 
+{isClient && !isDesktop && !isConnected && (
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-50">
+    <div className="text-center text-black">
+    <h2 className="text-xl text-black font-semibold pb-4">
+        Connect Wallet
+      </h2>
+      <span className="text-black font-semibold text-2xl mb-4">to start using <span className="text-base-blue font-bold">BasePay</span>!</span>
+   
+      <div className="-ml-2 flex items-center justify-center mt-6 mb-22">
+        <a
+          className="pointer-events-none flex place-items-center gap-2 p-8 pointer-events-auto"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <ConnectButton className="dark:invert" width={100} height={24} priority />
+        </a>
+      </div>
+    </div>
+  </div>
+)}
 
-      {isClient && !isDesktop && !isConnected && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-50">
-          <div className="-ml-2 flex items-center justify-center mt-32 mb-34">
-            <a
-              className="pointer-events-none flex place-items-center gap-2 p-8 pointer-events-auto"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <ConnectButton className="dark:invert" width={100} height={24} priority />
-            </a>
-          </div>
-        </div>
-      )}
+
+
+
     </>
   );
 }

@@ -61,7 +61,9 @@ const ChatMessages = () => {
                 {error && <strong>Error: {JSON.stringify(error)}</strong>}
                 {loading && <span>Collection: Loading...</span>}
                 {value && value.docs.map((doc) => {
-  const textOrRequest = doc.data().payment_request_message ? "request" : "text";
+                const textOrRequest = doc.data().payment_request_message ? "request" : "text";
+                console.log(doc.data,textOrRequest)
+
 
   if (textOrRequest === 'text') {
     return (
@@ -73,16 +75,7 @@ const ChatMessages = () => {
   } else if (textOrRequest === "request") {
     const requestRef = doc.data().payment_request_message;
     // getDoc(requestRef)
-    axios.post('https://basepay-api.onrender.com/get-paymentRequset-byRef', { referenceDocRef: requestRef })
-      .then((referenceDocData) => {
-        return (
-          <div key={doc.id}> {/* Add key prop here */}
-            {JSON.stringify(doc.data().from)}
-            {JSON.stringify(referenceDocData.ether_amount)}
-            {JSON.stringify(referenceDocData.transaction_message)}
-          </div>
-        );
-      });
+    
   }
 })}
             </div>
@@ -111,4 +104,4 @@ export default ChatMessages;
                         {JSON.stringify(doc.data().text_content)}
                     </div>
                 ))}
-*/
+                */

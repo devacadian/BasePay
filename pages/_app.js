@@ -40,16 +40,40 @@ const isLocal = process.env.NEXT_PUBLIC_ENVIRONMENT === 'local';
 function AppContent({ Component, pageProps }) {
   const { isConnected } = useAccount();
   const [isClient, setIsClient] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   // Effect to set the isClient state to true once the component is mounted
   useEffect(() => {
     setIsClient(true);
+
+    // Check if the viewport width is greater than a specific value
+    if (window.innerWidth > 768) { // Change this value to the desired breakpoint
+      setIsDesktop(true);
+    }
+
+    // Optional: Add a listener to handle window resize
+    const handleResize = () => {
+      if (window.innerWidth > 768) { // Change this value to the desired breakpoint
+        setIsDesktop(true);
+      } else {
+        setIsDesktop(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize); // Cleanup on unmount
   }, []);
 
   return (
     <>
       <Component {...pageProps} />
-      {isClient && !isConnected && (
+      {isDesktop && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-50">
+          <div className="text-center text-black">
+            <h1>This site is only accessible on mobile devices.</h1>
+          </div>
+        </div>
+      )}
+      {isClient && !isDesktop && !isConnected && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-50">
           <div className="-ml-2 flex items-center justify-center mt-32 mb-34">
             <a

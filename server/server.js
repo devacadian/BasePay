@@ -474,7 +474,7 @@ router.post('/send-paymentRequest-message', async (req,res) => {
 // GET Request: Get payment request by payment request ref
 router.post('/get-paymentRequset-byRef/', async (req,res) => {
     try {
-        const {referenceDocRef} = request.body
+        const {referenceDocRef} = req.body
         const referenceDocSnap = await getDoc(referenceDocRef)
         const referenceDocData = referenceDocSnap.data()
         return res.status(200).json(referenceDocData)

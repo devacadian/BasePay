@@ -1,15 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMessagePen, faMagnifyingGlass, faArrowLeft, faBarcodeRead, faMessages, faXmark, faCopy, faUpRightFromSquare } from '@fortawesome/pro-solid-svg-icons';
 import QRCode from 'qrcode.react'; 
+import { useAccount } from "wagmi";
 
 export default function Messages() {
   const router = useRouter();
   const [showModal, setShowModal] = useState(router.query.newmessage === 'true');
   const [showInviteModal, setShowInviteModal] = useState(false);
-  
+  const { address } = useAccount();
+  const [chatRooms, setChatRooms] = useState([]);
+  const [isLoadingChatRooms, setIsLoadingChatRooms] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0); // You can use this key to manually trigger a refresh
+
+  useEffect(() => {
+    if (address) {
+      // Function to fetch available chat rooms
+      const fetchChatRooms = async () => {
+        setIsLoadingChatRooms(true); // Set loading state to true before fetching
+
+        try {
+          // Use the address from useAccount as the connected wallet
+          const response = await fetch(`https://basepay-api.onrender.com/get-private-chatroom/${address}`);
+          const data = await response.json();
+          setChatRooms(data);
+        } catch (error) {
+          console.error('Error fetching chat rooms:', error);
+        }
+
+        setIsLoadingChatRooms(false); // Set loading state to false after fetching
+      };
+
+      fetchChatRooms();
+    }
+  }, [address, refreshKey]); // Will run when address changes or refreshKey changes
+
+
+
+
+
   const handleCloseModal = () => {
     // Create a copy of the query object without the 'newmessage' key
     const { newmessage, ...newQuery } = router.query;

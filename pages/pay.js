@@ -911,7 +911,7 @@ const handleCloseQRChoiceModal = () => {
           type="text"
           id="to"
           className="rounded p-2 flex-grow ml-1 text-black font-medium outline-none"
-          placeholder="Enter ENS or Base address..."
+          placeholder="Enter Goerli Base address..."
           value={toAddress}
           onChange={(e) => setToAddress(e.target.value.trim())}
         />

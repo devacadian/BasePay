@@ -186,7 +186,6 @@ export default function Messages() {
 
 
 {/* Chat Room Modal */}
-{/* Chat Room Modal */}
 {showChatRoomModal && (
   <div className="fixed inset-0 bg-white z-50 flex flex-col">
     <div className="p-4 flex items-center mt-2">
@@ -201,14 +200,14 @@ export default function Messages() {
         {selectedChatRoomName.substring(0, 7) + "..."}
       </h1>
     </div>
-    <div className="flex-grow overflow-y-scroll bg-base-blue text-white font-medium w-full mx-1 mb-4 flex flex-col text-left p-4 rounded">
+    <div className="flex-grow overflow-y-scroll bg-white text-white font-medium w-full mb-4 flex flex-col text-left p-3 rounded">
       {value && value.docs.map((doc) => {
         const textOrRequest = doc.data().payment_request_message ? "request" : "text";
+        const bubbleColor = doc.data().from === address ? "bg-green-400" : "bg-blue-500"; // Conditional color
 
         if (textOrRequest === 'text') {
           return (
-            <div key={doc.id} className="bg-blue-500 rounded-2xl p-2 my-1 mt-2 text-white"> {/* Individual message bubble */}
-              <div>{JSON.stringify(doc.data().from)}</div>
+            <div key={doc.id} className={`${bubbleColor} rounded-2xl p-2 my-1 mt-2 text-white`}> {/* Individual message bubble */}
               <div>{JSON.stringify(doc.data().text_content)}</div>
             </div>
           );
@@ -218,15 +217,16 @@ export default function Messages() {
       })}
     </div>
     {/* Chat Input Box */}
-    <div className="p-2 bg-base-blue border-1 border rounded-xl mb-2 ml-2 mr-2">
+    <div className="p-2 white border-1 border rounded-xl mb-2 ml-2 mr-2">
       <input 
         type="text" 
         placeholder="Enter message.." 
-        className="w-full py-2 px-4 text-black rounded bg-white border-base-blue focus:outline-none" 
+        className="w-full py-2 px-4 text-black rounded bg-white border-base-blue border-1 focus:outline-none" 
       />
     </div>
   </div>
 )}
+
 
 
 

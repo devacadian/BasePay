@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMessagePen, faMagnifyingGlass, faArrowLeft, faBarcodeRead, faMessages, faXmark, faCopy, faUpRightFromSquare } from '@fortawesome/pro-solid-svg-icons';
 import QRCode from 'qrcode.react'; 
 import { useAccount } from "wagmi";
+import createIcon from 'blockies';
 
 export default function Messages() {
   const router = useRouter();
@@ -13,7 +14,7 @@ export default function Messages() {
   const { address } = useAccount();
   const [chatRooms, setChatRooms] = useState([]);
   const [isLoadingChatRooms, setIsLoadingChatRooms] = useState(false);
-  const [refreshKey, setRefreshKey] = useState(0); // You can use this key to manually trigger a refresh
+
 
   useEffect(() => {
     if (address) {
@@ -35,7 +36,7 @@ export default function Messages() {
 
       fetchChatRooms();
     }
-  }, [address, refreshKey]); // Will run when address changes or refreshKey changes
+  }, [address]); // Will run when address changes or refreshKey changes
 
 
 
@@ -59,6 +60,30 @@ export default function Messages() {
     setShowInviteModal(false);
   };
 
+
+  const AvatarIcon = ({ seed }) => {
+    const avatarRef = useRef(null);
+  
+    useEffect(() => {
+      const icon = createIcon({
+        seed: address,
+        color: '#000000', // Foreground color
+        bgcolor: '#ffffff',
+        size: 11,
+        scale: 7.5  // Width/height of each block in pixels
+      });
+  
+      if (avatarRef.current) {
+        avatarRef.current.innerHTML = ''; // Clear previous children
+        avatarRef.current.appendChild(icon);
+      }
+    }, [seed]);
+    return <div ref={avatarRef} className="-ml-1"></div>;
+  };
+
+
+
+
   return (
     <main className="flex flex-col min-h-screen bg-white">
       <Head>
@@ -78,34 +103,51 @@ export default function Messages() {
         </button>
       </div>
 
-      <div className="flex items-start p-4">
-  {/* First Bubble */}
-  <div className="bg-gray-300 w-14 h-14 rounded-full flex-shrink-0"></div>
-  <div className="ml-4 flex flex-col flex-grow">
-    <div className="grid grid-cols-[auto,1fr,auto] items-center gap-x-2">
-      <p className="text-black text-xl font-semibold mt-1 truncate">Acadian.eth</p>
-      <span className="text-black text-sm font-semibold justify-self-end">12h</span>
-    </div>
-    <div className="grid grid-cols-[1fr,auto] items-center gap-x-2">
-      <p className="text-black text-sm truncate overflow-hidden whitespace-nowrap">Hey what are your plans this weekend? test test test this should truncate</p>
-      <div className="bg-base-blue w-9 h-6 rounded-xl flex items-center justify-center text-white text-xs">1</div>
-    </div>
-  </div>
-</div>
+    
 
-<div className="flex items-start p-4 mt-0"> {/* Second Bubble with mt-4 */}
-  <div className="bg-gray-300 w-14 h-14 rounded-full flex-shrink-0"></div>
-  <div className="ml-4 flex flex-col flex-grow">
-    <div className="grid grid-cols-[auto,1fr,auto] items-center gap-x-2">
-      <p className="text-black text-xl font-semibold mt-1 truncate">0x7bF92...</p>
-      <span className="text-black text-sm font-semibold justify-self-end">12h</span>
-    </div>
-    <div className="grid grid-cols-[1fr,auto] items-center gap-x-2">
-      <p className="text-black text-sm truncate overflow-hidden whitespace-nowrap">I was thinking we go out to that new restaurant around the block this weekend!</p>
-      <div className="bg-base-blue w-9 h-6 rounded-xl flex items-center justify-center text-white text-xs">27</div>
-    </div>
-  </div>
-</div>
+{chatRooms.map((chatRoom, index) => {
+      const chatRoomTimestamp = chatRoom.lastestMessageTimeStamp.seconds * 1000;
+      const timeDifferenceMinutes = Math.floor((Date.now() - chatRoomTimestamp) / (1000 * 60));
+      const truncatedChatWith = chatRoom.chatWith.substring(0, 6) + "...";
+
+      let chatRoomTimeString;
+      if (timeDifferenceMinutes === 1) {
+        chatRoomTimeString = `${timeDifferenceMinutes} min ago`;
+      } else if (timeDifferenceMinutes < 60) {
+        chatRoomTimeString = `${timeDifferenceMinutes} mins ago`;
+      } else {
+        const timeDifferenceHours = Math.floor(timeDifferenceMinutes / 60);
+        chatRoomTimeString = timeDifferenceHours === 1
+          ? `${timeDifferenceHours} hr ago`
+          : `${timeDifferenceHours} hrs ago`;
+
+        if (timeDifferenceMinutes >= 24 * 60) {
+          const chatRoomDate = new Date(chatRoomTimestamp);
+          chatRoomTimeString = chatRoomDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+      }
+
+      return (
+        <div className="flex items-start p-4 mt-0" key={chatRoom.chatroomId}>
+          <div className="bg-gray-300 rounded-full h-14 w-14 mb-6 mx-auto overflow-hidden border-2 border-gray-300 shrink-0"
+               style={{ maskImage: 'radial-gradient(circle, white, black)' }}>
+            <AvatarIcon seed={chatRoom.chatWith} />
+          </div>
+          <div className="ml-4 flex flex-col flex-grow">
+            <div className="grid grid-cols-[auto,1fr,auto] items-center gap-x-2">
+              <p className="text-black text-xl font-semibold mt-1 truncate">{truncatedChatWith}</p>
+              <span className="text-black text-sm font-semibold justify-self-end">{chatRoomTimeString}</span>
+            </div>
+            <div className="grid grid-cols-[1fr,auto] items-center gap-x-2">
+              <p className="text-black text-sm truncate overflow-hidden whitespace-nowrap">{chatRoom.lastestMessage}</p>
+              {/* You can add other elements here if needed */}
+            </div>
+          </div>
+        </div>
+      );
+    })}
+
+
 
       <div className="bg-white w-full -mb-2"></div>
       <div className="flex-grow flex items-center justify-center">

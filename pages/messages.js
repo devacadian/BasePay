@@ -127,7 +127,7 @@ export default function Messages() {
     // Trim the message content and check if it's empty
     const trimmedMessageContent = messageContent.trim();
     if (trimmedMessageContent === '') {
-      // If the message is empty or only contains whitespace, return without sending
+      // If the message is empty or only contains whitespace, return without sendin
       return;
     }
   

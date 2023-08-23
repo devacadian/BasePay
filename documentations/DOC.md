@@ -35,7 +35,7 @@
    - 4.7 [Transaction History](#transaction-history)
 
 
-## Introduction {#introduction}
+## Introduction
 
 ### 1.1 About Base
 

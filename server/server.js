@@ -403,7 +403,91 @@ router.post('/send-message', async (req,res) => {
     }
 })
 
+// POST Request: Add a Payment Request Type Message to Messages Collection
+// returns back the 1. new payment request ID 2. new Message ID
+router.post('/send-paymentRequest-message', async (req,res) => {
+    try {
+        // first Add a Payment Request Type message to Messages collection
+        const {ether_amount, transaction_message} = req.body
+        const {chatroomId,currentUserAddress} = req.body
 
+        // find the second user address
+        const chatroomDocRef = doc(db, "PrivateChatRooms", chatroomId)
+        const chatroomSnap = await getDoc(chatroomDocRef)
+        const secondUserAddress = findChatWith(chatroomSnap.data().participants,currentUserAddress)
+
+        if (ether_amount <= 0){
+            console.log(`${currentDateAndTime}: Invalid transaction amount`)
+            return res.status(400).send("Invalid transaction amount")
+        }
+
+        if (currentUserAddress == secondUserAddress) {
+            console.log(`${currentDateAndTime}: Invalid receipient: You are no allowed to send funds to your own address`)
+            return res.status(400).send("Invalid receipient: You are no allowed to send funds to your own address")
+        }
+
+        const data = {
+            payment_requester : currentUserAddress,
+            request_recipient : secondUserAddress,
+            ether_amount : ether_amount,
+            transaction_message : transaction_message,
+            transaction_state : "Pending",
+            request_time: serverTimestamp(),
+            transaction_completion_time: false,
+            transaction_hash: false 
+        }
+        
+        // Add a new payment request document with an auto-generated ID.
+        const newDocumentRef = await addDoc(PaymentRequestRef, data)
+        
+        // add the newly created payment request document to Messages collection as a reference type document 
+        // Create a reference to the newly created payment request document
+        const paymentRequestRef = doc(db, "PaymentRequests", newDocumentRef.id);
+        // Create the data for the message document
+        const messageData = {
+            payment_request_message : paymentRequestRef,
+            timestamp : serverTimestamp(),
+            from : currentUserAddress,
+            to : secondUserAddress
+        };
+
+        const MessagesRef = collection(db, "PrivateChatRooms", chatroomId, "Messages")
+        // Add a new message document with an auto-generated ID to the Messages collection
+        const newMessageRef = await addDoc(MessagesRef, messageData);
+
+        console.log(`${currentDateAndTime}: Added new payment request document with id: ${newDocumentRef.id}`)
+        console.log(`${currentDateAndTime}: Added new Message document with id: ${newMessageRef.id}`)
+
+        const result = {
+            newPaymentRequestId : newDocumentRef.id,
+            newMessageId : newMessageRef.id
+        }
+
+        return res.status(200).json(result)
+
+    } catch(error){
+        console.log(`${currentDateAndTime}: ${error.message}`);
+        return res.status(500).send(error.message);
+    }
+})
+
+
+
+// GET Request: Testing GET Request: Review Referene type doc data structure
+router.get('/get-paymentRequsetType-message/', async (req,res) => {
+    try {
+        const docRef = doc(db, "PrivateChatRooms", "CGieudoeTGi3fK0vVDgq", "Messages", "QLfHHDymr6d7pNHQRVbJ")
+        const docSnap = await getDoc(docRef)
+        const referenceedDocRef = docSnap.data().payment_request_message
+        const referenceedDocSnap = await getDoc(referenceedDocRef)
+        const referenceedDocData = referenceedDocSnap.data()
+        return res.status(200).json(referenceedDocData)
+    } 
+    catch(error) {
+        console.log(`${currentDateAndTime}: ${error.message}`)
+        return res.status(500).send(error.message)
+    }
+})
 
 
 /* ------------------------- PrivateChatRoom Helper Functions ------------------------- */

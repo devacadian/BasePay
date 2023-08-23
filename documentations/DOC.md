@@ -12,27 +12,27 @@
 
 ### Table of Contents
 1. [Introduction](#introduction)
-   - 1.1 [About Base](#11-about-base)
-   - 1.2 [Challenge Description](#challenge-description)
+   - 1.1 About Base
+   - 1.2 Challenge Description
 
 2. [Project Overview](#project-overview)
-   - 2.1 [Problem Statement](#problem-statement)
-   - 2.2 [Solution](#solution)
-   - 2.3 [Key Features](#key-features)
+   - 2.1 Problem Statement
+   - 2.2 Solution
+   - 2.3 Key Features
 
 3. [Technical Details](#technical-details)
-   - 3.1 [Architecture](#architecture)
-   - 3.2 [Technologies Used](#technologies-used)
-   - 3.3 [Integration with Base](#integration-with-base)
+   - 3.1 Architecture
+   - 3.2 Technologies Used
+   - 3.3 Integration with Base
 
 4. [User Guide](#user-guide)
-   - 4.1 [Connecting Your Crypto Wallet](#connecting-your-crypto-wallet)
-   - 4.2 [Making Direct Ether Transfers](#making-direct-ether-transfers)
-   - 4.3 [Initiating Payment Requests](#initiating-payment-requests)
-   - 4.4 [Instant Chat Messaging](#instant-chat-messaging)
-   - 4.5 [Payment Requests in Chat](#payment-requests-in-chat)
-   - 4.6 [Direct Transfers in Chat](#direct-transfers-in-chat)
-   - 4.7 [Transaction History](#transaction-history)
+   - 4.1 Connecting Your Crypto Wallet
+   - 4.2 Making Direct Ether Transfers
+   - 4.3 Initiating Payment Requests
+   - 4.4 Instant Chat Messaging
+   - 4.5 Payment Requests in Chat
+   - 4.6 Direct Transfers in Chat
+   - 4.7 Transaction History
 
 
 ## Introduction

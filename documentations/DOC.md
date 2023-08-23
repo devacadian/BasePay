@@ -33,7 +33,8 @@
    - 4.5 Payment Requests in Chat
    - 4.6 Direct Transfers in Chat
    - 4.7 Transaction History
-
+  
+5. [Other Materials](#other-materials)
 
 ## Introduction
 
@@ -128,7 +129,8 @@ BasePay is deeply integrated with Base, leveraging its infrastructure to provide
 1. Navigate to the "Transaction" section.
 2. Enter the amount and the recipient's address
 3. Click Request
-4. Confirm the transaction.
+4. Confirm the transaction.  
+<img src="https://github.com/devacadian/BasePay/blob/main/documentations/assets/Receipt.PNG" alt="Request" height="600" width="270">
 
 ### 4.4 Instant Chat Messaging
 
@@ -136,7 +138,7 @@ BasePay is deeply integrated with Base, leveraging its infrastructure to provide
 2. Start a conversation with your contact.
 3. Send and receive messages in real-time.
 
-### 4.5 Payment Requests in Chat
+<!-- ### 4.5 Payment Requests in Chat
 
 1. While chatting, click on the "Request Payment" button.
 2. Enter the amount and confirm the request.
@@ -145,11 +147,14 @@ BasePay is deeply integrated with Base, leveraging its infrastructure to provide
 
 1. During a chat, click on the "Send Ether" button.
 2. Enter the amount and confirm the transfer.
+-->
 
-### 4.7 Transaction History
+### 4.5 Transaction History
 
 1. Visit the "Transaction History" section.
-2. Review all past transactions, including payments sent, received, requests sent, and requests received.
+2. Review all past transactions, including payments sent, received, requests sent, and requests received.  
+<img src="https://github.com/devacadian/BasePay/blob/main/documentations/assets/Profile.PNG" alt="Request" height="600" width="270">
 
-[GitHub Repository](https://github.com/BasePay)
+## 5. Other Materials
+[GitHub Repository](https://github.com/BasePay)  
 [Video Presentation](link-to-video)

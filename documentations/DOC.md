@@ -12,7 +12,7 @@
 
 ### Table of Contents
 1. [Introduction](#introduction)
-   - 1.1 [About Base](#about-base)
+   - 1.1 [About Base](#11-about-base)
    - 1.2 [Challenge Description](#challenge-description)
 
 2. [Project Overview](#project-overview)

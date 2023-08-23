@@ -61,31 +61,30 @@ const ChatMessages = () => {
                 {error && <strong>Error: {JSON.stringify(error)}</strong>}
                 {loading && <span>Collection: Loading...</span>}
                 {value && value.docs.map((doc) => {
-                    const textOrRequest = doc.data().payment_request_message ? "request" : "text"
+  const textOrRequest = doc.data().payment_request_message ? "request" : "text";
 
-                    if (textOrRequest == 'text') {
-                        return (
-                            <div>
-                                <>{JSON.stringify(doc.data().from)}</>
-                                <>{JSON.stringify(doc.data().text_content)}</>
-                            </div>
-                        )
-                    } else if (textOrRequest == "request") {
-                        const requestRef = doc.data().payment_request_message
-                        //getDoc(requestRef)
-                        axios.post('https://basepay-api.onrender.com/get-paymentRequset-byRef', {referenceDocRef : requestRef})
-                            .then((referenceDocData) => {
-                                return (
-                                    <>
-                                        {JSON.stringify(doc.data().from)}
-                                        {JSON.stringify(referenceDocData.ether_amount)}
-                                        {JSON.stringify(referenceDocData.transaction_message)}
-                                    </>
-                                );
-                            })
-                    }
-
-                })}
+  if (textOrRequest === 'text') {
+    return (
+      <div key={doc.id}> {/* Add key prop here */}
+        <>{JSON.stringify(doc.data().from)}</>
+        <>{JSON.stringify(doc.data().text_content)}</>
+      </div>
+    );
+  } else if (textOrRequest === "request") {
+    const requestRef = doc.data().payment_request_message;
+    // getDoc(requestRef)
+    axios.post('https://basepay-api.onrender.com/get-paymentRequset-byRef', { referenceDocRef: requestRef })
+      .then((referenceDocData) => {
+        return (
+          <div key={doc.id}> {/* Add key prop here */}
+            {JSON.stringify(doc.data().from)}
+            {JSON.stringify(referenceDocData.ether_amount)}
+            {JSON.stringify(referenceDocData.transaction_message)}
+          </div>
+        );
+      });
+  }
+})}
             </div>
 
             <button onClick={sendMessage} className="bg-base-blue text-white font-medium rounded-full w-full py-2 mx-1 flex items-center justify-center m-10" >

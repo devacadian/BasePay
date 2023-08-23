@@ -692,21 +692,40 @@ const handleConfirmPayment = async () => {
            onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} 
            onClick={handleCloseAnimation}></div>
       <div className="p-4">
-        {/* Display details */}
         <div className="text-2xl text-black font-bold">
           Confirm Payment
         </div>
-        <div className="text-black text-base mt-2 text-center">Amount: {selectedRequestToPay.ether_amount} ETH</div>
-        <div className="text-black text-base mt-2 text-center">From: {selectedRequestToPay.payment_requester.substring(0, 6)}...{selectedRequestToPay.payment_requester.slice(-6)}</div>
-        <div className="text-black text-base mt-2 text-center">Request Sent on {new Date(selectedRequestToPay.request_time.seconds * 1000).toLocaleDateString()}</div>
-        <div className="text-black text-base mt-2 text-center">Message: {selectedRequestToPay.transaction_message || 'No message sent with request'}</div>
-        <button className="bg-base-blue text-white text-2xl font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none mt-4 mb-2" onClick={handleConfirmPayment}>
-  Confirm Payment
-</button>
+        <div className="w-full bg-gray-100 h-18 rounded-3xl flex items-center justify-start shadow-sm drop-shadow-sm p-4 mt-8">
+          <div className="flex justify-center items-center relative w-12 h-12 rounded-full bg-gray-300 shadow drop-shadow-sm">
+            <FontAwesomeIcon icon={faEthereum} className="text-black h-8 w-8 z-10" />
+          </div>
+          <div className="text-gray-500 text-base ml-4 font-semibold">Amount: <span className="font-bold text-black">{selectedRequestToPay.ether_amount} ETH</span></div>
+        </div>
+        <div className="flex justify-center items-center mt-2">
+          <div className="w-full bg-gray-100 h-18 rounded-3xl flex items-center justify-start shadow-sm drop-shadow-sm p-4 mt-4">
+            <div className="relative h-12 w-12 border-2 border-gray-300 rounded-3xl">
+              <div className="relative w-full h-full overflow-hidden rounded-3xl" style={{ maskImage: 'radial-gradient(circle, white, black)' }}>
+                <AvatarIcon seed={selectedRequestToPay.payment_requester} />
+              </div>
+            </div>
+            <div className="text-gray-500 text-base ml-4 font-semibold">Pay To: <span className="font-bold text-black">{selectedRequestToPay.payment_requester.substring(0, 6)}...{selectedRequestToPay.payment_requester.slice(-6)}</span></div>
+          </div>
+        </div>
+        <div className={`text-black text-base font-semibold mt-5 ${selectedRequestToPay.transaction_message ? 'text-left ml-2' : 'text-center ml-0'}`}>
+          {selectedRequestToPay.transaction_message 
+            ? `Message: ${selectedRequestToPay.transaction_message}` 
+            : <i>No message sent with request</i>} {/* Conditional rendering */}
+        </div>
+        <button className="bg-base-blue text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none mt-4 mb-2" onClick={handleConfirmPayment}>
+          Confirm Payment
+        </button>
+        <div className="text-gray-500 text-sm mt-5 mb-0 text-center font-semibold ml-0">Request received on {new Date(selectedRequestToPay.request_time.seconds * 1000).toLocaleDateString()}.</div>
       </div>
     </div>
   </div>
 )}
+
+
 
 {/* Transaction Modal */}
 

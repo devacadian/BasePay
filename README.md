@@ -21,7 +21,7 @@ Whether you're organizing a vacation or sharing lunch expenses, BasePay streamli
 🔹 **Review Transaction History:** View all transaction history within the app, including payments sent, received, requests sent, and requests received.  
 
 ## Detailed Documentation
-Refer to [DOC.md]([https://url.com](https://github.com/devacadian/BasePay/blob/main/documentations/DOC.md))
+Refer to [DOC.md](https://github.com/devacadian/BasePay/blob/main/documentations/DOC.md)
 
 ## Want to Contribute? 
 Contributions are welcome! Please submit a pull request if you find any issues or want to add new features.

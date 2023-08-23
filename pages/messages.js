@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMessagePen, faMagnifyingGlass, faArrowLeft, faBarcodeRead, faMessages, faXmark, faCopy, faUpRightFromSquare } from '@fortawesome/pro-solid-svg-icons';
+import { faMessagePen, faMagnifyingGlass, faArrowLeft, faBarcodeRead, faMessages, faXmark, faCopy, faUpRightFromSquare, faPaperPlaneTop } from '@fortawesome/pro-solid-svg-icons';
 import QRCode from 'qrcode.react'; 
 import { useAccount } from "wagmi";
 import createIcon from 'blockies';
@@ -273,7 +273,7 @@ const chatRoomTimestamp = chatRoom.lastestMessageTimeStamp?.seconds * 1000 || 0;
         }
 
         const textOrRequest = doc.data().payment_request_message ? "request" : "text";
-        const bubbleColor = doc.data().from === address ? "bg-blue-500 mr-10" : "bg-green-400 ml-10"; // Conditional color
+        const bubbleColor = doc.data().from === address ? "bg-blue-500 ml-10" : "bg-green-400 mr-10"; // Conditional color
 
         if (textOrRequest === 'text') {
           return (
@@ -325,7 +325,7 @@ const chatRoomTimestamp = chatRoom.lastestMessageTimeStamp?.seconds * 1000 || 0;
       {showModal && (
   <div className="fixed inset-0 bg-white z-0 flex flex-col">
     <div className="p-4 flex items-center">
-    <button onClick={handleCloseModal}> {/* Close modal on click */}
+      <button onClick={handleCloseModal}> {/* Close modal on click */}
         <FontAwesomeIcon icon={faArrowLeft} className="h-6 w-6 text-black align-middle mt-3" />
       </button>
       <h1 className="text-black text-3xl font-semibold pt-2 ml-4">New Message</h1> 
@@ -335,30 +335,32 @@ const chatRoomTimestamp = chatRoom.lastestMessageTimeStamp?.seconds * 1000 || 0;
         <FontAwesomeIcon icon={faMagnifyingGlass} className="pl-2 mr-2 text-black w-6 h-6" />
         <input
           type="text"
-          placeholder="Search for an ENS or Base address..."
+          placeholder="Search for a Goerli Base address..."
           value={searchAddress} // Controlled input
           onChange={(e) => setSearchAddress(e.target.value)} // Update state on input change
           onKeyPress={(e) => { if (e.key === 'Enter') createPrivateChatRoom(); }} // Trigger createPrivateChatRoom on Enter key
           className="w-full bg-transparent outline-none text-black text-base"
         />
       </div>
-      <FontAwesomeIcon icon={faBarcodeRead} className="ml-4 mr-0 h-8 w-8 text-gray-600" />
+      <button onClick={createPrivateChatRoom} className="ml-4 mr-0 h-8 w-8 text-base-blue"> {/* Trigger createPrivateChatRoom on click */}
+        <FontAwesomeIcon icon={faPaperPlaneTop} /> {/* Updated icon */}
+      </button>
     </div>
     <div className="bg-gray-100 h-10 flex items-center shadow-sm mt-22">
-        <span className="text-gray-500 text-base font-bold ml-4">Last Messaged</span>
-      </div>
+      <span className="text-gray-500 text-base font-bold ml-4">Last Messaged</span>
+    </div>
 
-      <div className="text-center text-black text-sm font-medium my-10">
-        Start using BasePay to find suggested contacts!
-      </div>
-      <div className="text-center ">
+    <div className="text-center text-black text-sm font-medium my-10">
+      Start using BasePay to find suggested contacts!
+    </div>
+    <div className="text-center ">
       <button
-  className="w-40 h-12 bg-base-blue text-white font-semibold text-sm rounded-3xl shadow-md"
-  onClick={() => setShowInviteModal(true)} // Open the invite modal on click
->
-  Invite to BasePay
-</button>
-          </div>
+        className="w-40 h-12 bg-base-blue text-white font-semibold text-sm rounded-3xl shadow-md"
+        onClick={() => setShowInviteModal(true)} // Open the invite modal on click
+      >
+        Invite to BasePay
+      </button>
+    </div>
 
 
 

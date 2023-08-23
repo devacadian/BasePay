@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell, faListCheck, faArrowUpRightFromSquare, faEllipsis, faHandshakeSlash, faEye, faPaperPlane, faHand, faXmark, faFileInvoice, faBells, faCircleCheck, faSpinner, faUpRightFromSquare, faRightLeft } from '@fortawesome/pro-solid-svg-icons';
+import { faBell, faListCheck, faArrowUpRightFromSquare, faEllipsis, faHandshakeSlash, faEye, faPaperPlane, faHand, faXmark, faFileInvoice, faBells, faCircleCheck, faSpinner, faUpRightFromSquare, faRightLeft, faCircleX } from '@fortawesome/pro-solid-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import Head from 'next/head';
 import { useAccount } from "wagmi";
@@ -387,12 +387,12 @@ const handleConfirmPayment = async () => {
     <FontAwesomeIcon icon={faEllipsis} className="h-5 w-5 text-gray-400" />
     {openDropdownIndex === index && (
       <div ref={dropdownRef} className="absolute right-0 top-full mt-2 bg-base-blue border-white border-2 rounded-3xl py-4 shadow text-gray-700 w-56 text-sm z-10">
-        <div className="p-4 -mt-2 cursor-pointer flex items-center relative border-b-2 border-white text-white text-base" onClick={() => openPayModal(request)}>
+        <div className="p-4 -mt-2 cursor-pointer flex items-center relative border-b-2 border-white text-white text-lg" onClick={() => openPayModal(request)}>
           <FontAwesomeIcon icon={faPaperPlane} className="mr-3 h-5 w-5 text-white" />
           Pay Request
         </div>
-        <div className="p-4 cursor-pointer flex items-center relative  text-white text-base -mb-2" onClick={() => openDeclineModal(request)}>
-          <FontAwesomeIcon icon={faHandshakeSlash} className="mr-3 h-5 w-5 text-white" />
+        <div className="p-4 cursor-pointer flex items-center relative  text-white text-lg -mb-2" onClick={() => openDeclineModal(request)}>
+          <FontAwesomeIcon icon={faCircleX} className="mr-3 h-5 w-5 text-white" />
           Decline Request
         </div>
       </div>
@@ -531,7 +531,7 @@ const handleConfirmPayment = async () => {
           document.body.style.overflowY = "scroll"; // Remove scroll lock
           document.body.style.minHeight = "0px";
           window.scrollBy(0, -1);
-          setShowRequestTransactionModal(false); // Close the request transaction modal
+          setShowDeclineRequestTransactionModal(false); // Close the request transaction modal
         }}> 
         <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
       </button>
@@ -550,11 +550,23 @@ const handleConfirmPayment = async () => {
             <FontAwesomeIcon icon={faSpinner} className="text-base-blue h-7 w-7 animate-spin" />
             <span className="ml-4 mt-0.5 text-black font-semibold">Declining Payment Request...</span>
           </div>
-          <div className="mb-4"> 
-            <div className="text-black font-semibold">Declining payment request from {selectedRequest.payment_requester.substring(0, 6)}...{selectedRequest.payment_requester.slice(-6)} on Goerli Base Chain.</div>
+          <div className="flex justify-center items-center mt-2">
+        <div className="w-full bg-gray-100 h-18 rounded-3xl flex items-center justify-start shadow-sm drop-shadow-sm p-4 mt-0 mb-6">
+          <div className="relative h-12 w-12 border-2 border-gray-300 rounded-3xl">
+            <div className="relative w-full h-full overflow-hidden rounded-3xl" style={{ maskImage: 'radial-gradient(circle, white, black)' }}>
+              <AvatarIcon seed={selectedRequest.payment_requester} />
+            </div>
           </div>
+          <div className="text-gray-500 text-base ml-4 font-semibold">Request From: <span className="font-bold text-black">{selectedRequest.payment_requester.substring(0, 6)}...{selectedRequest.payment_requester.slice(-6)}</span></div>
+        </div>
+      </div>
+        
           <div className="ml-0">
-            <div className="text-gray-600 font-medium text-lg"> {selectedRequest.transaction_message || 'No message sent with request'}</div>
+          <div className={`text-black text-base font-semibold ${selectedRequest.transaction_message ? 'text-left ml-2 mt-0' : 'text-center mt-0 ml-0'}`}>
+  {selectedRequest.transaction_message 
+    ? `Message: ${selectedRequest.transaction_message}` 
+    : <i>No message sent with request</i>} {/* Conditional rendering */}
+</div>
           </div>
           <button className="bg-gray-300 text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" >
             Continue
@@ -565,6 +577,10 @@ const handleConfirmPayment = async () => {
       {requestTransactionStatus === 'success' && (
         <div className="mt-14 ml-0">
           <div className="flex justify-center items-center mb-10 relative"> 
+
+
+    
+          
             <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> 
             <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
           </div>
@@ -576,13 +592,31 @@ const handleConfirmPayment = async () => {
             <FontAwesomeIcon icon={faCircleCheck} className="text-base-blue h-7 w-7" /> 
             <span className="ml-4 mt-0.5 text-black font-semibold">Payment Request Declined!</span>
           </div>
-          <div className="mb-4"> 
-            <div className="text-black font-semibold">Declining payment request from {selectedRequest.payment_requester.substring(0, 6)}...{selectedRequest.payment_requester.slice(-6)} on Goerli Base Chain was succesful!</div>
+
+   
+
+    <div className="flex justify-center items-center mt-2">
+        <div className="w-full bg-gray-100 h-18 rounded-3xl flex items-center justify-start shadow-sm drop-shadow-sm p-4 mt-0 mb-6">
+          <div className="relative h-12 w-12 border-2 border-gray-300 rounded-3xl">
+            <div className="relative w-full h-full overflow-hidden rounded-3xl" style={{ maskImage: 'radial-gradient(circle, white, black)' }}>
+              <AvatarIcon seed={selectedRequest.payment_requester} />
+            </div>
           </div>
+          <div className="text-gray-500 text-base ml-4 font-semibold">Request From: <span className="font-bold text-black">{selectedRequest.payment_requester.substring(0, 6)}...{selectedRequest.payment_requester.slice(-6)}</span></div>
+        </div>
+      </div>
+        
+
+         
           <div className="ml-0">
-            <div className="text-gray-600 font-medium text-lg"> {selectedRequest.transaction_message || 'No message sent with request'}</div>
+          <div className={`text-black text-base font-semibold ${selectedRequest.transaction_message ? 'text-left ml-2 mt-0' : 'text-center mt-0 ml-0'}`}>
+  {selectedRequest.transaction_message 
+    ? `Message: ${selectedRequest.transaction_message}` 
+    : <i>No message sent with request</i>} {/* Conditional rendering */}
+</div>
+  
           </div>
-          <button className="bg-base-blue shadow-sm drop-shadow text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" onClick={() => {
+          <button className="bg-base-blue shadow-sm drop-shadow text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-6 mb-0" onClick={() => {
               document.body.style.overflowY = "scroll"; // Remove scroll lock
               document.body.style.minHeight = "0px";
               window.scrollBy(0, -1);

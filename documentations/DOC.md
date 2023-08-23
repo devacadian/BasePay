@@ -113,6 +113,7 @@ BasePay is deeply integrated with Base, leveraging its infrastructure to provide
 
 1. Visit (https://www.basepay.app/).
 2. Connect your preferred crypto wallet (Coinbase Wallet, Metamask).
+ <img src="https://github.com/devacadian/BasePay/blob/main/documentations/assets/Landing_Page.PNG" alt="Landing Page" height="600" width="270">
 
 ### 4.2 Making Direct Ether Transfers
 

@@ -1,5 +1,6 @@
 import '@/styles/globals.css'
 import '@rainbow-me/rainbowkit/styles.css';
+import React, { useState, useEffect } from 'react';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { goerli, mainnet, baseGoerli } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
@@ -38,10 +39,17 @@ const isLocal = process.env.NEXT_PUBLIC_ENVIRONMENT === 'local';
 
 function AppContent({ Component, pageProps }) {
   const { isConnected } = useAccount();
+  const [isClient, setIsClient] = useState(false);
+
+  // Effect to set the isClient state to true once the component is mounted
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
     <>
       <Component {...pageProps} />
-      {!isConnected && (
+      {isClient && !isConnected && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-50">
           <div className="-ml-2 flex items-center justify-center mt-32 mb-34">
             <a

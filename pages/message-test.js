@@ -1,48 +1,39 @@
-
 import React from 'react';
-import dotenv from 'dotenv';
-dotenv.config();
 import axios from 'axios'
+import { collection, query, orderBy } from "firebase/firestore";
 import { useCollection } from 'react-firebase-hooks/firestore';
-// initialize connection to firebase and firestore
-import { initializeApp } from 'firebase/app'
-import { getFirestore, collection, query, orderBy } from "firebase/firestore"
-
-const firebaseConfig = {
-    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTHDOMAIN,
-    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECTID,
-    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGEBUCKET,
-    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGINGSENDER_ID,
-    appId: process.env.NEXT_PUBLIC_FIREBASE_APPID,
-};
-// initialize firebase conncetion
-const app = initializeApp(firebaseConfig);
-// initialize firestore conncetion
-const db = getFirestore(app);
-
-
-
-// create a function to listen to the Messages collection of a particular chatroom
+import { db } from '../controller/firebase'
 
 const ChatMessages = () => {
 
+    // Testing sendMessage function
     const sendMessage = async() => {
         const url = 'https://basepay-api.onrender.com/send-message'
         const data = {
             chatroomId : "5uC30L8CqDYj4VivMuqn",
             currentUserAddress : "0xAB60DdFE027D9D86C836e8e5f9133578E102F720",
-            message_content : "Test Message send from react"
+            message_content : "Good"
         }
-        
         const response = await axios.post(url,data)
         console.log(response)
     }
 
+    // ------------------------------ Please improvise and reuse this part ------------------------------ //
+    // make the second param dynamic. Hardcoded a chatroom ID for testing
     const privateChatRef = collection(db, "PrivateChatRooms", "5uC30L8CqDYj4VivMuqn", "Messages")
+    // sort messages by timestamp. Latest appears as last
     const q = query(privateChatRef, orderBy('timestamp'))
 
+    // hook to listen to firestore
     const [value, loading, error] = useCollection(q);
+
+    // data structure of value.docs.data()
+    /*
+    {"timestamp":{"seconds":1692412626,"nanoseconds":21000000},
+    "from":"0x6724A71f5689c51138F2f213E3Bbb00Ffe320A28",
+    "text_content":"Hello World",
+    "to":"0xAB60DdFE027D9D86C836e8e5f9133578E102F720"}
+    */
 
     return (
         <div className="flex flex-col items-center  h-screen bg-white px-4  p-20">

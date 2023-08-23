@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
@@ -12,6 +12,7 @@ import { useNetwork } from 'wagmi';
 import { useChainModal } from '@rainbow-me/rainbowkit'; 
 import createIcon from 'blockies';
 import { BrowserMultiFormatReader } from '@zxing/library';
+import { NotificationContext } from "../components/NotificationProvider";
 
 const Pay = () => {
   const [counter, setCounter] = useState('0');
@@ -43,6 +44,7 @@ const Pay = () => {
   const [showScanner, setShowScanner] = useState(false);
   const videoRef = useRef(null);
   const [showQRChoiceModal, setShowQRChoiceModal] = useState(false);
+  const { showNotification } = useContext(NotificationContext);
 
 
   useEffect(() => {
@@ -92,6 +94,12 @@ const handleNumberClick = (number) => {
   };
 
   const handlePayClick = () => {
+    if (Number(counter) === 0) {
+      showNotification("Counter is 0. Cannot proceed to pay modal.", "error");
+      // You can display a message or do something else here if needed
+      return;
+    }
+  
     setshowPaySelectionModal(true); // Show the modal when the Pay button is clicked
   };
 

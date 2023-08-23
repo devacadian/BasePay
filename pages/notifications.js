@@ -307,7 +307,7 @@ const handleConfirmPayment = async () => {
         </div>
       ) : sortedPaymentRequests.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-screen text-center">
-          <div className="text-3xl -mt-80">🤝</div>
+          <div className="text-3xl -mt-80">🔔</div>
           <span className="text-black font-semibold text-xl mt-4">No notifications received yet!</span>
           <div className="flex w-full mt-14">
             <button className="bg-base-blue text-white font-medium rounded-full w-full py-2 mx-1 flex items-center justify-center" onClick={handlePayButttonClick}>

@@ -1,5 +1,8 @@
 import '@/styles/globals.css'
 import '@rainbow-me/rainbowkit/styles.css';
+
+import { NotificationProvider } from "../components/NotificationProvider";
+import 'react-toastify/dist/ReactToastify.css'; // Import CSS file
 import React, { useState, useEffect } from 'react';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { goerli, mainnet, baseGoerli } from 'wagmi/chains';
@@ -161,11 +164,13 @@ function MyApp({ Component, pageProps }) {
           href={isLocal ? '/favicon-local.png' : '/favicon.png'} // Change favicon based on the environment
         />
       </Head>
+      <NotificationProvider>
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider coolMode chains={chains} initialChain={baseGoerli} >
       <AppContent Component={Component} pageProps={pageProps} />
       </RainbowKitProvider>
     </WagmiConfig>
+    </NotificationProvider>
     <Footer />
     </>
   );

@@ -32,7 +32,7 @@ const ChatMessages = () => {
 
     // ------------------------------ Please improvise and reuse this part ------------------------------ //
     // make the second param dynamic. Hardcoded a chatroom ID for testing
-    const privateChatRef = collection(db, "PrivateChatRooms", "CGieudoeTGi3fK0vVDgq", "Messages")
+    const privateChatRef = collection(db, "PrivateChatRooms", "AbB0OwGYh6svK80gPaxp", "Messages")
     // sort messages by timestamp. Latest appears as last
     const q = query(privateChatRef, orderBy('timestamp'))
 

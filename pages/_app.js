@@ -17,6 +17,7 @@ import { useSignTypedData } from 'wagmi';
 
 
 
+
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
     baseGoerli, mainnet, goerli, ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [goerli] : []),

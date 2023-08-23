@@ -25,3 +25,32 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.Toastify__toast-container {
+  pointer-events: none;
+  z-index: 60 !important;
+}
+
+.Toastify__toast, .Toastify__close-button {
+  pointer-events: auto;
+}
+
+.Toastify__toast-container .Toastify__toast:first-of-type {
+  margin-top: 20px;
+  margin-left: 16px;
+  margin-right: 16px;
+  border-radius: 6px;  
+}
+
+.Toastify__toast-container .Toastify__toast:not(:first-of-type) {
+  margin-top: 8px; 
+  margin-left: 16px;
+  margin-right: 16px;
+  border-radius: 6px;  
+}
+
+@media (min-width: 768px) {
+  .Toastify__toast-container .Toastify__toast:first-of-type {
+    margin-top: 70px;
+  }
+}

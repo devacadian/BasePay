@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { useAccount } from "wagmi";
@@ -9,7 +9,9 @@ import { faCircleX, faCopy, faEnvelopeOpenDollar, faMoneyBill, faMoneyBillTransf
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import QRCode from 'qrcode.react'; 
 import { fetchAllAct  } from '../controller/activitiesFetch'
-const etherscanDomain = 'https://api-goerli.basescan.org/'
+import { NotificationContext } from "../components/NotificationProvider";
+
+
 
 
 const Profile = () => {
@@ -22,7 +24,8 @@ const Profile = () => {
   const [activities, setActivities] = useState([]);
   const hasFetchedRef = useRef(false);
   const [isLoadingActivities, setIsLoadingActivities] = useState(false);
-
+  const { showNotification } = useContext(NotificationContext);
+  const etherscanDomain = 'https://api-goerli.basescan.org/'
 
 
   useEffect(() => {
@@ -32,6 +35,7 @@ const Profile = () => {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(address);
+    showNotification("Copied to clipboard!", "success");
   };
 
   useEffect(() => {

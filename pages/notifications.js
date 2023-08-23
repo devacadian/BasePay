@@ -728,7 +728,6 @@ const handleConfirmPayment = async () => {
 
 
 {/* Transaction Modal */}
-
 {showConfirmRequestTransactionModal  && selectedRequestToPay && (
   <div className="fixed top-0 left-0 w-full h-full z-40 flex items-center justify-center">
     <div className="bg-black opacity-50 w-full h-full absolute"></div>
@@ -739,86 +738,83 @@ const handleConfirmPayment = async () => {
           window.scrollBy(0, -1);
           setshowConfirmRequestTransactionModal(false); // Close the transaction modal
         }}> 
-          <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
+        <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
       </button>
 
-
-{transactionStatus === 'pending' && (
-  <div className="mt-14 ml-0">
-    <div className="flex justify-center items-center mb-10 relative"> 
-      <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> 
-      <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
-    </div>
-    <div className="text-center mb-4"> 
-      <div className="text-black font-bold text-2xl">{selectedRequestToPay.ether_amount} ETH</div>
-    </div>
-
-
-    <div className="mb-10 text-center text-gray-600 font-medium"> {/* Added a "View on Basescan" link */}
-  <a href={`https://goerli.basescan.org/tx/${txHashState}`} target="_blank" rel="noopener noreferrer" className="flex justify-center items-center">
-    View on <span className="text-gray-600 ml-1 font-semibold">BaseScan</span> <FontAwesomeIcon icon={faUpRightFromSquare} className="h-4.5 w-4.5 ml-2 text-gray-500" />
-  </a>
-</div>
-
-
-    <div className="flex items-center justify-start mb-6"> 
-    <FontAwesomeIcon icon={faSpinner} className="text-base-blue h-7 w-7 animate-spin" />
-          <span className="ml-4 mt-0.5 text-black font-semibold">Transaction in Progress...</span>
+      {transactionStatus === 'pending' && (
+        <div className="mt-14 ml-0">
+          <div className="flex justify-center items-center mb-10 relative"> 
+            <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> 
+            <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
+          </div>
+          <div className="text-center mb-4"> 
+            <div className="text-black font-bold text-2xl">{selectedRequestToPay.ether_amount} ETH</div>
+          </div>
+          <div className="flex items-center justify-start mb-6"> 
+            <FontAwesomeIcon icon={faSpinner} className="text-base-blue h-7 w-7 animate-spin" />
+            <span className="ml-4 mt-0.5 text-black font-semibold">Transaction in Progress...</span>
+          </div>
+          <div className="flex justify-center items-center mt-2">
+            <div className="w-full bg-gray-100 h-18 rounded-3xl flex items-center justify-start shadow-sm drop-shadow-sm p-4 mt-0 mb-6">
+              <div className="relative h-12 w-12 border-2 border-gray-300 rounded-3xl">
+                <div className="relative w-full h-full overflow-hidden rounded-3xl" style={{ maskImage: 'radial-gradient(circle, white, black)' }}>
+                  <AvatarIcon seed={selectedRequestToPay.payment_requester} />
+                </div>
+              </div>
+              <div className="text-gray-500 text-base ml-4 font-semibold">Pay To: <span className="font-bold text-black">{selectedRequestToPay.payment_requester.substring(0, 6)}...{selectedRequestToPay.payment_requester.slice(-6)}</span></div>
+            </div>
+          </div>
+          <div className={`text-black text-base font-semibold ${selectedRequestToPay.transaction_message ? 'text-left ml-2 mt-0' : 'text-center mt-0 ml-0'}`}>
+            {selectedRequestToPay.transaction_message 
+              ? `Message: ${selectedRequestToPay.transaction_message}` 
+              : <i>No message sent with request</i>} {/* Conditional rendering */}
+          </div>
+          <button className="bg-gray-300 text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-6 mb-0">
+            Continue
+          </button>
         </div>
+      )}
 
-    <div className=" mb-4"> 
-      <div className="text-black font-semibold">Transaction to {selectedRequestToPay.payment_requester.substring(0, 6)}...{selectedRequestToPay.payment_requester.slice(-6)} on Goerli Base Chain is processing.</div>
-    </div>
-    <div className="ml-0">
-      <div className="text-gray-600 font-medium text-lg"> {selectedRequestToPay.transaction_message || 'No message sent with request'}</div>
-    </div>
-    <button className="bg-gray-300 text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" >
-      Continue
-    </button>
-  </div>
-)}
-
-
-
-{transactionStatus === 'success' && (
-  <div className="mt-14 ml-0">
-    <div className="flex justify-center items-center mb-10 relative"> 
-      <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> 
-      <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
-    </div>
-    <div className="text-center mb-4"> 
-      <div className="text-black font-bold text-2xl">{selectedRequestToPay.ether_amount} ETH</div>
-    </div>
-
-    <div className="mb-10 text-center text-gray-600 font-medium"> {/* Added a "View on Basescan" link */}
-  <a href={`https://goerli.basescan.org/tx/${txHashState}`} target="_blank" rel="noopener noreferrer" className="flex justify-center items-center">
-    View on <span className="text-gray-600 ml-1 font-semibold">BaseScan</span> <FontAwesomeIcon icon={faUpRightFromSquare} className="h-4.5 w-4.5 ml-2 text-gray-500" />
-  </a>
-</div>
-
-    <div className="flex items-center justify-start mb-6"> 
-      <FontAwesomeIcon icon={faCircleCheck} className="text-base-blue h-7 w-7" /> 
-      <span className="ml-4 mt-0.5 text-black font-semibold">Transaction Successful!</span>
-    </div>
-
-    <div className=" mb-4"> 
-      <div className="text-black font-semibold">Sent successfully to {selectedRequestToPay.payment_requester.substring(0, 6)}...{selectedRequestToPay.payment_requester.slice(-6)} on Goerli Base Chain using BasePay!</div>
-    </div>
-    <div className="ml-0">
-      <div className="text-gray-600 font-medium text-lg">  {selectedRequestToPay.transaction_message || 'No message sent with request'}</div>
-    </div>
-    <button className="bg-base-blue shadow-sm drop-shadow text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" onClick={() => {
-        document.body.style.overflowY = "scroll"; // Remove scroll lock
-        document.body.style.minHeight = "0px";
-        window.scrollBy(0, -1);
-        setShowConfirmRequestTransactionModal(false);
-        setShowConfirmPayModal(false);
-        setShowPayRequestModal(false); // Close the success modal
-      }}>
-      Continue
-    </button>
-  </div>
-)}
+      {transactionStatus === 'success' && (
+        <div className="mt-14 ml-0">
+          <div className="flex justify-center items-center mb-10 relative"> 
+            <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> 
+            <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
+          </div>
+          <div className="text-center mb-4"> 
+            <div className="text-black font-bold text-2xl">{selectedRequestToPay.ether_amount} ETH</div>
+          </div>
+          <div className="flex items-center justify-start mb-6"> 
+            <FontAwesomeIcon icon={faCircleCheck} className="text-base-blue h-7 w-7" /> 
+            <span className="ml-4 mt-0.5 text-black font-semibold">Payment Request Paid!</span>
+          </div>
+          <div className="flex justify-center items-center mt-2">
+            <div className="w-full bg-gray-100 h-18 rounded-3xl flex items-center justify-start shadow-sm drop-shadow-sm p-4 mt-0 mb-6">
+              <div className="relative h-12 w-12 border-2 border-gray-300 rounded-3xl">
+                <div className="relative w-full h-full overflow-hidden rounded-3xl" style={{ maskImage: 'radial-gradient(circle, white, black)' }}>
+                  <AvatarIcon seed={selectedRequestToPay.payment_requester} />
+                </div>
+              </div>
+              <div className="text-gray-500 text-base ml-4 font-semibold">Pay To: <span className="font-bold text-black">{selectedRequestToPay.payment_requester.substring(0, 6)}...{selectedRequestToPay.payment_requester.slice(-6)}</span></div>
+            </div>
+          </div>
+          <div className={`text-black text-base font-semibold ${selectedRequestToPay.transaction_message ? 'text-left ml-2 mt-0' : 'text-center mt-0 ml-0'}`}>
+            {selectedRequestToPay.transaction_message 
+              ? `Message: ${selectedRequestToPay.transaction_message}` 
+              : <i>No message sent with request</i>} {/* Conditional rendering */}
+          </div>
+          <button className="bg-base-blue shadow-sm drop-shadow text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-6 mb-0" onClick={() => {
+              document.body.style.overflowY = "scroll"; // Remove scroll lock
+              document.body.style.minHeight = "0px";
+              window.scrollBy(0, -1);
+              setShowConfirmRequestTransactionModal(false);
+              setShowConfirmPayModal(false);
+              setShowPayRequestModal(false); // Close the success modal
+            }}>
+            Continue
+          </button>
+        </div>
+      )}
 
 
 

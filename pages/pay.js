@@ -48,7 +48,7 @@ const Pay = () => {
   useEffect(() => {
     setContainerWidth(chain?.name === 'Base Goerli' ? 'w-24' : 'w-20');
     setIsClient(true);
-  }, []);
+  }, [chain?.name]);
 
   useEffect(() => {
     const balanceValue = parseFloat(data?.formatted || '0.0000');

@@ -59,5 +59,12 @@ Whether you're organizing a vacation or sharing lunch expenses, BasePay streamli
 ## Detailed Documentation
 Refer to [DOC.md](https://github.com/devacadian/BasePay/blob/main/documentations/DOC.md)
 
+
+## Meet the Team 🚀 🚀 🚀 
+| Name          | Role                                       | Contact                                                                                          |
+| ------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------- |
+| Acadian.eth   | Frontend Developer & UI/UX Designer       | [![GitHub Badge](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/devacadian/) |
+| Allen Tsang   | Backend Developer & Blockchain Developer | [![LinkedIn Badge](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/allen-hs-tg/)[![GitHub Badge](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/allentsangdev/) |
+
 ## Want to Contribute? 
 Contributions are welcome! Please submit a pull request if you find any issues or want to add new features.

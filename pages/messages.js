@@ -234,20 +234,19 @@ export default function Messages() {
         }
       })}
     </div>
-    {/* Chat Input Box */}
-    <div className="p-2 bg-white border-1 border rounded-xl mb-2 ml-2 mr-2">
-          <input
-            type="text"
-            placeholder="Enter message.."
-            value={messageContent} // Controlled input
-            onChange={handleInputChange} // Handle input changes
-            className="w-full py-2 px-4 text-black rounded bg-white border-base-blue border-1 focus:outline-none"
-          />
-          <button onClick={sendMessage} className="bg-base-blue text-white rounded p-2">Send</button> {/* Send button */}
-        </div>
-      </div>
+  {/* Chat Input Box */}
+  <div className="p-2 bg-white border-1 border rounded-xl mb-2 ml-2 mr-2 flex items-center"> {/* Flex container */}
+      <input
+        type="text"
+        placeholder="Enter message.."
+        value={messageContent}
+        onChange={handleInputChange}
+        className="flex-grow py-2 px-4 text-black rounded-l bg-white border-base-blue border-1 focus:outline-none"
+      />
+      <button onClick={sendMessage} className="bg-base-blue text-white rounded-xl p-2">Send</button> {/* Send button */}
+    </div>
+  </div>
 )}
-
 
 
 

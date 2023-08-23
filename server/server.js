@@ -471,6 +471,20 @@ router.post('/send-paymentRequest-message', async (req,res) => {
     }
 })
 
+// GET Request: Get payment request by payment request ref
+router.post('/get-paymentRequset-byRef/', async (req,res) => {
+    try {
+        const {referenceDocRef} = request.body
+        const referenceDocSnap = await getDoc(referenceDocRef)
+        const referenceDocData = referenceDocSnap.data()
+        return res.status(200).json(referenceDocData)
+    } 
+    catch(error) {
+        console.log(`${currentDateAndTime}: ${error.message}`)
+        return res.status(500).send(error.message)
+    }
+})
+
 
 
 // GET Request: Testing GET Request: Review Referene type doc data structure

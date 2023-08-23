@@ -117,7 +117,7 @@ const getIconForActivity = (activityType, activityState) => {
   switch (displayText) {
     case 'Rejected Request':
       return <FontAwesomeIcon icon={faCircleX} className="h-7.5 w-7.5 text-gray-500" />;
-    case 'Pending Request':
+    case 'Request Sent':
       return <FontAwesomeIcon icon={faMoneyBillTransfer} className="h-7.5 w-7.5 text-base-blue" />;
     case 'Request Accepted':
       return <FontAwesomeIcon icon={faEnvelopeOpenDollar} className="h-7.5 w-7.5 text-base-blue" />;
@@ -125,7 +125,7 @@ const getIconForActivity = (activityType, activityState) => {
       return <FontAwesomeIcon icon={faMoneyBillWave} className="h-7.5 w-7.5 text-base-blue" />;
     case 'Request Declined':
       return <FontAwesomeIcon icon={faCircleX} className="h-7.5 w-7.5 text-gray-500" />;
-    case 'Request Sent':
+    case 'Request Received':
       return <FontAwesomeIcon icon={faMoneyCheckDollarPen} className="h-7.5 w-7.5 text-base-blue" />;
     case 'Request Paid':
       return <FontAwesomeIcon icon={faMoneyBill} className="h-7.5 w-7.5 text-base-blue" />;
@@ -138,8 +138,11 @@ const getIconForActivity = (activityType, activityState) => {
 
 // Function to format the date for grouping
 const formatDateForGrouping = (timestamp) => {
-  const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
-  return date.toISOString().split('T')[0]; // Returns YYYY-MM-DD
+  if (timestamp && timestamp.seconds != null && timestamp.nanoseconds != null) {
+    const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
+    return date.toISOString().split('T')[0]; // Returns YYYY-MM-DD
+  }
+  return ''; // Default fallback or handling for unexpected timestamp format
 };
 
 // Grouping activities by date
@@ -152,11 +155,11 @@ const activitiesByDate = activities.reduce((acc, activity) => {
 
 const getActivityDisplayText = (activityType, activityState) => {
   if (activityType === 'Request Sent' && activityState === 'Rejected') return 'Rejected Request';
-  if (activityType === 'Request Sent' && activityState === 'Pending') return 'Pending Request';
+  if (activityType === 'Request Sent' && activityState === 'Pending') return 'Request Sent';
   if (activityType === 'Request Sent' && activityState === 'Accepted') return 'Request Accepted';
   if (activityType === 'Payment Sent' && activityState === 'Processed') return 'Payment Sent';
   if (activityType === 'Request Received' && activityState === 'Rejected') return 'Request Declined';
-  if (activityType === 'Request Received' && activityState === 'Pending') return 'Request Sent';
+  if (activityType === 'Request Received' && activityState === 'Pending') return 'Request Received';
   if (activityType === 'Request Received' && activityState === 'Processed') return 'Request Paid';
   return activityType; // Default fallback
 };

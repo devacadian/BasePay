@@ -112,15 +112,16 @@ BasePay is deeply integrated with Base, leveraging its infrastructure to provide
 ### 4.1 Connecting Your Crypto Wallet
 
 1. Visit (https://www.basepay.app/).
-2. Connect your preferred crypto wallet (Coinbase Wallet, Metamask).
- <img src="https://github.com/devacadian/BasePay/blob/main/documentations/assets/Landing_Page.PNG" alt="Landing Page" height="600" width="270">
+2. Connect your preferred crypto wallet (Coinbase Wallet, Metamask).  
+ <img src="https://github.com/devacadian/BasePay/blob/main/documentations/assets/Landing_Page.PNG" alt="Landing Page" height="600" width="270"> <img src="https://github.com/devacadian/BasePay/blob/main/documentations/assets/Connect_Wallet.PNG" alt="Landing Page" height="600" width="270"> <img src="https://github.com/devacadian/BasePay/blob/main/documentations/assets/Home.PNG" alt="Landing Page" height="600" width="270">
 
 ### 4.2 Making Direct Ether Transfers
 
 1. Navigate to the "Transaction" section.
 2. Enter the amount and the recipient's address
 3. Click Send
-4. Confirm the transaction.
+4. Confirm the transaction.  
+<img src="https://github.com/devacadian/BasePay/blob/main/documentations/assets/Page.PNG" alt="Landing Page" height="600" width="270"> <img src="https://github.com/devacadian/BasePay/blob/main/documentations/assets/Txn_Message.PNG" alt="Landing Page" height="600" width="270"> <img src="https://github.com/devacadian/BasePay/blob/main/documentations/assets/Payment_Confirm.PNG" alt="Landing Page" height="600" width="270"> <img src="https://github.com/devacadian/BasePay/blob/main/documentations/assets/Wallet_Confirm.PNG" alt="Landing Page" height="600" width="270"> <img src="https://github.com/devacadian/BasePay/blob/main/documentations/assets/Receipt.PNG" alt="Receipt" height="600" width="270">    
 
 ### 4.3 Initiating Payment Requests
 

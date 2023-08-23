@@ -28,11 +28,15 @@ const [txHashState, setTxHashState] = useState('');
 const [transactionStatus, setTransactionStatus] = useState(null);
 const [showConfirmRequestTransactionModal, setShowConfirmRequestTransactionModal] = useState(false); 
 const hasFetchedPaymentRequestsRef = useRef(false);
+const [isLoadingNotifications, setIsLoadingNotifications] = useState(false);
+
 
 useEffect(() => {
   if (address && !hasFetchedPaymentRequestsRef.current) {
     // Function to fetch payment requests
     const fetchPaymentRequests = async () => {
+      setIsLoadingNotifications(true); // Set loading state to true before fetching
+
       try {
         // Use the address from useAccount as the connected wallet
         const response = await fetch(`https://basepay-api.onrender.com/get-payment-request/${address}`);
@@ -41,6 +45,8 @@ useEffect(() => {
       } catch (error) {
         console.error('Error fetching payment requests:', error);
       }
+
+      setIsLoadingNotifications(false); // Set loading state to false after fetching
     };
 
     fetchPaymentRequests();
@@ -283,30 +289,37 @@ const handleConfirmPayment = async () => {
         <h1 className="text-black text-3xl font-semibold pt-2 mr-1">Notifications</h1>
           <FontAwesomeIcon icon={faBells} className="h-7 w-7 text-black align-middle mt-2 ml-2" />
         </div>
-     
+
       </div>
-      <div className="bg-white w-full -mb-2"></div>
-      <div className="px-4 mb-30">
-      {sortedPaymentRequests.length === 0 ? (
+
+
+     
+    <div className="bg-white w-full -mb-2"></div>
+    <div className="px-4 mb-30">
+      {isLoadingNotifications ? (
+        <div className="flex justify-center mt-20">
+          <FontAwesomeIcon icon={faSpinner} className="text-base-blue h-10 w-10 animate-spin" />
+        </div>
+      ) : sortedPaymentRequests.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-screen text-center">
-  <div className="text-3xl -mt-80">🤝</div>
-  <span className="text-black font-semibold text-xl mt-4">No notifications received yet!</span>
-  <div className="flex w-full mt-14">
-    <button className="bg-base-blue text-white font-medium rounded-full w-full py-2 mx-1 flex items-center justify-center" onClick={handlePayButttonClick}>
-      <FontAwesomeIcon icon={faPaperPlane} className="h-4 w-4 text-white mr-2" />
-      Pay
-    </button>
-    <button className="bg-base-blue text-white font-medium rounded-full w-full py-2 mx-1 flex items-center justify-center" onClick={handleRequestButtonClick}>
-      <FontAwesomeIcon icon={faFileInvoice} className="h-4 w-4 text-white mr-2" />
-      Request
-    </button>
-  </div>
-  <span className="text-gray-600 font-medium text-base mt-4">
-    Pay or Request on <span className="text-base-blue">BasePay</span> to receive
-    <br />
-    notifications!
-  </span>
-</div>
+          <div className="text-3xl -mt-80">🤝</div>
+          <span className="text-black font-semibold text-xl mt-4">No notifications received yet!</span>
+          <div className="flex w-full mt-14">
+            <button className="bg-base-blue text-white font-medium rounded-full w-full py-2 mx-1 flex items-center justify-center" onClick={handlePayButttonClick}>
+              <FontAwesomeIcon icon={faPaperPlane} className="h-4 w-4 text-white mr-2" />
+              Pay
+            </button>
+            <button className="bg-base-blue text-white font-medium rounded-full w-full py-2 mx-1 flex items-center justify-center" onClick={handleRequestButtonClick}>
+              <FontAwesomeIcon icon={faFileInvoice} className="h-4 w-4 text-white mr-2" />
+              Request
+            </button>
+          </div>
+          <span className="text-gray-600 font-medium text-base mt-4">
+            Pay or Request on <span className="text-base-blue">BasePay</span> to receive
+            <br />
+            notifications!
+          </span>
+        </div>
       ) : (
         sortedPaymentRequests.map((request, index) => {
           // Convert the request time to a readable format

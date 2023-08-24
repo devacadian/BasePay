@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import React from 'react';
 import axios from 'axios'
 import { collection, query, orderBy, getDoc } from "firebase/firestore";
@@ -30,9 +31,27 @@ const ChatMessages = () => {
         console.log(response)
     }
 
+    const [requestData, setRequetData] = useState()
+    
+    const fetchRequest = async(docId,referenceDocRef) => {
+        const referenceDocSnap = await getDoc(referenceDocRef)
+        const referenceDocData = referenceDocSnap.data()
+
+        const data = {
+          docId : {
+            ether_amount : referenceDocData.ether_amount,
+            transaction_message : referenceDocData.transaction_message
+          }
+        }
+
+        setRequetData(data)
+    }
+
+    
+
     // ------------------------------ Please improvise and reuse this part ------------------------------ //
     // make the second param dynamic. Hardcoded a chatroom ID for testing
-    const privateChatRef = collection(db, "PrivateChatRooms", "AbB0OwGYh6svK80gPaxp", "Messages")
+    const privateChatRef = collection(db, "PrivateChatRooms", "5uC30L8CqDYj4VivMuqn", "Messages")
     // sort messages by timestamp. Latest appears as last
     const q = query(privateChatRef, orderBy('timestamp'))
 
@@ -62,22 +81,33 @@ const ChatMessages = () => {
                 {loading && <span>Collection: Loading...</span>}
                 {value && value.docs.map((doc) => {
                 const textOrRequest = doc.data().payment_request_message ? "request" : "text";
-                console.log(doc.data,textOrRequest)
+                //console.log(doc.data,textOrRequest)
 
 
-  if (textOrRequest === 'text') {
-    return (
-      <div key={doc.id}> {/* Add key prop here */}
-        <>{JSON.stringify(doc.data().from)}</>
-        <>{JSON.stringify(doc.data().text_content)}</>
-      </div>
-    );
-  } else if (textOrRequest === "request") {
-    const requestRef = doc.data().payment_request_message;
-    // getDoc(requestRef)
-    
-  }
-})}
+                if (textOrRequest === 'text') {
+                  return (
+                    <div key={doc.id}> {/* Add key prop here */}
+                      <>{JSON.stringify(doc.data().from)}</>
+                      <>{JSON.stringify(doc.data().text_content)}</>
+                    </div>
+                  );
+                } else if (textOrRequest === "request") {
+                  const requestRef = doc.data().payment_request_message;
+                  const docId = doc.id
+                  // getDoc(requestRef)
+                  fetchRequest(docId,requestRef)
+                  return (
+                    requestData ? <>
+                      <div key={doc.id}> {/* Add key prop here */}
+                        <>{JSON.stringify(requestData.docId)}</>
+                        
+                    </div>
+                    
+                    </> : null
+                  )
+                  
+                }
+              })}
             </div>
 
             <button onClick={sendMessage} className="bg-base-blue text-white font-medium rounded-full w-full py-2 mx-1 flex items-center justify-center m-10" >

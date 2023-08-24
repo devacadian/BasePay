@@ -206,7 +206,14 @@ export default function Messages() {
       <FontAwesomeIcon icon={faSpinner} className="text-base-blue h-10 w-10 animate-spin" />
     </div>
   ) : chatRooms.length > 0 ? (
-    chatRooms.map((chatRoom, index) => {
+    chatRooms
+    .sort((a, b) => {
+      // Convert timestamps to milliseconds
+      const timestampA = a.lastestMessageTimeStamp?.seconds * 1000 || 0;
+      const timestampB = b.lastestMessageTimeStamp?.seconds * 1000 || 0;
+      return timestampB - timestampA; // Sort in descending order
+    })
+    .map((chatRoom, index) => {
     const chatRoomTimestamp = chatRoom.lastestMessageTimeStamp?.seconds * 1000 || 0;
     const timeDifferenceMinutes = Math.floor((Date.now() - chatRoomTimestamp) / (1000 * 60));
     const truncatedChatWith = (chatRoom.chatWith || '').substring(0, 8) + "...";

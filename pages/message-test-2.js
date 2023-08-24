@@ -339,16 +339,15 @@ export default function Messages() {
             const docId = message.id
             fetchRequest(docId, requestRef)
             return(
-              requestData ? <>
-                <div key={message.id} className={`${bubbleColor} rounded-2xl p-2 my-1 mt-2 text-white`}> {/* Add key prop here */}
-                        <>{JSON.stringify(requestData[docId])}</>
+              requestData[docId] ?
+                <>
+                    <div key={message.id} className={`${bubbleColor} rounded-2xl p-2 my-1 mt-2 text-white`}> {/* Add key prop here */}
+                        <div>{JSON.stringify(requestData[docId].ether_amount)}</div>
+                        <div>{JSON.stringify(requestData[docId].transaction_message)}</div>
                         
-                    </div>
-                    
-                    </> : null
-              
+                    </div>                    
+                </> : null
             )
-            
           }
         })
       )}

@@ -76,7 +76,7 @@ function AppContent({ Component, pageProps }) {
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-50">
     <div className="text-center">
       <div className="flex justify-center">
-        <div className=" overflow-hidden" style={{ width: 180, height: 180 }}> {/* Apply rounded corners and match QR code size */}
+        <div className="overflow-hidden" style={{ width: 180, height: 180 }}> {/* Apply rounded corners and match QR code size */}
           <QRCode value="https://www.basepay.app" size={180} /> {/* Display the QR code */}
         </div>
       </div>

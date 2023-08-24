@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMessagePen, faMagnifyingGlass, faArrowLeft, faBarcodeRead, faMessages, faXmark, faCopy, faUpRightFromSquare, faPaperPlaneTop } from '@fortawesome/pro-solid-svg-icons';
+import { faMessagePen, faMagnifyingGlass, faArrowLeft, faSpinner, faMessages, faXmark, faCopy, faUpRightFromSquare, faPaperPlaneTop } from '@fortawesome/pro-solid-svg-icons';
 import QRCode from 'qrcode.react'; 
 import { useAccount } from "wagmi";
 import createIcon from 'blockies';
@@ -20,7 +20,6 @@ export default function Messages() {
   const [chatRooms, setChatRooms] = useState([]);
   const [isLoadingChatRooms, setIsLoadingChatRooms] = useState(false);
   const [showChatRoomModal, setShowChatRoomModal] = useState(false);
-
   const [messageContent, setMessageContent] = useState('');
   
   const [selectedChatRoomId, setSelectedChatRoomId] = useState(null);
@@ -192,9 +191,13 @@ export default function Messages() {
       </div>
 
     
-
-      {chatRooms.length > 0 ? (
-  chatRooms.map((chatRoom) => {
+      {
+  isLoadingChatRooms ? (
+    <div className="flex justify-center mt-20">
+      <FontAwesomeIcon icon={faSpinner} className="text-base-blue h-10 w-10 animate-spin" />
+    </div>
+  ) : chatRooms.length > 0 ? (
+    chatRooms.map((chatRoom) => {
     const chatRoomTimestamp = chatRoom.lastestMessageTimeStamp?.seconds * 1000 || 0;
     const timeDifferenceMinutes = Math.floor((Date.now() - chatRoomTimestamp) / (1000 * 60));
     const truncatedChatWith = (chatRoom.chatWith || '').substring(0, 6) + "...";

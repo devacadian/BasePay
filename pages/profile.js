@@ -185,7 +185,7 @@ const getCounterPartyPrefix = (activityType, activityState) => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-200">
-    <div className="bg-white rounded-lg shadow-xl flex flex-col overflow-hidden" style={{ width: '500px', height: '812px' }}>
+    <div className="bg-white rounded-xl shadow-xl flex flex-col overflow-hidden" style={{ width: '500px', height: '812px' }}>
       <main className="flex flex-col bg-white overflow-y-auto">
       <Head>
         <title>Profile - BasePay</title>
@@ -289,7 +289,7 @@ const getCounterPartyPrefix = (activityType, activityState) => {
 {/* QR Code Modal */}
 {showQRCodeModal && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
-    <div className="bg-white p-6 rounded-xl absolute shadow-xl drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}> {/* Manual control of width and padding */}
+  <div className="bg-white w-96 p-6 rounded-xl shadow-xl drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}> {/* Manual control of width and padding */}
     <button onClick={handleCloseQRCodeModal} className="absolute top-6 left-4">
         <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
       </button>

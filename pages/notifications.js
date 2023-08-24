@@ -658,8 +658,8 @@ const handleConfirmPayment = async () => {
 
 
 {showPayRequestModal && selectedRequestToPay && (
-  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
-    <div className="bg-white p-6 rounded-xl absolute shadow-xl drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}>
+ <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
+ <div className="bg-white w-96 p-6 rounded-xl shadow-xl drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}> {/* Manual control of width and padding */}
       <button onClick={closePayModal} className="absolute top-6 left-4">
         <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
       </button>
@@ -706,8 +706,8 @@ const handleConfirmPayment = async () => {
 {/* Confirm Pay Request Modal */}
 {showConfirmPayModal && selectedRequestToPay && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 outside-click" onClick={handleOutsideClick}>
-    <div className="bg-black opacity-50 w-full h-full outside-click"></div>
-    <div className={`bg-white w-full rounded-t-2xl absolute ${animateModal ? '-bottom-full motion-reduce:transition-all duration-700 ease-in-out' : 'bottom-0'}`}>
+   <div className="bg-black opacity-50 w-full h-full outside-click"></div>
+    <div className={`bg-white w-full rounded-t-2xl md:w-[500px] md:h-[512px] absolute ${animateModal ? '-bottom-full motion-reduce:transition-all duration-700 ease-in-out' : 'bottom-0'}`}>
       <div className="bg-gray-300 w-18 h-1 mx-auto mt-4 rounded-full cursor-pointer"
            onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} 
            onClick={handleCloseAnimation}></div>
@@ -751,7 +751,7 @@ const handleConfirmPayment = async () => {
 {showConfirmRequestTransactionModal  && selectedRequestToPay && (
   <div className="fixed top-0 left-0 w-full h-full z-40 flex items-center justify-center">
     <div className="bg-black opacity-50 w-full h-full absolute"></div>
-    <div className="bg-white p-6 rounded-xl absolute top-1/6 inset-x-4 shadow-xl drop-shadow"> 
+    <div className="bg-white p-6 rounded-xl  md:w-[400px] md:h-[585px] top-1/6 inset-x-4 shadow-xl drop-shadow"> 
       <button className="p-4 cursor-pointer absolute top-2 left-1" onClick={() => {
           document.body.style.overflowY = "scroll"; // Remove scroll lock
           document.body.style.minHeight = "0px";
@@ -767,15 +767,15 @@ const handleConfirmPayment = async () => {
             <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> 
             <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
           </div>
-          <div className="text-center mb-4"> 
+          <div className="text-center mb-4 md:mb-12"> 
             <div className="text-black font-bold text-2xl">{selectedRequestToPay.ether_amount} ETH</div>
           </div>
-          <div className="flex items-center justify-start mb-6"> 
+          <div className="flex items-center justify-start mb-6 md:mb-12"> 
             <FontAwesomeIcon icon={faSpinner} className="text-base-blue h-7 w-7 animate-spin" />
             <span className="ml-4 mt-0.5 text-black font-semibold">Transaction in Progress...</span>
           </div>
           <div className="flex justify-center items-center mt-2">
-            <div className="w-full bg-gray-100 h-18 rounded-3xl flex items-center justify-start shadow-sm drop-shadow-sm p-4 mt-0 mb-6">
+            <div className="w-full bg-gray-100 h-18 rounded-3xl flex items-center justify-start shadow-sm drop-shadow-sm p-4 mt-0 mb-6 md:mb-12">
               <div className="relative h-12 w-12 border-2 border-gray-300 rounded-3xl">
                 <div className="relative w-full h-full overflow-hidden rounded-3xl" style={{ maskImage: 'radial-gradient(circle, white, black)' }}>
                   <AvatarIcon seed={selectedRequestToPay.payment_requester} />
@@ -789,7 +789,7 @@ const handleConfirmPayment = async () => {
               ? `Message: ${selectedRequestToPay.transaction_message}` 
               : <i>No message sent with request</i>} {/* Conditional rendering */}
           </div>
-          <button className="bg-gray-300 text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-6 mb-0">
+          <button className="bg-gray-300 text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-6 md:mt-14 mb-0">
             Continue
           </button>
         </div>
@@ -801,15 +801,15 @@ const handleConfirmPayment = async () => {
             <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> 
             <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
           </div>
-          <div className="text-center mb-4"> 
+          <div className="text-center mb-4 md:mb-12"> 
             <div className="text-black font-bold text-2xl">{selectedRequestToPay.ether_amount} ETH</div>
           </div>
-          <div className="flex items-center justify-start mb-6"> 
+          <div className="flex items-center justify-start mb-6 md:mb-12"> 
             <FontAwesomeIcon icon={faCircleCheck} className="text-base-blue h-7 w-7" /> 
             <span className="ml-4 mt-0.5 text-black font-semibold">Payment Request Paid!</span>
           </div>
           <div className="flex justify-center items-center mt-2">
-            <div className="w-full bg-gray-100 h-18 rounded-3xl flex items-center justify-start shadow-sm drop-shadow-sm p-4 mt-0 mb-6">
+            <div className="w-full bg-gray-100 h-18 rounded-3xl flex items-center justify-start shadow-sm drop-shadow-sm p-4 mt-0 mb-6 md:mb-12">
               <div className="relative h-12 w-12 border-2 border-gray-300 rounded-3xl">
                 <div className="relative w-full h-full overflow-hidden rounded-3xl" style={{ maskImage: 'radial-gradient(circle, white, black)' }}>
                   <AvatarIcon seed={selectedRequestToPay.payment_requester} />
@@ -823,7 +823,7 @@ const handleConfirmPayment = async () => {
               ? `Message: ${selectedRequestToPay.transaction_message}` 
               : <i>No message sent with request</i>} {/* Conditional rendering */}
           </div>
-          <button className="bg-base-blue shadow-sm drop-shadow text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-6 mb-0" onClick={() => {
+          <button className="bg-base-blue shadow-sm drop-shadow text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-6 md:mt-14 mb-0" onClick={() => {
               document.body.style.overflowY = "scroll"; // Remove scroll lock
               document.body.style.minHeight = "0px";
               window.scrollBy(0, -1);

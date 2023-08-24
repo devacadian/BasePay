@@ -1095,7 +1095,7 @@ const handleCloseQRChoiceModal = () => {
 
 <div className="fixed top-0 left-0 w-full h-full z-40 flex items-center justify-center">
 <div className="bg-black opacity-50 w-full h-full absolute"></div>
-<div className="bg-white p-6 rounded-xl  md:w-[400px] md:h-[612px] top-1/6 inset-x-4 shadow-xl drop-shadow"> 
+<div className="bg-white p-6 rounded-xl  md:w-[400px] md:h-[582px] top-1/6 inset-x-4 shadow-xl drop-shadow"> 
       <button className="p-4 cursor-pointer absolute top-2 left-1" onClick={() => {
           document.body.style.overflowY = "scroll"; // Remove scroll lock
           document.body.style.minHeight = "0px";
@@ -1106,23 +1106,23 @@ const handleCloseQRChoiceModal = () => {
       </button>
 
       {requestTransactionStatus === 'pending' && (
-        <div className="mt-14 ml-0">
+        <div className="mt-14 md:mt-16 ml-0">
           <div className="flex justify-center items-center mb-10 relative"> 
             <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> 
             <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
           </div>
-          <div className="text-center mb-4"> 
+          <div className="text-center mb-4 md:mb-12"> 
             <div className="text-black font-bold text-2xl">{counter || '0'} ETH</div>
           </div>
           {/* Removed the "View on Basescan" link as it's not relevant for the request */}
-          <div className="flex items-center justify-start mb-6"> 
+          <div className="flex items-center justify-start mb-6 mb:14"> 
             <FontAwesomeIcon icon={faSpinner} className="text-base-blue h-7 w-7 animate-spin" />
             <span className="ml-4 mt-0.5 text-black font-semibold">Request in Progress...</span>
           </div>
-          <div className="mb-4"> 
+          <div className="mb-4 mb:13"> 
             <div className="text-black font-semibold">Request to {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress} on Goerli Base Chain is processing.</div>
           </div>
-          <div className="ml-0">
+          <div className="ml-0 mb:13">
           <div className="text-gray-600 font-medium text-lg">
   {requestNote ? `Message: ${requestNote}` : <i>No note added</i>}
 </div>
@@ -1134,23 +1134,23 @@ const handleCloseQRChoiceModal = () => {
       )}
 
       {requestTransactionStatus === 'success' && (
-        <div className="mt-14 ml-0">
+        <div className="mt-14 md:mt-16 ml-0">
           <div className="flex justify-center items-center mb-10 relative"> 
             <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> 
             <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
           </div>
-          <div className="text-center mb-4"> 
+          <div className="text-center mb-4 md:mb-12"> 
             <div className="text-black font-bold text-2xl">{counter || '0'} ETH</div>
           </div>
           {/* You can customize the link as needed */}
-          <div className="flex items-center justify-start mb-6"> 
+          <div className="flex items-center justify-start mb-6 md:mb-14"> 
             <FontAwesomeIcon icon={faCircleCheck} className="text-base-blue h-7 w-7" /> 
             <span className="ml-4 mt-0.5 text-black font-semibold">Request Successful!</span>
           </div>
-          <div className="mb-4"> 
+          <div className="mb-4 md:mb-13"> 
             <div className="text-black font-semibold">Request sent successfully to {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress} on Goerli Base Chain using <span className='text-base-blue'>BasePay</span>!</div>
           </div>
-          <div className="ml-0">
+          <div className="ml-0 md:mb-13">
           <div className="text-gray-600 font-medium text-lg">
   {requestNote ? `Message: ${requestNote}` : <i>No note added</i>}
 </div>

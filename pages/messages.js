@@ -197,10 +197,10 @@ export default function Messages() {
       <FontAwesomeIcon icon={faSpinner} className="text-base-blue h-10 w-10 animate-spin" />
     </div>
   ) : chatRooms.length > 0 ? (
-    chatRooms.map((chatRoom) => {
+    chatRooms.map((chatRoom, index) => {
     const chatRoomTimestamp = chatRoom.lastestMessageTimeStamp?.seconds * 1000 || 0;
     const timeDifferenceMinutes = Math.floor((Date.now() - chatRoomTimestamp) / (1000 * 60));
-    const truncatedChatWith = (chatRoom.chatWith || '').substring(0, 6) + "...";
+    const truncatedChatWith = (chatRoom.chatWith || '').substring(0, 8) + "...";
 
     let chatRoomTimeString;
     if (timeDifferenceMinutes === 1) {
@@ -220,18 +220,18 @@ export default function Messages() {
     }
 
     return (
-      <button onClick={() => openChatRoomModal(chatRoom.chatroomId)} className="flex items-start py-1 px-4 mt-0 focus:outline-none w-full text-left" key={chatRoom.chatroomId}>
-        <div className="bg-gray-300 rounded-full h-14 w-14 mb-6 mx-auto overflow-hidden border-2 border-gray-300 shrink-0"
+      <button onClick={() => openChatRoomModal(chatRoom.chatroomId)} className={`flex items-start py-1 px-4 mt-0 focus:outline-none w-full text-left ${index > 0 ? 'pt-4 pb-4' : 'pt-2 pb-4 '}`} key={chatRoom.chatroomId}>
+        <div className="bg-gray-300 rounded-full h-14 w-14  mx-auto overflow-hidden border-2 border-gray-300 shrink-0"
              style={{ maskImage: 'radial-gradient(circle, white, black)' }}>
           <AvatarIcon seed={chatRoom.chatWith} />
         </div>
         <div className="ml-4 flex flex-col flex-grow">
           <div className="grid grid-cols-[auto,1fr,auto] items-center gap-x-2">
             <p className="text-black text-xl font-semibold mt-1 truncate">{truncatedChatWith}</p>
-            <span className="text-black text-sm font-semibold justify-self-end">{chatRoomTimeString}</span>
+            <span className="text-gray-500 text-sm font-semibold justify-self-end -mr-2">{chatRoomTimeString}</span>
           </div>
           <div className="grid grid-cols-[1fr,auto] items-center gap-x-2">
-            <p className="text-black text-sm truncate overflow-hidden whitespace-nowrap">{chatRoom.lastestMessage}</p>
+            <p className="text-gray-500 text-sm truncate font-semibold overflow-hidden whitespace-nowrap mr-4">{chatRoom.lastestMessage}</p>
           </div>
         </div>
       </button>
@@ -256,10 +256,10 @@ export default function Messages() {
         <AvatarIcon seed={selectedChatRoomName} />
       </div>
       <h1 className="text-black text-2xl font-semibold ml-2">
-        {selectedChatRoomName.substring(0, 7) + "..."}
+        {selectedChatRoomName.substring(0, 8) + "..."}
       </h1>
     </div>
-    <div className="flex-grow overflow-y-scroll bg-white text-white  w-full mb-4 flex flex-col text-left p-3 rounded">
+    <div className="flex-grow overflow-y-scroll bg-white text-white  w-full mb-4 flex flex-col text-left p-3 -mt-3 rounded">
       {value && value.docs.map((doc) => {
         const chatRoomTimestamp = doc.data().timestamp.seconds * 1000;
         const timeDifferenceMinutes = Math.floor((Date.now() - chatRoomTimestamp) / (1000 * 60));
@@ -296,16 +296,18 @@ export default function Messages() {
       })}
     </div>
   {/* Chat Input Box */}
-  <div className="p-2 bg-white border-1 border rounded-xl mb-2 ml-2 mr-2 flex items-center"> {/* Flex container */}
+  <div className="p-2 bg-white border-1 border rounded-xl -mt-2 mb-2 ml-2 mr-2 flex items-center"> {/* Flex container */}
       <input
         type="text"
         placeholder="Enter message.."
         value={messageContent}
         onChange={handleInputChange}
         onKeyPress={(e) => { if (e.key === 'Enter') sendMessage(); }} // Trigger sendMessage on Enter key
-        className="flex-grow py-2 px-4 text-black rounded-l bg-white border-base-blue border-1 focus:outline-none"
+        className="flex-grow py-2 px-4 text-black rounded-l bg-white border-base-blue border-1 -ml-1 focus:outline-none"
       />
-      <button onClick={sendMessage} className="bg-base-blue text-white rounded-xl p-2">Send</button> {/* Send button */}
+     <button onClick={sendMessage} className="bg-base-blue text-white rounded-xl p-2">
+  <FontAwesomeIcon icon={faPaperPlaneTop} className="ml-0.5 h-6 w-8 text-white" />
+</button>
     </div>
   </div>
 )}

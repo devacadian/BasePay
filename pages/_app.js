@@ -11,7 +11,7 @@ import Head from 'next/head';
 import Footer from '../components/Footer';
 import { useAccount } from 'wagmi'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-
+import QRCode from 'qrcode.react'; 
 
 
 
@@ -74,12 +74,22 @@ function AppContent({ Component, pageProps }) {
     
       {isDesktop && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-50">
-    <div className="text-center text-black">
-      <h1 className="text-4xl font-bold text-base-blue mb-4">BasePay</h1>
-      <h2 className="text-xl text-black font-semibold">Visit on mobile device to access dApp.</h2>
+    <div className="text-center">
+      <div className="flex justify-center">
+        <div className=" overflow-hidden" style={{ width: 180, height: 180 }}> {/* Apply rounded corners and match QR code size */}
+          <QRCode value="https://www.basepay.app" size={180} /> {/* Display the QR code */}
+        </div>
+      </div>
+      <div>
+        <h1 className="text-4xl font-bold text-base-blue mb-4 mt-10">BasePay</h1>
+      </div>
+      <div>
+        <h2 className="text-xl text-black font-semibold">Scan on mobile device to access dApp.</h2>
+      </div>
     </div>
   </div>
 )}
+
 
 {isClient && !isDesktop && !isConnected && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-50">

@@ -37,8 +37,13 @@ export default function Messages() {
       const newData = {
         ...requestData,
         [docId] : {
-          ether_amount : referenceDocData.ether_amount,
-          transaction_message : referenceDocData.transaction_message
+            ether_amount : referenceDocData.ether_amount,
+            transaction_message : referenceDocData.transaction_message,
+            timestamp : referenceDocData.timestamp,
+            payment_requester : referenceDocData.payment_requester,
+            request_recipient : referenceDocData.request_recipient,
+            transaction_hash: referenceDocData.transaction_hash,
+            transaction_state: referenceDocData.transaction_state
         }
       }
 
@@ -344,6 +349,8 @@ export default function Messages() {
                     <div key={message.id} className={`${bubbleColor} rounded-2xl p-2 my-1 mt-2 text-white`}> {/* Add key prop here */}
                         <div>{JSON.stringify(requestData[docId].ether_amount)}</div>
                         <div>{JSON.stringify(requestData[docId].transaction_message)}</div>
+                        <div>{JSON.stringify(requestData[docId].transaction_state)}</div>
+                        
                         
                     </div>                    
                 </> : null

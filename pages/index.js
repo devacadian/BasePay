@@ -194,7 +194,7 @@ export default function Home() {
 
 
 
-<div className=" -ml-2 flex items-center justify-center mt-4 mb-34">
+<div className=" -ml-2 flex items-center justify-center mt-4 mb-34 md:mb-10">
   <a
     className="pointer-events-none flex place-items-center gap-2 p-8 pointer-events-auto"
     target="_blank"

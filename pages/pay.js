@@ -568,7 +568,7 @@ const handleCloseQRChoiceModal = () => {
               </button>
             ))}
       </div>
-      <div className="w-full flex justify-center space-x-3 px-4 mb-20">
+      <div className="w-full flex justify-center space-x-3 px-4 md:mt-16 mb-20 md:mb-0">
         <button onClick={handlePayClick} className="w-1/2 bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 rounded-3xl focus:outline-none">
           <FontAwesomeIcon icon={faPaperPlane} className="mr-2 h-4 w-4 text-white" />
           Pay
@@ -895,8 +895,8 @@ const handleCloseQRChoiceModal = () => {
 
 {/* Request User Selection Modal */}
 {showRequestSelectionModal && (
-  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-20">
-  <div className="bg-white  h-full w-full md:w-[500px] md:h-[812px] relative pt-2" >
+ <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-20">
+ <div className="bg-white h-full w-full md:w-[500px] md:h-[812px] relative pt-2 flex flex-col"> {/* Add flex layout */}
       <div className="px-4 pt-0 grid grid-cols-3 items-center">
         <button className="p-4 -ml-4 cursor-pointer" onClick={handleCloseRequestSelectionModal}> 
           <FontAwesomeIcon icon={faArrowLeft} className="h-7 w-7 text-black" />
@@ -969,21 +969,28 @@ const handleCloseQRChoiceModal = () => {
 )}
 
       {/* Add your user selection content here */}
-      
-      <div className="fixed bottom-0 left-0 right-0 px-4 pb-6"> {/* Button container */}
+      <div className="mt-auto flex-shrink-0"> {/* Push the button to the bottom */}
+        <div className="px-4 pb-6"> {/* Remove fixed positioning */}
         <button onClick={handleOpenRequestModal} className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none">
           Next
         </button>
       </div> {/* End of Button container */}
     </div>
   </div>
+  </div>
 )}
+
+
+
+
+
+
 
 
 {/* Request Modal */}
 {showRequestModal && (
-  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-20">
-    <div className="bg-white w-full h-full relative pt-2">
+ <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-20">
+ <div className="bg-white h-full w-full md:w-[500px] md:h-[812px] relative pt-2 flex flex-col"> {/* Add flex layout */}
       <div className="px-4 pt-0 grid grid-cols-3 items-center">
         <button className="p-4 -ml-4 cursor-pointer" onClick={handleCloseRequestModal}> 
           <FontAwesomeIcon icon={faArrowLeft} className="h-7 w-7 text-black" />
@@ -1025,7 +1032,8 @@ const handleCloseQRChoiceModal = () => {
   />
 </div>
 
-<div className="fixed bottom-0 left-0 right-0 px-4 pb-6"> {/* Request button container */}
+<div className="mt-auto flex-shrink-0"> {/* Push the button to the bottom */}
+        <div className="px-4 pb-6"> {/* Remove fixed positioning */}
 <button 
     className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none" 
     onClick={handleOpenConfirmRequestModal} // Call the function to open the Confirm Request Modal
@@ -1036,6 +1044,7 @@ const handleCloseQRChoiceModal = () => {
 </div>
     </div>
   </div>
+  </div>
 )}
 
 
@@ -1045,7 +1054,7 @@ const handleCloseQRChoiceModal = () => {
 {showConfirmRequestModal && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 outside-click" onClick={handleOutsideClickRequest}>
     <div className="bg-black opacity-50 w-full h-full outside-click"></div>
-    <div className={`bg-white w-full rounded-t-2xl absolute ${animateRequestModal ? '-bottom-full motion-reduce:transition-all duration-700 ease-in-out' : 'bottom-0'}`}>
+    <div className={`bg-white w-full rounded-t-2xl md:w-[500px] md:h-[512px] absolute ${animateModal ? '-bottom-full motion-reduce:transition-all duration-700 ease-in-out' : 'bottom-0'}`}>
       <div className="bg-gray-300 w-18 h-1 mx-auto mt-4 rounded-full cursor-pointer"
            onTouchStart={handleTouchStartRequest} onTouchEnd={handleTouchEndRequest}
            onClick={handleCloseAnimationRequest}></div> {/* Clickable drag bar */}
@@ -1083,9 +1092,10 @@ const handleCloseQRChoiceModal = () => {
 
 
 {showRequestTransactionModal && (
-  <div className="fixed top-0 left-0 w-full h-full z-40 flex items-center justify-center">
-    <div className="bg-black opacity-50 w-full h-full absolute"></div>
-    <div className="bg-white p-6 rounded-xl absolute top-1/6 inset-x-4 shadow-xl drop-shadow">
+
+<div className="fixed top-0 left-0 w-full h-full z-40 flex items-center justify-center">
+<div className="bg-black opacity-50 w-full h-full absolute"></div>
+<div className="bg-white p-6 rounded-xl  md:w-[400px] md:h-[612px] top-1/6 inset-x-4 shadow-xl drop-shadow"> 
       <button className="p-4 cursor-pointer absolute top-2 left-1" onClick={() => {
           document.body.style.overflowY = "scroll"; // Remove scroll lock
           document.body.style.minHeight = "0px";

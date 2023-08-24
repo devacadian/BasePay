@@ -42,27 +42,10 @@ const isLocal = process.env.NEXT_PUBLIC_ENVIRONMENT === 'local';
 function AppContent({ Component, pageProps }) {
   const { isConnected } = useAccount();
   const [isClient, setIsClient] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
 
   // Effect to set the isClient state to true once the component is mounted
   useEffect(() => {
     setIsClient(true);
-
-    // Check if the viewport width is greater than a specific value
-    if (window.innerWidth > 768) { // Change this value to the desired breakpoint
-      setIsDesktop(false);
-    }
-
-    // Optional: Add a listener to handle window resize
-    const handleResize = () => {
-      if (window.innerWidth > 768) { // Change this value to the desired breakpoint
-        setIsDesktop(true);
-      } else {
-        setIsDesktop(false);
-      }
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize); // Cleanup on unmount
   }, []);
 
 
@@ -72,26 +55,8 @@ function AppContent({ Component, pageProps }) {
       <Component {...pageProps} />
 
     
-      {isDesktop && (
-  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-50">
-    <div className="text-center">
-      <div className="flex justify-center">
-        <div className="overflow-hidden" style={{ width: 180, height: 180 }}> {/* Apply rounded corners and match QR code size */}
-          <QRCode value="https://www.basepay.app" size={180} /> {/* Display the QR code */}
-        </div>
-      </div>
-      <div>
-        <h1 className="text-4xl font-bold text-base-blue mb-4 mt-10">BasePay</h1>
-      </div>
-      <div>
-        <h2 className="text-xl text-black font-semibold">Scan on mobile device to access dApp.</h2>
-      </div>
-    </div>
-  </div>
-)}
 
-
-{isClient && !isDesktop && !isConnected && (
+{isClient && !isConnected && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-50">
     <div className="text-center text-black">
     <h2 className="text-xl text-black font-semibold pb-4">

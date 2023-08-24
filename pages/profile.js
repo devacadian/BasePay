@@ -184,7 +184,9 @@ const getCounterPartyPrefix = (activityType, activityState) => {
 
 
   return (
-    <main className="flex flex-col min-h-screen bg-white">
+    <div className="flex items-center justify-center min-h-screen bg-gray-200">
+    <div className="bg-white rounded-lg shadow-xl flex flex-col overflow-hidden" style={{ width: '500px', height: '812px' }}>
+      <main className="flex flex-col bg-white overflow-y-auto">
       <Head>
         <title>Profile - BasePay</title>
         {/* Add other meta tags as needed */}
@@ -313,6 +315,8 @@ const getCounterPartyPrefix = (activityType, activityState) => {
 
 
     </main>
+    </div>
+    </div>
   );
 };
 

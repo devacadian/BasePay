@@ -16,7 +16,6 @@ import QRCode from 'qrcode.react';
 
 
 
-
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
     baseGoerli, mainnet, goerli, ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [goerli] : []),
@@ -51,7 +50,7 @@ function AppContent({ Component, pageProps }) {
 
     // Check if the viewport width is greater than a specific value
     if (window.innerWidth > 768) { // Change this value to the desired breakpoint
-      setIsDesktop(true);
+      setIsDesktop(false);
     }
 
     // Optional: Add a listener to handle window resize
@@ -69,8 +68,9 @@ function AppContent({ Component, pageProps }) {
 
   return (
     <>
+
       <Component {...pageProps} />
-    
+
     
       {isDesktop && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-50">

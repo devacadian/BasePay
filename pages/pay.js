@@ -513,7 +513,9 @@ const handleCloseQRChoiceModal = () => {
 
 
   return (
-<main className="min-h-screen flex flex-col bg-white pb-20">
+    <div className="flex items-center justify-center min-h-screen bg-gray-200">
+    <div className="bg-white sm:rounded-lg shadow-xl flex flex-col overflow-hidden" style={{ width: '500px', height: '812px' }}>
+      <main className="flex flex-col bg-white overflow-y-auto pb-20">
       <div style={{ background: 'linear-gradient(to bottom, #0e76fd, #ffffff)' }} className="flex-grow flex flex-col">
         <Head>
           <title>Payment Page</title>
@@ -579,7 +581,7 @@ const handleCloseQRChoiceModal = () => {
 
       {showQRChoiceModal && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
-    <div className="bg-white p-6 rounded-xl absolute top-1/6 inset-x-4 shadow-xl drop-shadow">
+    <div className="bg-white p-6 rounded-xl w-full md:w-96 top-1/6 inset-x-4 shadow-xl drop-shadow">
     <button onClick={handleCloseQRChoiceModal}  className="z-40 absolute top-6 left-4">
         <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
       </button>
@@ -604,7 +606,7 @@ const handleCloseQRChoiceModal = () => {
 {/* Pay User Selection Modal */}
 {showPaySelectionModal && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-20">
-    <div className="bg-white w-full h-full relative pt-2">
+    <div className="bg-white  h-full w-full md:w-[500px] md:h-[812px] relative pt-2" >
       <div className="px-4 pt-0 grid grid-cols-3 items-center">
         <button className="p-4 -ml-4 cursor-pointer" onClick={handleCloseModal}> 
           <FontAwesomeIcon icon={faXmark} className="h-7 w-7 text-black" />
@@ -654,7 +656,7 @@ const handleCloseQRChoiceModal = () => {
 
       {showScanner && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
-    <div className="bg-white p-6 rounded-xl absolute top-1/6 inset-x-4 shadow-xl drop-shadow">
+   <div className="bg-white w-96 p-6 rounded-xl shadow-xl top-1/6 inset-x-4 drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}> {/* Manual control of width and padding */}
       <button
         onClick={() => {
           setShowScanner(false);
@@ -706,8 +708,8 @@ const handleCloseQRChoiceModal = () => {
 {/* Confirm Modal */}
 {showconfirmpayModal && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 outside-click" onClick={handleOutsideClick}>
-    <div className="bg-black opacity-50 w-full h-full outside-click"></div>
-    <div className={`bg-white w-full rounded-t-2xl absolute ${animateModal ? '-bottom-full motion-reduce:transition-all duration-700 ease-in-out' : 'bottom-0'}`}>
+    <div className="bg-black opacity-50 w-full h-full  outside-click"></div>
+    <div className={`bg-white w-full rounded-t-2xl md:w-[500px] md:h-[512px] absolute ${animateModal ? '-bottom-full motion-reduce:transition-all duration-700 ease-in-out' : 'bottom-0'}`}>
 
       <div className="bg-gray-300 w-18 h-1 mx-auto mt-4 rounded-full cursor-pointer"
            onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} // Touch handler to the gray drag bar
@@ -748,7 +750,7 @@ const handleCloseQRChoiceModal = () => {
 {showtransactionModal && (
   <div className="fixed top-0 left-0 w-full h-full z-40 flex items-center justify-center">
     <div className="bg-black opacity-50 w-full h-full absolute"></div>
-    <div className="bg-white p-6 rounded-xl absolute top-1/6 inset-x-4 shadow-xl drop-shadow"> 
+    <div className="bg-white p-6 rounded-xl  md:w-[400px] md:h-[612px] top-1/6 inset-x-4 shadow-xl drop-shadow"> 
       <button className="p-4 cursor-pointer absolute top-2 left-1" onClick={() => {
           document.body.style.overflowY = "scroll"; // Remove scroll lock
           document.body.style.minHeight = "0px";
@@ -760,7 +762,7 @@ const handleCloseQRChoiceModal = () => {
 
 
 {transactionStatus === 'pending' && (
-  <div className="mt-14 ml-0">
+  <div className="mt-14 md:mt-16 ml-0">
     <div className="flex justify-center items-center mb-10 relative"> 
       <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> 
       <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
@@ -770,22 +772,22 @@ const handleCloseQRChoiceModal = () => {
     </div>
 
 
-    <div className="mb-6 text-center text-gray-600 font-medium"> {/* Added a "View on Basescan" link */}
+    <div className="mb-6 md:mb-12 text-center text-gray-600 font-medium"> {/* Added a "View on Basescan" link */}
   <a href={`https://goerli.basescan.org/tx/${txHashState}`} target="_blank" rel="noopener noreferrer" className="flex justify-center items-center">
     View on <span className="text-gray-600 ml-1 font-semibold">BaseScan</span> <FontAwesomeIcon icon={faUpRightFromSquare} className="h-4.5 w-4.5 ml-2 text-gray-500" />
   </a>
 </div>
 
 
-    <div className="flex items-center justify-start mb-6"> 
+    <div className="flex items-center justify-start mb-6 md:mb-12"> 
     <FontAwesomeIcon icon={faSpinner} className="text-base-blue h-7 w-7 animate-spin" />
           <span className="ml-4 mt-0.5 text-black font-semibold">Transaction in Progress...</span>
         </div>
 
-    <div className=" mb-4"> 
+    <div className=" mb-4 mb:12"> 
       <div className="text-black font-semibold">Transaction to {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress} on Goerli Base Chain is processing.</div>
     </div>
-    <div className="ml-0">
+    <div className="ml-0 mb:12">
     <div className={`text-gray-600 font-medium text-lg ${forValue ? 'text-left' : 'text-left'}`}>
   {forValue
     ? `Message: ${forValue}`
@@ -801,7 +803,7 @@ const handleCloseQRChoiceModal = () => {
 
 
 {transactionStatus === 'success' && (
-  <div className="mt-14 ml-0">
+  <div className="mt-14 md:mt-16 ml-0">
     <div className="flex justify-center items-center mb-10 relative"> 
       <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div> 
       <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
@@ -810,21 +812,21 @@ const handleCloseQRChoiceModal = () => {
       <div className="text-black font-bold text-2xl">{counter || '0'} ETH</div>
     </div>
 
-    <div className="mb-6 text-center text-gray-600 font-medium"> {/* Added a "View on Basescan" link */}
+    <div className="mb-6 md:mb-12 text-center text-gray-600 font-medium"> {/* Added a "View on Basescan" link */}
   <a href={`https://goerli.basescan.org/tx/${txHashState}`} target="_blank" rel="noopener noreferrer" className="flex justify-center items-center">
     View on <span className="text-gray-600 ml-1 font-semibold">BaseScan</span> <FontAwesomeIcon icon={faUpRightFromSquare} className="h-4.5 w-4.5 ml-2 text-gray-500" />
   </a>
 </div>
 
-    <div className="flex items-center justify-start mb-6"> 
+    <div className="flex items-center justify-start mb-6 md:mb-12"> 
       <FontAwesomeIcon icon={faCircleCheck} className="text-base-blue h-7 w-7" /> 
       <span className="ml-4 mt-0.5 text-black font-semibold">Transaction Successful!</span>
     </div>
 
-    <div className=" mb-4"> 
+    <div className=" mb-4 md:mb-12"> 
       <div className="text-black font-semibold">Sent successfully to {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress} on Goerli Base Chain using <span className='text-base-blue'>BasePay</span>!</div>
     </div>
-    <div className="ml-0">
+    <div className="ml-0 md:mb-12">
     <div className={`text-gray-600 font-medium text-lg ${forValue ? 'text-left' : 'text-left'}`}>
   {forValue
     ? `Message: ${forValue}`
@@ -847,7 +849,7 @@ const handleCloseQRChoiceModal = () => {
 
 
 {transactionStatus === 'fail' && (
-  <div className="mt-14 ml-0">
+  <div className="mt-14 md:mt-16 ml-0">
     <div className="flex justify-center items-center mb-10 relative">
       <div className="bg-gray-300 w-16 h-16 rounded-full absolute shadow drop-shadow"></div>
       <FontAwesomeIcon icon={faEthereum} className="text-black h-9 w-9 z-10" /> 
@@ -856,21 +858,21 @@ const handleCloseQRChoiceModal = () => {
       <div className="text-black font-bold text-2xl">{counter || '0'} ETH</div>
     </div>
 
-    <div className="mb-10 text-center text-gray-600 font-medium"> {/* Added a "View on Basescan" link */}
+    <div className="mb-6 md:mb-12 text-center text-gray-600 font-medium"> {/* Added a "View on Basescan" link */}
   <a href={`https://goerli.basescan.org/tx/${txHashState}`} target="_blank" rel="noopener noreferrer" className="flex justify-center items-center">
     View on <span className="text-gray-600 ml-1 font-semibold">BaseScan</span> <FontAwesomeIcon icon={faUpRightFromSquare} className="h-4.5 w-4.5 ml-2 text-gray-500" />
   </a>
 </div>
 
-    <div className="flex items-center justify-start mb-6"> 
+    <div className="flex items-center justify-start mb-4 md:mb-12"> 
     <FontAwesomeIcon icon={faTimesCircle} className="text-red-600 h-7 w-7" /> 
           <span className="ml-4 mt-0.5 text-black font-semibold">Transaction Failed!</span>
         </div>
 
-    <div className=" mb-4">
+    <div className=" mb-4 md:mb-12">
       <div className="text-black font-semibold">Transaction to {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress} on Goerli Base Chain failed!</div>
     </div>
-    <div className="ml-0">
+    <div className="ml-0 md:mb-12">
       <div className="text-gray-700 font-medium text-lg"> {forValue || "No note added"}</div>
     </div>
     <button className="bg-base-blue shadow-sm drop-shadow text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-10 mb-0" onClick={() => {
@@ -894,7 +896,7 @@ const handleCloseQRChoiceModal = () => {
 {/* Request User Selection Modal */}
 {showRequestSelectionModal && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-20">
-    <div className="bg-white w-full h-full relative pt-2">
+  <div className="bg-white  h-full w-full md:w-[500px] md:h-[812px] relative pt-2" >
       <div className="px-4 pt-0 grid grid-cols-3 items-center">
         <button className="p-4 -ml-4 cursor-pointer" onClick={handleCloseRequestSelectionModal}> 
           <FontAwesomeIcon icon={faArrowLeft} className="h-7 w-7 text-black" />
@@ -1169,6 +1171,8 @@ const handleCloseQRChoiceModal = () => {
 
 
     </main>
+    </div>
+    </div>
   );
 };
 

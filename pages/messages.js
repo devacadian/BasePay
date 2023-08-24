@@ -6,7 +6,7 @@ import { faMessagePen, faMagnifyingGlass, faArrowLeft, faSpinner, faMessages, fa
 import QRCode from 'qrcode.react'; 
 import { useAccount } from "wagmi";
 import createIcon from 'blockies';
-import { collection, query, orderBy } from "firebase/firestore";
+import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { db } from '../controller/firebase'; // Make sure to import your Firebase db configuration
 import axios from 'axios'
@@ -21,7 +21,7 @@ export default function Messages() {
   const [isLoadingChatRooms, setIsLoadingChatRooms] = useState(false);
   const [showChatRoomModal, setShowChatRoomModal] = useState(false);
   const [messageContent, setMessageContent] = useState('');
-  
+  const [chatMessages, setChatMessages] = useState([]);
   const [selectedChatRoomId, setSelectedChatRoomId] = useState(null);
   const [selectedChatRoomName, setSelectedChatRoomName] = useState('');
   const [searchAddress, setSearchAddress] = useState('');
@@ -33,7 +33,15 @@ export default function Messages() {
   useEffect(() => {
     if (selectedChatRoomId) {
       const privateChatRef = collection(db, "PrivateChatRooms", selectedChatRoomId, "Messages");
-      queryRef.current = query(privateChatRef, orderBy('timestamp'));
+      const q = query(privateChatRef, orderBy('timestamp'));
+  
+      // Subscribe to changes and update the state
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        setChatMessages(snapshot.docs.map(doc => doc.data()));
+      });
+  
+      // Return the unsubscribe function to clean up the subscription
+      return () => unsubscribe();
     }
   }, [selectedChatRoomId]);
 
@@ -80,8 +88,9 @@ export default function Messages() {
   
   const handleCloseChatRoomModal = () => {
     setShowChatRoomModal(false);
+    setChatMessages([]); // Clear the chat messages
+    setSelectedChatRoomId(null); // Reset the chat room ID
   };
-
 
   const handleCloseModal = () => {
     // Create a copy of the query object without the 'newmessage' key
@@ -260,8 +269,8 @@ export default function Messages() {
       </h1>
     </div>
     <div className="flex-grow overflow-y-scroll bg-white text-white  w-full mb-4 flex flex-col text-left p-3 -mt-3 rounded">
-      {value && value.docs.map((doc) => {
-        const chatRoomTimestamp = doc.data().timestamp.seconds * 1000;
+    {chatMessages.map((message) => {
+  const chatRoomTimestamp = message.timestamp.seconds * 1000;
         const timeDifferenceMinutes = Math.floor((Date.now() - chatRoomTimestamp) / (1000 * 60));
         let chatRoomTimeString;
         if (timeDifferenceMinutes === 1) {
@@ -280,13 +289,13 @@ export default function Messages() {
           }
         }
 
-        const textOrRequest = doc.data().payment_request_message ? "request" : "text";
-        const bubbleColor = doc.data().from === address ? "bg-blue-500 ml-10" : "bg-green-400 mr-10"; // Conditional color
-
+        const textOrRequest = message.payment_request_message ? "request" : "text";
+        const bubbleColor = message.from === address ? "bg-blue-500 ml-10" : "bg-green-400 mr-10"; // Conditional color
+      
         if (textOrRequest === 'text') {
           return (
-            <div key={doc.id} className={`${bubbleColor} rounded-2xl p-2 my-1 mt-2 text-white `}> {/* Individual message bubble */}
-              <div className="mt-1 ml-1 mr-12 font-semibold text-white">{JSON.stringify(doc.data().text_content).trim().slice(1, -1)}</div>
+            <div key={message.id} className={`${bubbleColor} rounded-2xl p-2 my-1 mt-2 text-white`}> {/* Individual message bubble */}
+              <div className="mt-1 ml-1 mr-12 font-semibold text-white">{JSON.stringify(message.text_content).trim().slice(1, -1)}</div>
               <div className="text-xs text-right font-medium text-gray-100 -mt-4 mb-1 mr-1">{chatRoomTimeString}</div> {/* Timestamp */}
             </div>
           );

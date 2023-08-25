@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMessagePen, faMagnifyingGlass, faArrowLeft, faSpinner, faMessages, faXmark, faCopy, faUpRightFromSquare, faPaperPlaneTop } from '@fortawesome/pro-solid-svg-icons';
+import { faMessagePen, faMagnifyingGlass, faArrowLeft, faSpinner, faMessages, faXmark, faCopy, faUpRightFromSquare, faPaperPlaneTop, faDollarSign } from '@fortawesome/pro-solid-svg-icons';
 import QRCode from 'qrcode.react'; 
 import { useAccount } from "wagmi";
 import createIcon from 'blockies';
@@ -361,19 +361,24 @@ export default function Messages() {
       )}
     </div>
     {/* Chat Input Box */}
-    <div className="p-2 bg-white border-1 border rounded-xl -mt-2 mb-2 ml-2 mr-2 flex items-center"> {/* Flex container */}
-      <input
-        type="text"
-        placeholder="Enter message.."
-        value={messageContent}
-        onChange={handleInputChange}
-        onKeyPress={(e) => { if (e.key === 'Enter') sendMessage(); }} // Trigger sendMessage on Enter key
-        className="flex-grow py-2 px-4 text-black rounded-l bg-white border-base-blue border-1 -ml-1 focus:outline-none"
-      />
-      <button onClick={sendMessage} className="bg-base-blue text-white rounded-xl p-2">
-        <FontAwesomeIcon icon={faPaperPlaneTop} className="ml-0.5 h-6 w-8 text-white" />
-      </button>
-    </div>
+{/* Chat Input Box */}
+<div className="p-2 bg-white border-1 border rounded-xl -mt-2 mb-2 ml-2 mr-2 flex items-center"> {/* Flex container */}
+  <div className="bg-base-blue rounded-full w-8 h-8 mr-2 flex items-center justify-center"> {/* Blue circle */}
+    <FontAwesomeIcon icon={faDollarSign} className="text-white h-4 w-4" /> {/* Dollar sign icon */}
+  </div>
+  <input
+    type="text"
+    placeholder="Enter message.."
+    value={messageContent}
+    onChange={handleInputChange}
+    onKeyPress={(e) => { if (e.key === 'Enter') sendMessage(); }} // Trigger sendMessage on Enter key
+    className="flex-grow py-2 px-4 text-black rounded-l bg-white border-base-blue border-1 -ml-2 focus:outline-none"
+  />
+  <button onClick={sendMessage} className="bg-base-blue text-white rounded-xl p-2">
+    <FontAwesomeIcon icon={faPaperPlaneTop} className="ml-0.5 h-6 w-8 text-white" />
+  </button>
+</div>
+
   </div>
   </div>
 )}

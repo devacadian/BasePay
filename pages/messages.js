@@ -326,7 +326,7 @@ export default function Messages() {
       )}
     </div>
     {/* Chat Input Box */}
-    <div className="p-2 bg-white border-1 border rounded-xl -mt-2 mb-2 ml-2 mr-2 flex items-center flex-shrink-0"> {/* Flex container */}
+    <div className="p-2 bg-white border-1 fixed bottom-0 border relative rounded-xl -mt-2 mb-2 ml-2 mr-2 flex items-center flex-shrink-0"> {/* Flex container */}
       <input
         type="text"
         placeholder="Enter message.."
@@ -335,7 +335,7 @@ export default function Messages() {
         onKeyPress={(e) => { if (e.key === 'Enter') sendMessage(); }} // Trigger sendMessage on Enter key
         className="flex-grow py-2 px-4 text-black rounded-l bg-white border-base-blue border-1 -ml-1 focus:outline-none"
       />
-      <button onClick={sendMessage} className="bg-base-blue text-white rounded-xl p-2">
+      <button onClick={sendMessage} className="bg-base-blue text-white rounded-xl p-2 mr-2">
         <FontAwesomeIcon icon={faPaperPlaneTop} className="ml-0.5 h-6 w-8 text-white" />
       </button>
     </div>

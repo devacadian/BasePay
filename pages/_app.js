@@ -1,7 +1,7 @@
 import '@/styles/globals.css'
 import '@rainbow-me/rainbowkit/styles.css';
 import { NotificationProvider } from "../components/NotificationProvider";
-import 'react-toastify/dist/ReactToastify.css'; // Import CSS file
+import 'react-toastify/dist/ReactToastify.css';
 import React, { useState, useEffect } from 'react';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { goerli, mainnet, baseGoerli } from 'wagmi/chains';
@@ -11,9 +11,7 @@ import Head from 'next/head';
 import Footer from '../components/Footer';
 import { useAccount } from 'wagmi'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import QRCode from 'qrcode.react'; 
-
-
+import { GoogleAnalytics } from "nextjs-google-analytics";
 
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
@@ -37,7 +35,7 @@ const wagmiConfig = createConfig({
 });
 
 const isLocal = process.env.NEXT_PUBLIC_ENVIRONMENT === 'local'; 
-
+const GID = process.env.NEXT_PUBLIC_GID
 
 function AppContent({ Component, pageProps }) {
   const { isConnected } = useAccount();
@@ -54,7 +52,6 @@ function AppContent({ Component, pageProps }) {
 
       <Component {...pageProps} />
 
-    
 
 {isClient && !isConnected && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-50">
@@ -77,9 +74,6 @@ function AppContent({ Component, pageProps }) {
   </div>
 )}
 
-
-
-
     </>
   );
 }
@@ -96,6 +90,7 @@ function MyApp({ Component, pageProps }) {
           href={isLocal ? '/favicon-local.png' : '/favicon.png'} // Change favicon based on the environment
         />
       </Head>
+      <GoogleAnalytics gaMeasurementId={GID} trackPageViews/>
       <NotificationProvider>
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider coolMode chains={chains} initialChain={baseGoerli} >

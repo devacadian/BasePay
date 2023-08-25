@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,6 +10,7 @@ import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { db } from '../controller/firebase'; 
 import axios from 'axios'
+import { NotificationContext } from "../components/NotificationProvider";
 
 
 export default function Messages() {
@@ -26,6 +27,7 @@ export default function Messages() {
   const [selectedChatRoomName, setSelectedChatRoomName] = useState('');
   const [searchAddress, setSearchAddress] = useState('');
   const [isLoadingChatMessages, setIsLoadingChatMessages] = useState(false);
+  const { showNotification } = useContext(NotificationContext);
 
   
   // Create a ref for the query
@@ -162,6 +164,15 @@ export default function Messages() {
 
   // Function to create a private chat room
   const createPrivateChatRoom = async () => {
+
+    if (searchAddress === address) {
+      // Display an error notification (replace this with your notification method)
+   showNotification("You cant chat with yourself, silly goose!", "error");
+      return; // Exit the function without proceeding
+    }
+  
+
+
     const url = 'https://basepay-api.onrender.com/create-private-chatroom';
     const data = {
       "currentUserAddress": address,
@@ -397,7 +408,20 @@ export default function Messages() {
         <FontAwesomeIcon icon={faPaperPlaneTop} /> 
       </button>
     </div>
-    <div className="bg-gray-100 h-10 flex items-center shadow-sm mt-22">
+
+    {searchAddress.length === 42 && (
+  <button onClick={createPrivateChatRoom} className="px-4 flex items-center mb-6 mt-4 focus:outline-none w-full text-left"> {/* Trigger createPrivateChatRoom on click */}
+    <div className="bg-gray-300 rounded-full h-14 w-14 overflow-hidden border-2 border-gray-300">
+      <AvatarIcon seed={searchAddress} /> {/* Render avatar */}
+    </div>
+    <span className="text-black font-semibold text-lg ml-4">
+      {searchAddress.substring(0, 10) + "..." + searchAddress.substring(searchAddress.length - 10)} {/* Render truncated address */}
+    </span>
+  </button>
+)}
+
+
+    <div className="bg-gray-100 h-10 flex items-center shadow-sm mt-2">
       <span className="text-gray-500 text-base font-bold ml-4">Last Messaged</span>
     </div>
 

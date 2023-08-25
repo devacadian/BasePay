@@ -187,7 +187,7 @@ export default function Messages() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-200">
     <div className="bg-white rounded-lg shadow-xl flex flex-col overflow-hidden" style={{ width: '500px', height: '812px' }}>
-      <main className="flex flex-col bg-white overflow-y-auto">
+      <main className="flex flex-col bg-white overflow-y-auto flex-grow">
       <Head>
         {/* Other head content */}
       </Head>
@@ -205,7 +205,7 @@ export default function Messages() {
         </button>
       </div>
 
-    
+
       {
   isLoadingChatRooms ? (
     <div className="flex justify-center mt-20">
@@ -263,12 +263,14 @@ export default function Messages() {
   <div className="text-center text-black text-xl font-medium my-10">
     No chats created yet!
   </div>
+  
 )}
 
 
 {/* Chat Room Modal */}
 {showChatRoomModal && (
-  <div className="fixed inset-0 bg-white z-50 flex flex-col">
+  <div className="flex items-center justify-center min-h-screen bg-gray-200 fixed inset-0 z-50">
+  <div className="bg-white rounded-lg shadow-xl flex flex-col overflow-hidden relative" style={{ width: '500px', height: '812px' }}>
     <div className="p-4 flex items-center mt-2">
       <button onClick={handleCloseChatRoomModal} className="focus:outline-none">
         <FontAwesomeIcon icon={faArrowLeft} className="h-8 w-8 text-black" />
@@ -324,7 +326,7 @@ export default function Messages() {
       )}
     </div>
     {/* Chat Input Box */}
-    <div className="p-2 bg-white border-1 border rounded-xl -mt-2 mb-2 ml-2 mr-2 flex items-center"> {/* Flex container */}
+    <div className="p-2 bg-white border-1 border rounded-xl -mt-2 mb-2 ml-2 mr-2 flex items-center flex-shrink-0"> {/* Flex container */}
       <input
         type="text"
         placeholder="Enter message.."
@@ -337,6 +339,7 @@ export default function Messages() {
         <FontAwesomeIcon icon={faPaperPlaneTop} className="ml-0.5 h-6 w-8 text-white" />
       </button>
     </div>
+  </div>
   </div>
 )}
 
@@ -352,7 +355,7 @@ export default function Messages() {
       </div>
       {!showModal && (
         <button
-          className="bg-base-blue h-14 w-14 flex items-center justify-center rounded-full text-white fixed bottom-36 right-4 z-10"
+   className="bg-base-blue h-14 w-14 flex items-center justify-center rounded-full text-white fixed bottom-36 right-4 z-10 lg:bottom-[calc(40%-210px)] lg:right-[calc(50%-210px)]"
           onClick={() => setShowModal(true)} // Open modal on click
         >
           <FontAwesomeIcon icon={faMessagePen} className="h-7 w-7" />
@@ -362,7 +365,8 @@ export default function Messages() {
 
 
       {showModal && (
-  <div className="fixed inset-0 bg-white z-0 flex flex-col">
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-20">
+  <div className="bg-white  h-full w-full md:w-[500px] md:h-[812px] relative pt-2" >
     <div className="p-4 flex items-center">
       <button onClick={handleCloseModal}> {/* Close modal on click */}
         <FontAwesomeIcon icon={faArrowLeft} className="h-6 w-6 text-black align-middle mt-3" />
@@ -400,13 +404,13 @@ export default function Messages() {
         Invite to BasePay
       </button>
     </div>
-
+    </div>
 
 
 {/* Invite Modal */}
 {showInviteModal && (
-  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
-    <div className="bg-white p-6 rounded-xl absolute shadow-xl drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}>
+ <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
+ <div className="bg-white w-96 p-6 rounded-xl shadow-xl drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}> {/* Manual control of width and padding */}
       <button onClick={handleInviteModalClose} className="absolute top-6 left-4">
         <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
       </button>

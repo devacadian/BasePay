@@ -750,7 +750,7 @@ const handleCloseQRChoiceModal = () => {
 {showtransactionModal && (
   <div className="fixed top-0 left-0 w-full h-full z-40 flex items-center justify-center">
     <div className="bg-black opacity-50 w-full h-full absolute"></div>
-    <div className="bg-white p-6 rounded-xl md:w-[400px] md:h-[612px] top-1/6 inset-x-4 shadow-xl drop-shadow"> 
+    <div className="bg-white p-6 rounded-xl md:w-[400px] md:h-[612px] top-1/6 inset-x-4 shadow-xl drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}>
       <button className="p-4 cursor-pointer absolute top-2 left-1" onClick={() => {
           document.body.style.overflowY = "scroll"; // Remove scroll lock
           document.body.style.minHeight = "0px";
@@ -896,7 +896,7 @@ const handleCloseQRChoiceModal = () => {
 {/* Request User Selection Modal */}
 {showRequestSelectionModal && (
  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-20">
- <div className="bg-white h-full w-full md:w-[500px] md:h-[812px] relative pt-2 flex flex-col"> {/* Add flex layout */}
+ <div className="bg-white h-full w-full md:w-[500px] md:h-[812px] relative pt-2 flex flex-col" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}>
       <div className="px-4 pt-0 grid grid-cols-3 items-center">
         <button className="p-4 -ml-4 cursor-pointer" onClick={handleCloseRequestSelectionModal}> 
           <FontAwesomeIcon icon={faArrowLeft} className="h-7 w-7 text-black" />

@@ -275,11 +275,11 @@ export default function Messages() {
   
 )}
 
-
 {/* Chat Room Modal */}
 {showChatRoomModal && (
-  <div className="flex items-center justify-center min-h-screen bg-gray-200 fixed inset-0 z-50">
-  <div className="bg-white rounded-lg shadow-xl flex flex-col overflow-hidden relative" style={{ width: '500px', height: '812px' }}>
+  
+  <div className="fixed inset-0 bg-white z-50 flex flex-col fixed top-0 left-0 w-full h-full flex items-center justify-center">
+    <div className="bg-white rounded-lg shadow-xl flex flex-col overflow-hidden lg:w-[500px] lg:h-[812px]  relative w-full h-full">
     <div className="p-4 flex items-center mt-2">
       <button onClick={handleCloseChatRoomModal} className="focus:outline-none">
         <FontAwesomeIcon icon={faArrowLeft} className="h-8 w-8 text-black" />
@@ -335,7 +335,7 @@ export default function Messages() {
       )}
     </div>
     {/* Chat Input Box */}
-    <div className="p-2 bg-white border-1 fixed bottom-0 border relative rounded-xl -mt-2 mb-2 ml-2 mr-2 flex items-center flex-shrink-0"> {/* Flex container */}
+    <div className="p-2 bg-white border-1 border rounded-xl -mt-2 mb-2 ml-2 mr-2 flex items-center"> {/* Flex container */}
       <input
         type="text"
         placeholder="Enter message.."
@@ -344,7 +344,7 @@ export default function Messages() {
         onKeyPress={(e) => { if (e.key === 'Enter') sendMessage(); }} // Trigger sendMessage on Enter key
         className="flex-grow py-2 px-4 text-black rounded-l bg-white border-base-blue border-1 -ml-1 focus:outline-none"
       />
-      <button onClick={sendMessage} className="bg-base-blue text-white rounded-xl p-2 mr-2">
+      <button onClick={sendMessage} className="bg-base-blue text-white rounded-xl p-2">
         <FontAwesomeIcon icon={faPaperPlaneTop} className="ml-0.5 h-6 w-8 text-white" />
       </button>
     </div>

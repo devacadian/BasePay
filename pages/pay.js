@@ -517,10 +517,18 @@ const handleCloseQRChoiceModal = () => {
     <div className="bg-white sm:rounded-lg shadow-xl flex flex-col overflow-hidden" style={{ width: '500px', height: '812px' }}>
       <main className="flex flex-col bg-white overflow-y-auto pb-20">
       <div style={{ background: 'linear-gradient(to bottom, #0e76fd, #ffffff)' }} className="flex-grow flex flex-col">
-        <Head>
-          <title>Payment Page</title>
-          <meta name="description" content="Handle payments here" />
-        </Head>
+      <Head>
+  <title>Payment Page - BasePay.app</title>
+  <meta name="description" content="Handle payments here with BasePay.app. Go cashless, Go Decentralized!" />
+  <link rel="canonical" href="https://www.basepay.app/pay" />
+  <meta property="og:title" content="Payment Page - BasePay.app: Your Decentralized Payment Solution" />
+  <meta property="og:description" content="Handle all your payments through BasePay. Whether you're organizing a vacation or sharing lunch expenses, BasePay streamlines payments for all social situations." />
+  <meta property="og:url" content="https://www.basepay.app/pay" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Payment Page - BasePay.app: Go cashless, Go Decentralized!" />
+  <meta name="twitter:description" content="Handle payments here with BasePay.app. Go cashless, Go Decentralized!" />
+  <meta name="keywords" content="Crypto, Decentralized, Payments, Wallet, Metamask, BasePay.app, Contacts, Transactions, Ether, Base, Payment Page" />
+</Head>
         <div className="px-4 pb-0 pt-8 flex items-center w-full justify-between">
         <div className="flex items-center">
           <div

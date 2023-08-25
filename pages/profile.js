@@ -188,9 +188,18 @@ const getCounterPartyPrefix = (activityType, activityState) => {
     <div className="bg-white rounded-xl shadow-xl flex flex-col overflow-hidden" style={{ width: '500px', height: '812px' }}>
       <main className="flex flex-col bg-white overflow-y-auto">
       <Head>
-        <title>Profile - BasePay</title>
-        {/* Add other meta tags as needed */}
-      </Head>
+  <title>Profile - BasePay.app</title>
+  <meta name="description" content="View your BasePay profile - access your wallet address, balance, recent activities, and QR code for receiving payments." />
+  <link rel="canonical" href="https://www.basepay.app/profile" />
+  <meta property="og:title" content="Profile - BasePay.app: Manage Your Wallet and Activities" />
+  <meta property="og:description" content="Your BasePay profile lets you access your wallet address, view your balance, monitor recent activities, and more. Secure and decentralized control at your fingertips." />
+  <meta property="og:url" content="https://www.basepay.app/profile" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Profile - BasePay.app: Your Decentralized Wallet Management" />
+  <meta name="twitter:description" content="Access your wallet, monitor transactions, and control your profile with BasePay. Go decentralized today!" />
+  <meta name="keywords" content="Crypto, Decentralized, Profile, Wallet, Metamask, BasePay.app, Address, Balance, Activities, QR code, Base" />
+</Head>
+
       <div className="flex-grow flex items-start justify-center mt-12">
       {isClient && (
         <div className="text-center relative w-full">

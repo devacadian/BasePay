@@ -189,8 +189,17 @@ export default function Messages() {
     <div className="bg-white rounded-lg shadow-xl flex flex-col overflow-hidden" style={{ width: '500px', height: '812px' }}>
       <main className="flex flex-col bg-white overflow-y-auto flex-grow">
       <Head>
-        {/* Other head content */}
-      </Head>
+  <title>BasePay Messages - Chat & Request</title>
+  <meta name="description" content="Chat with your contacts and send payment requests directly through BasePay messages." />
+  <meta property="og:title" content="BasePay Messages: Chat & Send Requests" />
+  <meta property="og:description" content="Access your BasePay messages to chat, send payment requests, and manage all your communication in one place." />
+  <meta property="og:url" content="https://www.basepay.app/messages" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="BasePay Messages: Chat & Send Payment Requests!" />
+  <meta name="twitter:description" content="With BasePay messages, you can chat and send payment requests directly to your contacts." />
+  <meta name="keywords" content="BasePay, Messages, Chat, Payment Requests, Communication, Crypto" />
+</Head>
+
       <div className="p-4 flex items-center justify-between">
       <div className="flex items-center">
           <h1 className="text-black text-3xl font-semibold pt-2 mr-1">Messages</h1>

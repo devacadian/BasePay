@@ -284,8 +284,18 @@ const handleConfirmPayment = async () => {
     <div className="bg-white rounded-lg shadow-xl flex flex-col overflow-hidden" style={{ width: '500px', height: '812px' }}>
       <main className="flex flex-col bg-white overflow-y-auto">
       <Head>
-        {/* Other head content */}
-      </Head>
+  <title>Notifications - BasePay.app</title>
+  <meta name="description" content="Stay updated with your BasePay notifications. Accept or reject all payment requests and other important alerts in one place." />
+  <link rel="canonical" href="https://www.basepay.app/notifications" />
+  <meta property="og:title" content="Notifications - BasePay.app: Stay Informed and Connected" />
+  <meta property="og:description" content="Track all your BasePay notifications including payment requests. Keep an eye on your decentralized transactions." />
+  <meta property="og:url" content="https://www.basepay.app/notifications" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Notifications - BasePay.app: Your Alerts Hub" />
+  <meta name="twitter:description" content="Manage your BasePay alerts efficiently. Receive and view notifications for all your decentralized payment activities." />
+  <meta name="keywords" content="Crypto, Decentralized, Notifications, Alerts, Payments, Requests, Invites, Transactions, BasePay.app" />
+</Head>
+
       <div className="p-4 flex items-center justify-between">
       <div className="flex items-center">
         <h1 className="text-black text-3xl font-semibold pt-2 mr-1">Notifications</h1>

@@ -92,8 +92,17 @@ export default function Home() {
     <div className="bg-white md:rounded-lg shadow-xl flex flex-col overflow-hidden" style={{ width: '500px', height: '812px' }}>
       <main className="flex flex-col bg-white overflow-y-auto">
       <Head>
-        {/* Head content */}
-      </Head>
+  <title>Home - BasePay.app</title>
+  <meta name="description" content="Manage payments, send and receive assets, and explore quick actions with BasePay. Experience decentralized payments today!" />
+  <link rel="canonical" href="https://www.basepay.app" />
+  <meta property="og:title" content="Home - BasePay.app: Your Decentralized Payment Hub" />
+  <meta property="og:description" content="BasePay offers a decentralized platform to pay, request, send, and receive assets. Experience fast and secure transactions on the Goerli Base Chain." />
+  <meta property="og:url" content="https://www.basepay.app" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Home - BasePay.app: Decentralized Transactions at Your Fingertips" />
+  <meta name="twitter:description" content="With BasePay, manage your assets, make payments, and invite others to a decentralized payment experience. Join BasePay today!" />
+  <meta name="keywords" content="Crypto, Decentralized, Payments, Wallet, Metamask, BasePay.app, Pay, Request, Message, Invite, Send, Receive, ETH, Base" />
+</Head>
     
 
       <div className="px-4 mt-6"> {/* Container for padding */}

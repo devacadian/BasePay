@@ -297,7 +297,7 @@ const getCounterPartyPrefix = (activityType, activityState) => {
 {/* QR Code Modal */}
 {showQRCodeModal && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
-  <div className="bg-white w-96 p-6 rounded-xl shadow-xl drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}> 
+  <div className="bg-white w-96 p-6 sm:rounded-xl shadow-xl drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}> 
     <button onClick={handleCloseQRCodeModal} className="absolute top-6 left-4">
         <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
       </button>

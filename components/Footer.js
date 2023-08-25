@@ -16,7 +16,7 @@ const Footer = () => {
 
   return (
     
-    <footer className={`fixed bottom-0 left-0 right-0 flex w-full md:w-[500px] md:bottom-[calc(33%-220px)] md:left-[calc(50%-250px)]  ${activeTab === 'pay' ? 'h-20' : 'h-24'} bg-white text-black items-center justify-around border-t-2 border-base-blue`}>
+    <footer className={`fixed bottom-0 left-0 right-0 flex w-full md:w-[500px] md:bottom-[calc(28%-220px)] md:left-[calc(50%-250px)]  ${activeTab === 'pay' ? 'h-20' : 'h-24'} bg-white text-black items-center justify-around border-t-2 border-base-blue`}>
  {activeTab !== 'pay' && (
         <div className="absolute top-[-0px] left-1/2 transform -translate-x-1/2 w-[74px] h-[37px] rounded-b-full bg-base-blue  box-shadow: 0 0 0 2px blue-800"></div>
       )}

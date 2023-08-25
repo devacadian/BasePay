@@ -101,7 +101,8 @@ export default function Messages() {
   const handleCloseModal = () => {
     // Create a copy of the query object without the 'newmessage' key
     const { newmessage, ...newQuery } = router.query;
-  
+   // Clear the search address
+   setSearchAddress('');
     // Replace the URL with the new query object
     router.replace({
       pathname: router.pathname,
@@ -164,15 +165,12 @@ export default function Messages() {
 
   // Function to create a private chat room
   const createPrivateChatRoom = async () => {
-
     if (searchAddress === address) {
       // Display an error notification (replace this with your notification method)
-   showNotification("You cant chat with yourself, silly goose!", "error");
+      showNotification("You can't chat with yourself, silly goose!", "error");
       return; // Exit the function without proceeding
     }
   
-
-
     const url = 'https://basepay-api.onrender.com/create-private-chatroom';
     const data = {
       "currentUserAddress": address,
@@ -188,16 +186,20 @@ export default function Messages() {
     // Update the chat rooms array with the newly created chat room
     setChatRooms([...chatRooms, newChatRoom]);
   
-    // Open the chat room modal with the new chat room ID
-    openChatRoomModal(chatRoomId);
+    // Open the chat room modal with the new chat room ID and search address as name
+    openChatRoomModal(chatRoomId, searchAddress);
+  
+    // Close the search modal
+    setShowModal(false);
+  
+    // Clear the search address
+    setSearchAddress('');
   };
-  
-  
   
   
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-200">
-    <div className="bg-white rounded-lg shadow-xl flex flex-col overflow-hidden" style={{ width: '500px', height: '812px' }}>
+    <div className="bg-white md:rounded-lg shadow-xl flex flex-col overflow-hidden" style={{ width: '500px', height: '812px' }}>
       <main className="flex flex-col bg-white overflow-y-auto flex-grow">
       <Head>
   <title>BasePay Messages - Chat & Request</title>

@@ -355,13 +355,13 @@ export default function Messages() {
       </div>
       {!showModal && (
         <button
-   className="bg-base-blue h-14 w-14 flex items-center justify-center rounded-full text-white fixed bottom-36 right-4 z-10 lg:bottom-[calc(40%-210px)] lg:right-[calc(50%-210px)]"
+   className="bg-base-blue h-14 w-14 flex items-center justify-center rounded-full text-white fixed bottom-36 right-4 z-10 md:bottom-[calc(40%-140px)] md:right-[calc(50%-210px)]"
           onClick={() => setShowModal(true)} // Open modal on click
         >
           <FontAwesomeIcon icon={faMessagePen} className="h-7 w-7" />
         </button>
       )}
-      <div className="h-24 bg-white w-full absolute bottom-0">
+
 
 
       {showModal && (
@@ -444,7 +444,7 @@ export default function Messages() {
 )}
         
 
-      </div>
+
     </main>
     </div>
     </div>

@@ -45,6 +45,7 @@ const Pay = () => {
   const videoRef = useRef(null);
   const [showQRChoiceModal, setShowQRChoiceModal] = useState(false);
   const { showNotification } = useContext(NotificationContext);
+  const { address: addressFromUrl } = router.query;
 
 
   useEffect(() => {
@@ -56,6 +57,13 @@ const Pay = () => {
     const balanceValue = parseFloat(data?.formatted || '0.0000');
     setFormattedBalance(balanceValue.toFixed(4));
 }, [data]);
+
+useEffect(() => {
+  if (addressFromUrl) {
+    setToAddress(addressFromUrl); // Set the toAddress state variable
+    setShowRequestModal(true); // Open the request modal
+  }
+}, [addressFromUrl]);
 
 
 
@@ -504,6 +512,9 @@ const handleCloseQRChoiceModal = () => {
   setShowQRChoiceModal(false);
   document.body.style.overflowY = "scroll"; // Remove scroll lock
 };
+
+
+
 
 
   return (

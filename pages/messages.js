@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMessagePen, faMagnifyingGlass, faArrowLeft, faSpinner, faMessages, faXmark, faCopy, faUpRightFromSquare, faPaperPlaneTop, faDollarSign } from '@fortawesome/pro-solid-svg-icons';
+import { faMessagePen, faMagnifyingGlass, faArrowLeft, faSpinner, faMessages, faXmark, faCopy, faUpRightFromSquare, faPaperPlaneTop, faDollarSign, faFileInvoice } from '@fortawesome/pro-solid-svg-icons';
 import QRCode from 'qrcode.react'; 
 import { useAccount } from "wagmi";
 import createIcon from 'blockies';
@@ -90,17 +90,21 @@ export default function Messages() {
 
 
   
-  const openChatRoomModal = (chatRoomId, chatRoomName = null) => {
-    if (!chatRoomName) {
-      const chatRoom = chatRooms.find((room) => room.chatroomId === chatRoomId);
-      chatRoomName = chatRoom ? chatRoom.chatWith : 'Unknown'; // Provide a fallback value if needed
-    }
-    setSelectedChatRoomName(chatRoomName);
-    setSelectedChatRoomId(chatRoomId);
-    console.log("Selected Chat Room ID:", chatRoomId); // Debug log
-    setShowChatRoomModal(true);
-  };
-  
+// State variable to hold the selected chat room details
+const [selectedChatRoom, setSelectedChatRoom] = useState(null);
+
+const openChatRoomModal = (chatRoomId, chatRoomName = null) => {
+  const chatRoom = chatRooms.find((room) => room.chatroomId === chatRoomId);
+  setSelectedChatRoom(chatRoom); // Set the selected chat room details
+
+  chatRoomName = chatRoom ? chatRoom.chatWith : 'Unknown'; // Provide a fallback value if needed
+
+  setSelectedChatRoomName(chatRoomName);
+  setSelectedChatRoomId(chatRoomId);
+  console.log("Selected Chat Room ID:", chatRoomId); // Debug log
+  setShowChatRoomModal(true);
+};
+
   
   const handleCloseChatRoomModal = () => {
     setShowChatRoomModal(false);
@@ -207,8 +211,19 @@ export default function Messages() {
     setSearchAddress('');
   };
 
+  const handleDollarClick = () => {
+    if (selectedChatRoom) {
+      const addressToRequest = selectedChatRoom.chatWith;
   
+      // Navigate to the /pay page and pass the address as a query parameter
+      router.push(`/pay?address=${addressToRequest}`);
+    }
+  };
   
+const handleCloseRequestModal = () => {
+  setShowRequestModal(false);
+};
+
   
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-200">
@@ -363,9 +378,9 @@ export default function Messages() {
     {/* Chat Input Box */}
 {/* Chat Input Box */}
 <div className="p-2 bg-white border-1 border rounded-xl -mt-2 mb-2 ml-2 mr-2 flex items-center"> {/* Flex container */}
-  <div className="bg-base-blue rounded-full w-8 h-8 mr-2 flex items-center justify-center"> {/* Blue circle */}
-    <FontAwesomeIcon icon={faDollarSign} className="text-white h-4 w-4" /> {/* Dollar sign icon */}
-  </div>
+<div className="bg-base-blue rounded-full w-8 h-8 mr-2 flex items-center justify-center cursor-pointer" onClick={handleDollarClick}> {/* Blue circle */}
+  <FontAwesomeIcon icon={faDollarSign} className="text-white h-5 w-5" /> {/* Dollar sign icon */}
+</div>
   <input
     type="text"
     placeholder="Enter message.."
@@ -494,7 +509,8 @@ export default function Messages() {
 
   </div>
 )}
-        
+
+
 
 
     </main>

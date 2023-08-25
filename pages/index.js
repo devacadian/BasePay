@@ -104,6 +104,10 @@ export default function Home() {
 </Head>
     
 
+<div className="px-4 mt-8 mb-0 text-4xl text-center font-semibold text-base-blue"> {/* Quick Actions */}
+🔵 BasePay
+</div>
+
       <div className="px-4 mt-6"> 
         <div className="bg-gray-100 h-20 rounded-3xl flex items-center justify-start w-full shadow-sm drop-shadow-sm p-4"> 
           <div className="flex justify-center items-center relative w-10 h-10 rounded-full bg-gray-300 shadow drop-shadow-sm ml-4"> 

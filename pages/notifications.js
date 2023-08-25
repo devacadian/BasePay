@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell, faListCheck, faArrowUpRightFromSquare, faEllipsis, faHandshakeSlash, faEye, faPaperPlane, faHand, faXmark, faFileInvoice, faBells, faCircleCheck, faSpinner, faUpRightFromSquare, faRightLeft, faCircleX, faRotateRight } from '@fortawesome/pro-solid-svg-icons';
+import { faEllipsis, faPaperPlane, faXmark, faFileInvoice, faBells, faCircleCheck, faSpinner, faUpRightFromSquare, faRightLeft, faCircleX, faRotateRight } from '@fortawesome/pro-solid-svg-icons';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import Head from 'next/head';
 import { useAccount } from "wagmi";
@@ -172,7 +172,7 @@ const handleConfirmDecline = async () => {
     // Constructing the URL by appending the selected payment request ID
     const url = `https://basepay-api.onrender.com/update-transaction-state/${selectedRequest.paymentRequestId}`;
 
-    // Make a PATCH request to the correct endpoint
+    // Make a PATCH request 
     const response = await fetch(url, {
       method: 'PATCH',
       headers: {
@@ -194,12 +194,12 @@ const handleConfirmDecline = async () => {
       }, 750); // Introducing a delay for better UX
 
     } else {
-      // Handle the error appropriately
+ 
       console.error('Error declining request:', responseData);
     }
   } catch (error) {
     console.error('Error declining request:', error);
-    // Handle the error appropriately
+
   }
 };
 
@@ -305,7 +305,7 @@ const handleConfirmPayment = async () => {
       <div className="bg-base-blue rounded-full h-8 w-8 flex items-center justify-center mt-1.5">
   <FontAwesomeIcon
     icon={faRotateRight}
-    className="h-4.5 w-4.5 text-white cursor-pointer" // Fixed class name
+    className="h-4.5 w-4.5 text-white cursor-pointer" 
     onClick={() => setRefreshKey(refreshKey + 1)} // Increment refreshKey to trigger useEffect
   />
 </div>
@@ -439,7 +439,7 @@ const handleConfirmPayment = async () => {
 
 {showDeclineModal && selectedRequest && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
-<div className="bg-white w-96 p-6 rounded-xl shadow-xl drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}> {/* Manual control of width and padding */}
+<div className="bg-white w-96 p-6 rounded-xl shadow-xl drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}>
       <button onClick={closeDeclineModal} className="absolute top-6 left-4">
         <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
       </button>
@@ -453,7 +453,7 @@ const handleConfirmPayment = async () => {
         <div className="text-gray-500 text-base ml-4 font-semibold">Amount: <span className="font-bold text-black">{selectedRequest.ether_amount} ETH</span></div>
     </div>
 
-      <div className="flex justify-center mt-2"> {/* Centered icon div */}
+      <div className="flex justify-center mt-2"> 
       <div className=" w-16 h-10 rounded-2xl flex items-center justify-center p-0 mt-0">
         <FontAwesomeIcon icon={faRightLeft} className="text-base-blue h-5 w-5" />
       </div>
@@ -482,11 +482,11 @@ const handleConfirmPayment = async () => {
       </div>
      
      
-       {/* Left-justified */}
+      
        <div className={`text-black text-base font-semibold mt-7 ${selectedRequest.transaction_message ? 'text-left ml-2' : 'text-center ml-0'}`}>
   {selectedRequest.transaction_message 
     ? `Message: ${selectedRequest.transaction_message}` 
-    : <i>No message sent with request</i>} {/* Conditional rendering */}
+    : <i>No message sent with request</i>}
 </div>
   
       <button className="bg-base-blue text-white text-lg font-medium w-full h-12 rounded-3xl flex justify-center items-center focus:outline-none mt-6" onClick={handleOpenDeclineRequestModal}>
@@ -510,7 +510,7 @@ const handleConfirmPayment = async () => {
                  onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} 
                  onClick={handleCloseAnimation}></div>
             <div className="p-4">
-              {/* Display details */}
+           
               <div className="text-2xl text-black font-bold">
                 Decline Request
               </div>
@@ -558,10 +558,10 @@ const handleConfirmPayment = async () => {
     <div className="bg-black opacity-50 w-full h-full absolute"></div>
     <div className="bg-white p-6 rounded-xl  md:w-[400px] md:h-[585px] top-1/6 inset-x-4 shadow-xl drop-shadow"> 
       <button className="p-4 cursor-pointer absolute top-2 left-1" onClick={() => {
-          document.body.style.overflowY = "scroll"; // Remove scroll lock
+          document.body.style.overflowY = "scroll"; 
           document.body.style.minHeight = "0px";
           window.scrollBy(0, -1);
-          setShowDeclineRequestTransactionModal(false); // Close the request transaction modal
+          setShowDeclineRequestTransactionModal(false); 
         }}> 
         <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
       </button>
@@ -575,7 +575,6 @@ const handleConfirmPayment = async () => {
           <div className="text-center mb-4 md:mb-12"> 
             <div className="text-black font-bold text-2xl">{selectedRequest.ether_amount} ETH</div>
           </div>
-          {/* Removed the "View on Basescan" link as it's not relevant for the request */}
           <div className="flex items-center justify-start mb-6 md:mb-14"> 
             <FontAwesomeIcon icon={faSpinner} className="text-base-blue h-7 w-7 animate-spin" />
             <span className="ml-4 mt-0.5 text-black font-semibold">Declining Payment Request...</span>
@@ -617,7 +616,7 @@ const handleConfirmPayment = async () => {
           <div className="text-center mb-4 md:mb-12"> 
             <div className="text-black font-bold text-2xl">{selectedRequest.ether_amount} ETH</div>
           </div>
-          {/* You can customize the link as needed */}
+
           <div className="flex items-center justify-start mb-6 md:mb-14"> 
             <FontAwesomeIcon icon={faCircleCheck} className="text-base-blue h-7 w-7" /> 
             <span className="ml-4 mt-0.5 text-black font-semibold">Payment Request Declined!</span>
@@ -647,12 +646,12 @@ const handleConfirmPayment = async () => {
   
           </div>
           <button className="bg-base-blue shadow-sm drop-shadow text-white text-xl font-medium flex items-center justify-center h-12 w-full rounded-xl focus:outline-none mt-6 md:mt-10 mb-0" onClick={() => {
-              document.body.style.overflowY = "scroll"; // Remove scroll lock
+              document.body.style.overflowY = "scroll"; 
               document.body.style.minHeight = "0px";
               window.scrollBy(0, -1);
               setShowDeclineRequestTransactionModal(false);
               setShowConfirmDeclineModal(false);
-              setShowDeclineModal(false); // Close the success modal
+              setShowDeclineModal(false); 
             }}>
             Continue
           </button>
@@ -669,7 +668,7 @@ const handleConfirmPayment = async () => {
 
 {showPayRequestModal && selectedRequestToPay && (
  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
- <div className="bg-white w-96 p-6 rounded-xl shadow-xl drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}> {/* Manual control of width and padding */}
+ <div className="bg-white w-96 p-6 rounded-xl shadow-xl drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}>
       <button onClick={closePayModal} className="absolute top-6 left-4">
         <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
       </button>
@@ -681,7 +680,7 @@ const handleConfirmPayment = async () => {
         <div className="text-gray-500 text-base ml-4 font-semibold">Amount: <span className="font-bold text-black">{selectedRequestToPay.ether_amount} ETH</span></div>
       </div>
 
-      <div className="flex justify-center mt-2"> {/* Centered icon div */}
+      <div className="flex justify-center mt-2">
       <div className=" w-16 h-10 rounded-2xl flex items-center justify-center p-0 mt-0">
         <FontAwesomeIcon icon={faRightLeft} className="text-base-blue h-5 w-5" />
       </div>
@@ -763,10 +762,10 @@ const handleConfirmPayment = async () => {
     <div className="bg-black opacity-50 w-full h-full absolute"></div>
     <div className="bg-white p-6 rounded-xl  md:w-[400px] md:h-[585px] top-1/6 inset-x-4 shadow-xl drop-shadow"> 
       <button className="p-4 cursor-pointer absolute top-2 left-1" onClick={() => {
-          document.body.style.overflowY = "scroll"; // Remove scroll lock
+          document.body.style.overflowY = "scroll"; 
           document.body.style.minHeight = "0px";
           window.scrollBy(0, -1);
-          setshowConfirmRequestTransactionModal(false); // Close the transaction modal
+          setshowConfirmRequestTransactionModal(false); 
         }}> 
         <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
       </button>
@@ -858,7 +857,7 @@ const handleConfirmPayment = async () => {
       <div className="text-black font-bold text-2xl">{counter || '0'} ETH</div>
     </div>
 
-    <div className="mb-10 text-center text-gray-600 font-medium"> {/* Added a "View on Basescan" link */}
+    <div className="mb-10 text-center text-gray-600 font-medium"> 
   <a href={`https://goerli.basescan.org/tx/${txHashState}`} target="_blank" rel="noopener noreferrer" className="flex justify-center items-center">
     View on <span className="text-gray-600 ml-1 font-semibold">BaseScan</span> <FontAwesomeIcon icon={faUpRightFromSquare} className="h-4.5 w-4.5 ml-2 text-gray-500" />
   </a>

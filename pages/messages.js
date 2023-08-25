@@ -8,7 +8,7 @@ import { useAccount } from "wagmi";
 import createIcon from 'blockies';
 import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
 import { useCollection } from 'react-firebase-hooks/firestore';
-import { db } from '../controller/firebase'; // Make sure to import your Firebase db configuration
+import { db } from '../controller/firebase'; 
 import axios from 'axios'
 
 
@@ -172,7 +172,7 @@ export default function Messages() {
     const chatRoomId = response.data; // Directly use the response data as the chat room ID
   
     // Assuming the response includes the chat room name or other necessary details
-    const newChatRoom = { chatroomId: chatRoomId }; // Adjust as needed
+    const newChatRoom = { chatroomId: chatRoomId }; 
   
     // Update the chat rooms array with the newly created chat room
     setChatRooms([...chatRooms, newChatRoom]);
@@ -360,7 +360,6 @@ export default function Messages() {
 
       <div className="bg-white w-full -mb-2"></div>
       <div className="flex-grow flex items-center justify-center">
-        {/* other content here */}
       </div>
       {!showModal && (
         <button
@@ -388,14 +387,14 @@ export default function Messages() {
         <input
           type="text"
           placeholder="Search for a Goerli Base address..."
-          value={searchAddress} // Controlled input
+          value={searchAddress} 
           onChange={(e) => setSearchAddress(e.target.value)} // Update state on input change
           onKeyPress={(e) => { if (e.key === 'Enter') createPrivateChatRoom(); }} // Trigger createPrivateChatRoom on Enter key
           className="w-full bg-transparent outline-none text-black text-base"
         />
       </div>
       <button onClick={createPrivateChatRoom} className="ml-4 mr-0 h-8 w-8 text-base-blue"> {/* Trigger createPrivateChatRoom on click */}
-        <FontAwesomeIcon icon={faPaperPlaneTop} /> {/* Updated icon */}
+        <FontAwesomeIcon icon={faPaperPlaneTop} /> 
       </button>
     </div>
     <div className="bg-gray-100 h-10 flex items-center shadow-sm mt-22">
@@ -419,7 +418,7 @@ export default function Messages() {
 {/* Invite Modal */}
 {showInviteModal && (
  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
- <div className="bg-white w-96 p-6 rounded-xl shadow-xl drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}> {/* Manual control of width and padding */}
+ <div className="bg-white w-96 p-6 rounded-xl shadow-xl drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}> 
       <button onClick={handleInviteModalClose} className="absolute top-6 left-4">
         <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
       </button>
@@ -427,7 +426,7 @@ export default function Messages() {
         Invite to <span className='text-base-blue'>BasePay</span>
       </div>
       <div className="flex flex-col items-center justify-center mt-6">
-        <QRCode value="https://www.basepay.app" size={128} /> {/* Display the QR code */}
+        <QRCode value="https://www.basepay.app" size={128} />
         <div className="text-black text-lg font-bold mt-4">Scan to visit BasePay</div>
         <div className="flex items-center justify-center text-black text-lg mt-4 mb-4">
           <span>basepay.app</span>

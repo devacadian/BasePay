@@ -95,8 +95,7 @@ const handleNumberClick = (number) => {
 
   const handlePayClick = () => {
     if (Number(counter) === 0) {
-      showNotification("Must be greater than 0 ETH to proceed to pay modal.", "error");
-      // You can display a message or do something else here if needed
+      showNotification("Must be greater than 0 ETH to proceed to pay.", "error");
       return;
     }
 
@@ -110,8 +109,7 @@ const handleNumberClick = (number) => {
     return;
   }
   
-  
-    setshowPaySelectionModal(true); // Show the modal when the Pay button is clicked
+    setshowPaySelectionModal(true); 
   };
 
   const handleCloseModal = () => {
@@ -266,11 +264,8 @@ const handleNumberClick = (number) => {
   };
   
 
-// Function to handle closing the Request Modal
-const handleCloseRequestModal = () => {
-  // Reset the counter value back to '0' when closing the request modal
-  // Clear the 'toAddress' and 'requestNote' fields
 
+const handleCloseRequestModal = () => {
   setShowRequestModal(false);
 };
 
@@ -317,7 +312,7 @@ const handleOpenConfirmRequestModal = () => {
   document.body.style.overflowY = "hidden";
   document.body.style.minHeight = "calc(100vh + 1px)";
   window.scrollBy(0, 1);
-  setShowConfirmRequestModal(true); // Open the confirm request modal
+  setShowConfirmRequestModal(true); 
 };
 
 const handleCloseConfirmRequestModal = () => {
@@ -339,13 +334,13 @@ const handleConfirmRequest = async () => {
   try {
     // Define the request data based on the state variables
     const requestData = {
-      payment_requester: address, // Assuming this is the requester's address
+      payment_requester: address, 
       request_recipient: toAddress,
       ether_amount: counter || '0',
       transaction_message: requestNote || ''
     };
 
-    // Make a POST request to the correct endpoint
+    // Make a POST request to the endpoint
     const response = await fetch('https://basepay-api.onrender.com/create-payment-request', {
       method: 'POST',
       headers: {
@@ -368,7 +363,6 @@ const handleConfirmRequest = async () => {
   }
 } catch (error) {
   console.error('Error creating payment request:', error);
-  // Handle the error appropriately
 }
 };
 
@@ -533,7 +527,7 @@ const handleCloseQRChoiceModal = () => {
         <div className="flex items-center">
           <div
             className="bg-gray-100 rounded-full h-7 w-7 flex items-center justify-center"
-            onClick={navigateToProfile} // Add onClick event here
+            onClick={navigateToProfile}
           >
             <FontAwesomeIcon icon={faClockNine} className="h-7 w-7 text-base-blue" />
           </div>
@@ -642,10 +636,10 @@ const handleCloseQRChoiceModal = () => {
   onChange={(e) => setToAddress(e.target.value.trim())} // Trim method here to prevent sending to incorrect addresses
 />
 
-<button onClick={handlePasteClick} className="mr-2"> {/* Paste Button */}
+<button onClick={handlePasteClick} className="mr-2"> 
     <FontAwesomeIcon icon={faPaste} className="h-5.5 w-5.5 text-black" />
   </button>
-  <button onClick={() => setShowScanner(true)}> {/* Trigger Scanner */}
+  <button onClick={() => setShowScanner(true)}>
   <FontAwesomeIcon icon={faBarcodeRead} className="h-6 w-6 text-black ml-2" />
 </button>
       </div>
@@ -658,7 +652,7 @@ const handleCloseQRChoiceModal = () => {
       className="rounded p-2 flex-grow text-gray-600 font-medium outline-none"
       placeholder="Add a note"
       value={forValue}
-      onChange={(e) => setForValue(e.target.value)} // Update the state with the entered value
+      onChange={(e) => setForValue(e.target.value)} 
     />
       </div>
 
@@ -680,9 +674,9 @@ const handleCloseQRChoiceModal = () => {
         <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
       </button>
       <div className="flex flex-col items-center justify-center mt-4">
-        <div className="text-black text-2xl font-bold mb-4">Pay Address</div> {/* "Pay" text */}
+        <div className="text-black text-2xl font-bold mb-4">Pay Address</div> 
         <div className="relative">
-          <video ref={handleVideoRef} className="z-40 rounded-lg" autoPlay /> {/* Scanner Display with rounded corners */}
+          <video ref={handleVideoRef} className="z-40 rounded-lg" autoPlay /> 
           
           {/* Scan Overlay */}
           <div className="absolute top-20 left-10 border-t-3 border-l-3 border-base-blue h-7 w-7 rounded-tl "></div>
@@ -706,7 +700,7 @@ const handleCloseQRChoiceModal = () => {
       <div className="text-center text-black text-sm font-medium my-10">
         Start using BasePay to find suggested contacts!
       </div>
-      {/* Add your user selection content here */}
+
     </div>
   </div>
 )}
@@ -763,7 +757,7 @@ const handleCloseQRChoiceModal = () => {
           document.body.style.overflowY = "scroll"; // Remove scroll lock
           document.body.style.minHeight = "0px";
           window.scrollBy(0, -1);
-          setShowtransactionModal(false); // Close the transaction modal
+          setShowtransactionModal(false); 
         }}> 
           <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
       </button>
@@ -780,7 +774,7 @@ const handleCloseQRChoiceModal = () => {
     </div>
 
 
-    <div className="mb-6 md:mb-12 text-center text-gray-600 font-medium"> {/* Added a "View on Basescan" link */}
+    <div className="mb-6 md:mb-12 text-center text-gray-600 font-medium">
   <a href={`https://goerli.basescan.org/tx/${txHashState}`} target="_blank" rel="noopener noreferrer" className="flex justify-center items-center">
     View on <span className="text-gray-600 ml-1 font-semibold">BaseScan</span> <FontAwesomeIcon icon={faUpRightFromSquare} className="h-4.5 w-4.5 ml-2 text-gray-500" />
   </a>
@@ -820,7 +814,7 @@ const handleCloseQRChoiceModal = () => {
       <div className="text-black font-bold text-2xl">{counter || '0'} ETH</div>
     </div>
 
-    <div className="mb-6 md:mb-12 text-center text-gray-600 font-medium"> {/* Added a "View on Basescan" link */}
+    <div className="mb-6 md:mb-12 text-center text-gray-600 font-medium"> 
   <a href={`https://goerli.basescan.org/tx/${txHashState}`} target="_blank" rel="noopener noreferrer" className="flex justify-center items-center">
     View on <span className="text-gray-600 ml-1 font-semibold">BaseScan</span> <FontAwesomeIcon icon={faUpRightFromSquare} className="h-4.5 w-4.5 ml-2 text-gray-500" />
   </a>
@@ -847,7 +841,7 @@ const handleCloseQRChoiceModal = () => {
         document.body.style.minHeight = "0px";
         window.scrollBy(0, -1);
         setShowtransactionModal(false);
-        setToAddress(''); // Close the success modal
+        setToAddress(''); 
       }}>
       Continue
     </button>
@@ -866,7 +860,7 @@ const handleCloseQRChoiceModal = () => {
       <div className="text-black font-bold text-2xl">{counter || '0'} ETH</div>
     </div>
 
-    <div className="mb-6 md:mb-12 text-center text-gray-600 font-medium"> {/* Added a "View on Basescan" link */}
+    <div className="mb-6 md:mb-12 text-center text-gray-600 font-medium"> 
   <a href={`https://goerli.basescan.org/tx/${txHashState}`} target="_blank" rel="noopener noreferrer" className="flex justify-center items-center">
     View on <span className="text-gray-600 ml-1 font-semibold">BaseScan</span> <FontAwesomeIcon icon={faUpRightFromSquare} className="h-4.5 w-4.5 ml-2 text-gray-500" />
   </a>
@@ -912,7 +906,7 @@ const handleCloseQRChoiceModal = () => {
         <div className="text-black text-2xl font-bold flex items-center justify-center"> 
           Request
         </div>
-        <div className="flex justify-end"></div> {/* Empty div to keep the grid layout */}
+        <div className="flex justify-end"></div> 
       </div>
       <div className="border-t border-gray-300 mt-2"></div> 
       <div className="px-4 py-2 flex items-center">
@@ -925,10 +919,10 @@ const handleCloseQRChoiceModal = () => {
           value={toAddress}
           onChange={(e) => setToAddress(e.target.value.trim())}
         />
-         <button onClick={handlePasteClick} className="ml-1 mr-2"> {/* Add button wrapper */}
-    <FontAwesomeIcon icon={faPaste} className="h-5.5 w-5.5 text-black" /> {/* Paste icon */}
+         <button onClick={handlePasteClick} className="ml-1 mr-2">
+    <FontAwesomeIcon icon={faPaste} className="h-5.5 w-5.5 text-black" /> 
   </button>
-  <button onClick={() => setShowScanner(true)}> {/* Trigger Scanner */}
+  <button onClick={() => setShowScanner(true)}>
   <FontAwesomeIcon icon={faBarcodeRead} className="h-6 w-6 text-black ml-2" />
 </button>
 </div>
@@ -958,9 +952,9 @@ const handleCloseQRChoiceModal = () => {
         <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
       </button>
       <div className="flex flex-col items-center justify-center mt-4">
-        <div className="text-black text-2xl font-bold mb-4">Request to Address</div> {/* "Pay" text */}
+        <div className="text-black text-2xl font-bold mb-4">Request to Address</div> 
         <div className="relative">
-          <video ref={handleVideoRef} className="z-40 rounded-lg" autoPlay /> {/* Scanner Display with rounded corners */}
+          <video ref={handleVideoRef} className="z-40 rounded-lg" autoPlay /> 
           
           {/* Scan Overlay */}
           <div className="absolute top-20 left-10 border-t-3 border-l-3 border-base-blue h-7 w-7 rounded-tl "></div>
@@ -976,13 +970,13 @@ const handleCloseQRChoiceModal = () => {
   </div>
 )}
 
-      {/* Add your user selection content here */}
-      <div className="mt-auto flex-shrink-0"> {/* Push the button to the bottom */}
-        <div className="px-4 pb-6"> {/* Remove fixed positioning */}
+
+      <div className="mt-auto flex-shrink-0"> 
+        <div className="px-4 pb-6"> 
         <button onClick={handleOpenRequestModal} className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none">
           Next
         </button>
-      </div> {/* End of Button container */}
+      </div> 
     </div>
   </div>
   </div>
@@ -998,7 +992,7 @@ const handleCloseQRChoiceModal = () => {
 {/* Request Modal */}
 {showRequestModal && (
  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-20">
- <div className="bg-white h-full w-full md:w-[500px] md:h-[812px] relative pt-2 flex flex-col"> {/* Add flex layout */}
+ <div className="bg-white h-full w-full md:w-[500px] md:h-[812px] relative pt-2 flex flex-col"> 
       <div className="px-4 pt-0 grid grid-cols-3 items-center">
         <button className="p-4 -ml-4 cursor-pointer" onClick={handleCloseRequestModal}> 
           <FontAwesomeIcon icon={faArrowLeft} className="h-7 w-7 text-black" />
@@ -1006,15 +1000,15 @@ const handleCloseQRChoiceModal = () => {
         <div className="text-black text-2xl font-bold flex items-center justify-center">
           Request
         </div>
-        <div className="flex justify-end"></div> {/* Empty div to keep the grid layout */}
+        <div className="flex justify-end"></div> 
       </div>
-      <div className="flex justify-center"> {/* Gray circle */}
+      <div className="flex justify-center"> 
       <div className="bg-gray-300 border-3 border-gray-300 rounded-full h-20 w-20 mt-6 flex items-center justify-center overflow-hidden"
        style={{ maskImage: 'radial-gradient(circle, white, black)' }}>
     <AvatarIcon seed={toAddress} />
   </div>
 </div>
-      <div className="text-center text-black text-lg font-medium mt-6"> {/* Displaying the truncated toAddress */}
+      <div className="text-center text-black text-lg font-medium mt-6"> 
         {toAddress.length === 42 ? toAddress.substring(0, 6) + '...' + toAddress.substring(toAddress.length - 6) : toAddress}
       </div>
 
@@ -1022,8 +1016,8 @@ const handleCloseQRChoiceModal = () => {
   <FontAwesomeIcon icon={faEthereum} className="-mr-0 text-black h-9 w-9" />
   <input
     type="text"
-    style={{ width: `${(counter.length || 4) }ch` }} // Adjust width based on content
-    className="text-center bg-transparent outline-none border-none" // Tailwind CSS classes
+    style={{ width: `${(counter.length || 4) }ch` }} 
+    className="text-center bg-transparent outline-none border-none" 
     value={counter}
     onChange={handleCounterChange}
     placeholder="0.00"
@@ -1033,20 +1027,20 @@ const handleCloseQRChoiceModal = () => {
       <div className="text-center mt-0 text-lg text-gray-600 font-medium">
   <input
     type="text"
-    className="rounded p-2 text-center w-2/3 outline-none" // Added outline-none here
+    className="rounded p-2 text-center w-2/3 outline-none" 
     placeholder="Add a Note"
     value={requestNote}
     onChange={(e) => setrequestNote(e.target.value)}
   />
 </div>
 
-<div className="mt-auto flex-shrink-0"> {/* Push the button to the bottom */}
-        <div className="px-4 pb-6"> {/* Remove fixed positioning */}
+<div className="mt-auto flex-shrink-0"> 
+        <div className="px-4 pb-6">
 <button 
     className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none" 
-    onClick={handleOpenConfirmRequestModal} // Call the function to open the Confirm Request Modal
+    onClick={handleOpenConfirmRequestModal}
   >
-    <FontAwesomeIcon icon={faFileInvoice} className="mr-2 h-4 w-4 text-white" /> {/* File invoice icon */}
+    <FontAwesomeIcon icon={faFileInvoice} className="mr-2 h-4 w-4 text-white" /> 
     Request
   </button>
 </div>
@@ -1108,7 +1102,7 @@ const handleCloseQRChoiceModal = () => {
           document.body.style.overflowY = "scroll"; // Remove scroll lock
           document.body.style.minHeight = "0px";
           window.scrollBy(0, -1);
-          setShowRequestTransactionModal(false); // Close the request transaction modal
+          setShowRequestTransactionModal(false); 
         }}> 
         <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
       </button>
@@ -1122,7 +1116,6 @@ const handleCloseQRChoiceModal = () => {
           <div className="text-center mb-4 md:mb-12"> 
             <div className="text-black font-bold text-2xl">{counter || '0'} ETH</div>
           </div>
-          {/* Removed the "View on Basescan" link as it's not relevant for the request */}
           <div className="flex items-center justify-start mb-6 mb:14"> 
             <FontAwesomeIcon icon={faSpinner} className="text-base-blue h-7 w-7 animate-spin" />
             <span className="ml-4 mt-0.5 text-black font-semibold">Request in Progress...</span>
@@ -1150,7 +1143,6 @@ const handleCloseQRChoiceModal = () => {
           <div className="text-center mb-4 md:mb-12"> 
             <div className="text-black font-bold text-2xl">{counter || '0'} ETH</div>
           </div>
-          {/* You can customize the link as needed */}
           <div className="flex items-center justify-start mb-6 md:mb-14"> 
             <FontAwesomeIcon icon={faCircleCheck} className="text-base-blue h-7 w-7" /> 
             <span className="ml-4 mt-0.5 text-black font-semibold">Request Successful!</span>
@@ -1170,7 +1162,7 @@ const handleCloseQRChoiceModal = () => {
               window.scrollBy(0, -1);
               setShowRequestTransactionModal(false);
               setshowRequestSelectionModal(false);
-              setShowRequestModal(false); // Close the success modal
+              setShowRequestModal(false);
               setCounter('0');
               setToAddress('');
               setrequestNote('');

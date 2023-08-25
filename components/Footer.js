@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse, faMessages, faDollarSign, faBell, faUser, faMessagesDollar } from '@fortawesome/pro-solid-svg-icons';
+import { faHouse, faMessages, faDollarSign, faBell, faUser } from '@fortawesome/pro-solid-svg-icons';
 import { useRouter } from 'next/router'; 
 
 const Footer = () => {

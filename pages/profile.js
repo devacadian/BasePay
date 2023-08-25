@@ -82,7 +82,6 @@ const Profile = () => {
 
   const handleRequestPayment = () => {
     router.push('/pay?request=true');
-    // You can also send any state or parameters needed to handle the modal on the /pay page
   };
 
 
@@ -203,13 +202,13 @@ const getCounterPartyPrefix = (activityType, activityState) => {
       <div className="flex-grow flex items-start justify-center mt-12">
       {isClient && (
         <div className="text-center relative w-full">
-          <div className="relative inline-block"> {/* Wrapper for avatar and blue circle */}
+          <div className="relative inline-block"> 
           <div className="bg-gray-300 rounded-full h-20 w-20 mb-6 mx-auto overflow-hidden border-2 border-gray-300"
      style={{ maskImage: 'radial-gradient(circle, white, black)' }}>
   <AvatarIcon />
 </div>
             <div className="bg-base-blue rounded-full h-8 w-8 absolute bottom-5.5 -right-1 flex items-center justify-center" onClick={handleQRCodeClick}>
-                <FontAwesomeIcon icon={faQrcode} className="h-5 w-5 text-white" /> {/* QR code icon */}
+                <FontAwesomeIcon icon={faQrcode} className="h-5 w-5 text-white" /> 
               </div>
           </div>
           <div className="flex items-center justify-center text-gray-600 font-bold text-lg ml-11">
@@ -228,8 +227,8 @@ const getCounterPartyPrefix = (activityType, activityState) => {
                 <FontAwesomeIcon icon={faEthereum} className="text-black h-6 w-6 z-10" />
               </div>
               <div className="text-left text-black font-semibold ml-4 flex flex-col">
-                <div>{formattedBalance} ETH</div> {/* Display formatted balance */}
-                <div className="text-sm text-gray-500 font-semibold">Goerli Basechain Balance</div> {/* Label */}
+                <div>{formattedBalance} ETH</div> 
+                <div className="text-sm text-gray-500 font-semibold">Goerli Basechain Balance</div> 
               </div>
             </div>
           </div>
@@ -298,7 +297,7 @@ const getCounterPartyPrefix = (activityType, activityState) => {
 {/* QR Code Modal */}
 {showQRCodeModal && (
   <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-30 bg-opacity-50 bg-black">
-  <div className="bg-white w-96 p-6 rounded-xl shadow-xl drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}> {/* Manual control of width and padding */}
+  <div className="bg-white w-96 p-6 rounded-xl shadow-xl drop-shadow" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}> 
     <button onClick={handleCloseQRCodeModal} className="absolute top-6 left-4">
         <FontAwesomeIcon icon={faXmark} className="h-8 w-8 text-black" />
       </button>

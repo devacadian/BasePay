@@ -28,6 +28,7 @@ export default function Messages() {
   const [searchAddress, setSearchAddress] = useState('');
   const [isLoadingChatMessages, setIsLoadingChatMessages] = useState(false);
   const { showNotification } = useContext(NotificationContext);
+  const [refreshKey, setRefreshKey] = useState(0); // Define refreshKey state
 
   const chatContainerRef = useRef(null); // Create a ref for the chat container
 
@@ -69,7 +70,7 @@ export default function Messages() {
       // Function to fetch available chat rooms
       const fetchChatRooms = async () => {
         setIsLoadingChatRooms(true); // Set loading state to true before fetching
-
+  
         try {
           // Use the address from useAccount as the connected wallet
           const response = await fetch(`https://basepay-api.onrender.com/get-private-chatroom/${address}`);
@@ -78,13 +79,13 @@ export default function Messages() {
         } catch (error) {
           console.error('Error fetching chat rooms:', error);
         }
-
+  
         setIsLoadingChatRooms(false); // Set loading state to false after fetching
       };
-
+  
       fetchChatRooms();
     }
-  }, [address]); // Will run when address changes or refreshKey changes
+  }, [address, refreshKey]); // Will run when address changes or refreshKey changes
 
 
 
@@ -105,6 +106,7 @@ export default function Messages() {
     setShowChatRoomModal(false);
     setChatMessages([]); // Clear the chat messages
     setSelectedChatRoomId(null); // Reset the chat room ID
+    setRefreshKey((prevKey) => prevKey + 1); 
   };
 
   const handleCloseModal = () => {

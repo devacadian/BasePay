@@ -29,7 +29,16 @@ export default function Messages() {
   const [isLoadingChatMessages, setIsLoadingChatMessages] = useState(false);
   const { showNotification } = useContext(NotificationContext);
 
-  
+  const chatContainerRef = useRef(null); // Create a ref for the chat container
+
+  // Scroll to the bottom of the chat container when chat messages change or the chat modal is opened
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [showChatRoomModal, chatMessages]);
+
+
   // Create a ref for the query
   const queryRef = useRef(null);
 
@@ -195,6 +204,8 @@ export default function Messages() {
     // Clear the search address
     setSearchAddress('');
   };
+
+  
   
   
   return (
@@ -305,7 +316,7 @@ export default function Messages() {
         {selectedChatRoomName.substring(0, 8) + "..."}
       </h1>
     </div>
-    <div className="flex-grow overflow-y-scroll bg-white text-white w-full mb-4 flex flex-col text-left p-3 -mt-3 rounded">
+    <div className="flex-grow overflow-y-scroll bg-white text-white w-full mb-4 flex flex-col text-left p-3 -mt-3 rounded" ref={chatContainerRef}>
       {isLoadingChatMessages ? (
         <div className="flex justify-center mt-56">
           <FontAwesomeIcon icon={faSpinner} className="text-base-blue h-10 w-10 animate-spin" />

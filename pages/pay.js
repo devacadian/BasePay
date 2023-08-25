@@ -898,7 +898,7 @@ const handleCloseQRChoiceModal = () => {
 {/* Request User Selection Modal */}
 {showRequestSelectionModal && (
  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-20">
- <div className="bg-white h-full w-full md:w-[500px] md:h-[812px] relative pt-2 flex flex-col" style={{ maxWidth: 'calc(100% - 2rem)', left: '1rem', right: '1rem' }}>
+ <div className="bg-white  h-full w-full md:w-[500px] md:h-[812px] relative pt-2" >
       <div className="px-4 pt-0 grid grid-cols-3 items-center">
         <button className="p-4 -ml-4 cursor-pointer" onClick={handleCloseRequestSelectionModal}> 
           <FontAwesomeIcon icon={faArrowLeft} className="h-7 w-7 text-black" />
@@ -972,7 +972,7 @@ const handleCloseQRChoiceModal = () => {
 
 
       <div className="mt-auto flex-shrink-0"> 
-        <div className="px-4 pb-6"> 
+        <div className="px-4 pb-6 fixed bottom-0 left-0 right-0 absolute"> 
         <button onClick={handleOpenRequestModal} className="bg-base-blue text-white text-lg font-medium flex items-center justify-center h-12 w-full rounded-3xl focus:outline-none">
           Next
         </button>

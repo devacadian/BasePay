@@ -395,7 +395,7 @@ const handleConfirmPayment = async () => {
                   </div>
                 </div>
               </div>
-              <div className={"flex justify-between text-gray-500 text-sm ml-0 mt-3 mb-4 font-semibold mr-0" + (!request.transaction_message ? " -mt-1 mb-4" : "")}>
+              <div className={"flex justify-between text-gray-500 text-sm ml-0 mt-2.5 mb-4 font-semibold mr-0" + (!request.transaction_message ? " -mt-1 mb-4" : "")}>
   <span>
     {request.transaction_message ? (
       <span>

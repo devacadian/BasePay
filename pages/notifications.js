@@ -365,9 +365,9 @@ const handleConfirmPayment = async () => {
        
 
           return (
-            <div key={index} className=" border-0 border-b border-gray-300 w-full shadow-sm mt-0">
+            <div key={index} className=" border-0 border-b border-gray-300 w-full mt-0">
               <div className={"flex items-center" + (!request.transaction_message ? " pb-0 mt-1 " : " mt-0.5 mb-0")}>
-              <div className={"relative h-12 w-12 border-2 border-gray-300 rounded-3xl ml-4" + (!request.transaction_message ? " -mb-2" : " -mb-3.5")}>
+              <div className={"relative h-12 w-12 border-2 border-gray-300 rounded-3xl ml-0" + (!request.transaction_message ? " -mb-2" : " -mb-3.5")}>
               <div className="relative w-full h-full overflow-hidden rounded-3xl" 
      style={{ maskImage: 'radial-gradient(circle, white, black)' }}>
   <AvatarIcon seed={request.payment_requester} />
@@ -382,20 +382,20 @@ const handleConfirmPayment = async () => {
   {request.transaction_state === "Processed" ? "Paid Request" : request.transaction_state === "Rejected" ? "Declined Request" : "Payment Request"}
 </span>
 
-                    <span className="text-gray-500 mr-4 font-medium">{requestTimeString}</span>
+                    <span className="text-gray-500 mr-0 font-medium">{requestTimeString}</span>
                   </div>
                   <div className={"flex justify-between items-center " + (!request.transaction_message ? " pb-1" : "mt-1")}>
                     <div className="flex items-center text-black font-semibold">
                       <FontAwesomeIcon icon={faEthereum} className="h-3.5 w-3.5 text-black mr-1 mb-0.5" />
                       <span>{request.ether_amount}</span>
                     </div>
-                    <div className="flex items-center text-gray-500 font-medium mr-4">
+                    <div className="flex items-center text-gray-500 font-medium mr-0">
                       <span>From {paymentRequester}</span>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className={"flex justify-between text-gray-500 text-sm ml-4.5 mt-3 mb-4 font-semibold mr-4" + (!request.transaction_message ? " -mt-1 mb-4" : "")}>
+              <div className={"flex justify-between text-gray-500 text-sm ml-0 mt-3 mb-4 font-semibold mr-0" + (!request.transaction_message ? " -mt-1 mb-4" : "")}>
   <span>
     {request.transaction_message ? (
       <span>

@@ -200,6 +200,13 @@ const handleNumberClick = (number) => {
   };
   
   const handleConfirmPayment = async () => {
+
+    const networkId = await window.ethereum.request({ method: 'net_version' });
+    if (networkId !== '84531') {
+      showNotification("Please switch to Goerli Base network!", "error");
+      return;
+    }
+
     setTransactionStatus('pending'); // Set the status to pending before initiating payment
   
     const txHash = await initiatePayment(window.ethereum, toAddress, counter || '0', (receipt) => {

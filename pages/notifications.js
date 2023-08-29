@@ -365,7 +365,7 @@ const handleConfirmPayment = async () => {
        
 
           return (
-            <div key={index} className="rounded-4xl border-2 border-gray-100 w-full shadow-sm mt-4">
+            <div key={index} className=" border-0 border-b border-gray-300 w-full shadow-sm mt-0">
               <div className={"flex items-center" + (!request.transaction_message ? " pb-0 mt-1 " : " mt-0.5 mb-0")}>
               <div className={"relative h-12 w-12 border-2 border-gray-300 rounded-3xl ml-4" + (!request.transaction_message ? " -mb-2" : " -mb-3.5")}>
               <div className="relative w-full h-full overflow-hidden rounded-3xl" 

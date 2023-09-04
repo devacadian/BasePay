@@ -60,6 +60,8 @@ Whether you're organizing a vacation or sharing lunch expenses, BasePay streamli
 ## Detailed Documentation
 Refer to [DOC.md](https://github.com/devacadian/BasePay/blob/main/documentations/DOC.md)
 
+## RoadMap 🗺
+Refer to [ROADMAP.md](https://github.com/devacadian/BasePay/blob/main/documentations/ROADMAP.md)
 
 ## Meet the Team 🚀 🚀 🚀 
 | Name          | Role                                       | Contact                                                                                          |

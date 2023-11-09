@@ -87,7 +87,7 @@ function MyApp({ Component, pageProps }) {
           rel="icon"
           type="image/png"
           sizes="16x16"
-          href={isLocal ? '/favicon-local.png' : '/favicon.png'} // Change favicon based on the environment
+          href={isLocal ? '/favicon-local.ico' : '/favicon.ico'} // Change favicon based on the environment
         />
       </Head>
       <GoogleAnalytics gaMeasurementId={GID} trackPageViews/>

@@ -18,6 +18,7 @@
 # misc
 .DS_Store
 *.pem
+desktop.ini  # Added to ignore Windows folder view settings
 
 # debug
 npm-debug.log*
